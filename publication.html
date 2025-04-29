@@ -103,44 +103,48 @@
     
     <main>
         <h1 class="main-title">Publications</h1>
-
+    
         <div class="content-wrapper">
             <!-- New Publications Section -->
-            <section class="publication-section">
-                <h2 class="section-title" data-translate="newPublications">
+            <section id="new-publications" class="publication-section">
+                <h2 class="section-title" data-translate="newPublications" onclick="toggleSection('new-publications')">
                     <span>Neuerscheinungen</span>
                     <i class="fas fa-chevron-down toggle-icon"></i>
                 </h2>
                 <div class="section-content">
-                    <div class="publication-item">
-                        <div class="publication-title">Digital Methods in Historical Language Teaching Research</div>
-                        <div class="publication-authors">Michael Weiß, Sarah Schmidt</div>
-                        <div class="publication-details">Journal of Digital Humanities, 2025, Volume 12, Issue 2, pp. 45-67, DOI: 10.1234/jdh.2025.123</div>
-                    </div>
-                    <div class="publication-item">
-                        <div class="publication-title">Historical Language Teaching Materials: A Digital Perspective</div>
-                        <div class="publication-authors">Anna Weber, Thomas Müller</div>
-                        <div class="publication-details">Digital Scholarship in the Humanities, 2024, Volume 39, Issue 4, pp. 789-810, DOI: 10.1234/dsh.2024.456</div>
+                    <div class="publication-grid">
+                        <div class="publication-item">
+                            <div class="publication-title">Digital Methods in Historical Language Teaching Research</div>
+                            <div class="publication-authors">Michael Weiß, Sarah Schmidt</div>
+                            <div class="publication-details">Journal of Digital Humanities, 2025, Volume 12, Issue 2, pp. 45-67, DOI: 10.1234/jdh.2025.123</div>
+                        </div>
+                        <div class="publication-item">
+                            <div class="publication-title">Historical Language Teaching Materials: A Digital Perspective</div>
+                            <div class="publication-authors">Anna Weber, Thomas Müller</div>
+                            <div class="publication-details">Digital Scholarship in the Humanities, 2024, Volume 39, Issue 4, pp. 789-810, DOI: 10.1234/dsh.2024.456</div>
+                        </div>
                     </div>
                 </div>
             </section>
-
+    
             <!-- Secondary Literature Section -->
-            <section class="publication-section">
-                <h2 class="section-title" data-translate="secondaryLiterature">
+            <section id="secondary-literature" class="publication-section">
+                <h2 class="section-title" data-translate="secondaryLiterature" onclick="toggleSection('secondary-literature')">
                     <span>Sekundärliteratur</span>
                     <i class="fas fa-chevron-down toggle-icon"></i>
                 </h2>
                 <div class="section-content">
-                    <div class="publication-item">
-                        <div class="publication-title">The Evolution of Language Teaching Methods: 1800-1950</div>
-                        <div class="publication-authors">Klaus Schneider, Maria Fischer</div>
-                        <div class="publication-details">Historical Linguistics Review, 2024, Volume 45, Issue 1, pp. 112-134, DOI: 10.1234/hlr.2024.789</div>
-                    </div>
-                    <div class="publication-item">
-                        <div class="publication-title">Digitizing Historical Teaching Materials: Best Practices</div>
-                        <div class="publication-authors">Lisa Wagner, Peter Koch</div>
-                        <div class="publication-details">Digital Archives Quarterly, 2023, Volume 8, Issue 3, pp. 223-245, DOI: 10.1234/daq.2023.012</div>
+                    <div class="publication-grid">
+                        <div class="publication-item">
+                            <div class="publication-title">The Evolution of Language Teaching Methods: 1800-1950</div>
+                            <div class="publication-authors">Klaus Schneider, Maria Fischer</div>
+                            <div class="publication-details">Historical Linguistics Review, 2024, Volume 45, Issue 1, pp. 112-134, DOI: 10.1234/hlr.2024.789</div>
+                        </div>
+                        <div class="publication-item">
+                            <div class="publication-title">Digitizing Historical Teaching Materials: Best Practices</div>
+                            <div class="publication-authors">Lisa Wagner, Peter Koch</div>
+                            <div class="publication-details">Digital Archives Quarterly, 2023, Volume 8, Issue 3, pp. 223-245, DOI: 10.1234/daq.2023.012</div>
+                        </div>
                     </div>
                 </div>
             </section>
