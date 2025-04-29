@@ -4,21 +4,11 @@ function loadComponent(id, url) {
         .then(response => response.text())
         .then(data => {
             document.getElementById(id).innerHTML = data;
-
-            // Delay execution to ensure DOM is updated
             if (id === "nav-placeholder") {
-                // Wait for DOM insertion before initializing
-                setTimeout(() => {
-                    initializeMobileNav();
-                    highlightActiveNavLink();
-                }, 0); // A delay of 0 ensures it runs after DOM updates
+                initializeMobileNav();
             }
-        })
-        .catch(error => {
-            console.error(`Error loading ${url}:`, error);
         });
 }
-
 
 document.addEventListener("DOMContentLoaded", function() {
     loadComponent("nav-placeholder", "nav.html");
