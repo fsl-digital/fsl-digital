@@ -1,26 +1,6 @@
-// Dynamically load nav and footer into placeholders
-function loadComponent(id, url) {
-    fetch(url)
-        .then(response => response.text())
-        .then(data => {
-            document.getElementById(id).innerHTML = data;
-            if (id === "nav-placeholder") {
-                initializeMobileNav();
-            }
-        });
-}
-
-document.addEventListener("DOMContentLoaded", function() {
-    loadComponent("nav-placeholder", "nav.html");
-    loadComponent("footer-placeholder", "footer.html");
-});
-
-// Mobile Navigation
-function initializeMobileNav() {
+document.addEventListener('DOMContentLoaded', function() {
     const hamburger = document.querySelector('.hamburger');
     const navCenter = document.querySelector('.nav-center');
-    
-    if (!hamburger || !navCenter) return; // Exit if elements not found
     
     hamburger.addEventListener('click', function() {
         hamburger.classList.toggle('active');
@@ -45,4 +25,4 @@ function initializeMobileNav() {
             navCenter.classList.remove('active');
         });
     });
-}
+});
