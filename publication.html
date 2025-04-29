@@ -7,6 +7,8 @@
     <link rel="icon" href="favicon/favicon.ico" type="image/x-icon">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="css/style.css">
+    
     <style>
         .content-wrapper {
             display: grid;
@@ -19,10 +21,8 @@
 
         .publication-section {
             width: 100%;
-            background: rgba(255, 255, 255, 0.95);
             border-radius: 12px;
             padding: 2rem;
-            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
         }
 
         .section-title {
@@ -63,20 +63,18 @@
         }
 
         .publication-item {
+            background: rgba(255, 255, 255, 0.9);
             margin-bottom: 1.5rem;
-            padding-bottom: 1.5rem;
-            border-bottom: 1px solid rgba(0, 0, 0, 0.1);
-        }
-
-        .publication-item:last-child {
-            margin-bottom: 0;
-            padding-bottom: 0;
-            border-bottom: none;
+            padding: 1.5rem;
+            border-radius: 8px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
         }
 
         .publication-title {
             font-weight: bold;
             margin-bottom: 0.5rem;
+            color: #333;
+            font-size: 1.1rem;
         }
 
         .publication-authors {
@@ -99,11 +97,47 @@
 </head>
 <body>
     <img src="background_photo.jpg" class="background-img" alt="background" style="opacity:0.4;">
-    <div id="nav-placeholder"></div>
+    <img src="background_photo.jpg" class="background-img" alt="background" style="opacity:0.4;">
+    <nav class="navbar">
+        <div class="nav-left">
+            <div class="logo-container">
+                <img src="logo/fsl_logo.gif" alt="FSL Logo" class="logo">
+            </div>
+            <h1 class="site-title">F<span>|</span> S <span>|</span> L <span class="digital">&lt;digital/&gt;</span></h1>
+        </div>
+        <div class="hamburger">
+            <span></span>
+            <span></span>
+            <span></span>
+        </div>
+        <div class="nav-center">
+            <ul class="nav-menu">
+                <li><a href="index.html" data-translate="home">Home</a></li>
+                <li><a href="project.html" data-translate="project">Project</a></li>
+                <li><a href="team.html" data-translate="team">Team</a></li>
+                <li><a href="corpus.html" data-translate="corpus">Corpus</a></li>
+                <li><a href="news.html" data-translate="news">News/Events</a></li>
+                <li><a href="publication.html" data-translate="publication">Publication</a></li>
+            </ul>
+        </div>
+        <div class="nav-right">
+            <div class="controls">
+                <div class="language-toggle">
+                    <label class="switch">
+                        <input type="checkbox" id="langToggle">
+                        <span class="slider">
+                            <img src="flags/gb.svg" alt="English" class="flag-icon en-flag">
+                            <img src="flags/de.svg" alt="German" class="flag-icon de-flag">
+                        </span>
+                    </label>
+                </div>
+            </div>
+        </div>
+    </nav>
     
     <main>
         <h1 class="main-title">Publications</h1>
-    
+
         <div class="content-wrapper">
             <!-- New Publications Section -->
             <section id="new-publications" class="publication-section">
@@ -126,7 +160,7 @@
                     </div>
                 </div>
             </section>
-    
+
             <!-- Secondary Literature Section -->
             <section id="secondary-literature" class="publication-section">
                 <h2 class="section-title" data-translate="secondaryLiterature" onclick="toggleSection('secondary-literature')">
@@ -154,26 +188,24 @@
     <div id="footer-placeholder"></div>
 
     <script src="js/include-components.js"></script>
-    <script type="module" src="script.js"></script>
+    <script src="js/translations.js"></script>
+    <script src="js/active-page.js"></script>
+    <script src="js/mobile-nav.js"></script>
+    <script src="js/nav-highlight.js"></script>
     <script>
-        document.addEventListener('DOMContentLoaded', () => {
-            // Get all section titles
-            const sectionTitles = document.querySelectorAll('.section-title');
+        function toggleSection(sectionId) {
+            const section = document.getElementById(sectionId);
+            const title = section.querySelector('.section-title');
+            const content = section.querySelector('.section-content');
+            const icon = section.querySelector('.toggle-icon');
             
-            // Add click event to each section title
-            sectionTitles.forEach(title => {
-                title.addEventListener('click', () => {
-                    // Toggle active class on the title
-                    title.classList.toggle('active');
-                    
-                    // Get the content div that follows the title
-                    const content = title.nextElementSibling;
-                    
-                    // Toggle active class on the content
-                    content.classList.toggle('active');
-                });
-            });
-        });
+            // Toggle only this section
+            title.classList.toggle('active');
+            content.classList.toggle('active');
+            
+            // Rotate icon
+            icon.style.transform = title.classList.contains('active') ? 'rotate(180deg)' : 'rotate(0)';
+        }
     </script>
 </body>
 </html>

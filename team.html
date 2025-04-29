@@ -22,6 +22,7 @@
     <!-- Stylesheets -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="css/style.css">
     
     <!-- Font loading optimization -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -38,8 +39,44 @@
     </style>
 </head>
 <body>
+    <nav class="navbar">
+        <div class="nav-left">
+            <div class="logo-container">
+                <img src="logo/fsl_logo.gif" alt="FSL Logo" class="logo">
+            </div>
+            <h1 class="site-title">F<span>|</span> S <span>|</span> L <span class="digital">&lt;digital/&gt;</span></h1>
+        </div>
+        <div class="hamburger">
+            <span></span>
+            <span></span>
+            <span></span>
+        </div>
+        <div class="nav-center">
+            <ul class="nav-menu">
+                <li><a href="index.html" data-translate="home">Home</a></li>
+                <li><a href="project.html" data-translate="project">Project</a></li>
+                <li><a href="team.html" data-translate="team">Team</a></li>
+                <li><a href="corpus.html" data-translate="corpus">Corpus</a></li>
+                <li><a href="news.html" data-translate="news">News/Events</a></li>
+                <li><a href="publication.html" data-translate="publication">Publication</a></li>
+            </ul>
+        </div>
+        <div class="nav-right">
+            <div class="controls">
+                <div class="language-toggle">
+                    <label class="switch">
+                        <input type="checkbox" id="langToggle">
+                        <span class="slider">
+                            <img src="flags/gb.svg" alt="English" class="flag-icon en-flag">
+                            <img src="flags/de.svg" alt="German" class="flag-icon de-flag">
+                        </span>
+                    </label>
+                </div>
+            </div>
+        </div>
+    </nav>
     <img src="background_photo.jpg" class="background-img" alt="background" style="opacity:0.4;" fetchpriority="high">
-    <div id="nav-placeholder"></div>
+    
     <main>
         <div class="team-intro">
             <div class="team-banner">
@@ -303,6 +340,10 @@
     </main>
     <div id="footer-placeholder"></div>
     <script src="js/include-components.js"></script>
+    <script src="js/translations.js"></script>
+    <script src="js/active-page.js"></script>
+    <script src="js/mobile-nav.js"></script>
+    <script src="js/nav-highlight.js"></script>
     <script type="module" src="script.js"></script>
 </body>
 </html>

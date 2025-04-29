@@ -4,6 +4,21 @@ import { debounce, performGlobalSearch, performLocalSearch, initializeSearch } f
 import { initializeExpandableContent } from './js/expand.js';
 
 document.addEventListener('DOMContentLoaded', () => {
+    // Set active nav link based on current page
+    function updateActiveNavLink() {
+        const currentPage = window.location.pathname.split('/').pop() || 'index.html';
+        document.querySelectorAll('.nav-menu a').forEach(link => {
+            if (link.getAttribute('href') === currentPage) {
+                link.classList.add('active');
+            } else {
+                link.classList.remove('active');
+            }
+        });
+    }
+
+    // Update active state on page load
+    updateActiveNavLink();
+
     // Initialize expandable content
     initializeExpandableContent();
 
@@ -68,22 +83,25 @@ document.addEventListener('DOMContentLoaded', () => {
     initializeLanguage();
 
     // Handle navigation with optimized transitions
-    document.querySelectorAll('a').forEach(link => {
-        // Only handle internal links
-        if (link.href.startsWith(window.location.origin)) {
-            link.addEventListener('click', (e) => {
-                e.preventDefault();
-                const targetUrl = link.href;
-                
-                // Add fade-out class
-                document.body.classList.add('fade-out');
-                
-                // Navigate after a shorter fade-out
-                setTimeout(() => {
-                    window.location.href = targetUrl;
-                }, 200);
+    document.querySelectorAll('.nav-menu a').forEach(link => {
+        link.addEventListener('click', (e) => {
+            e.preventDefault();
+            const targetUrl = link.href;
+            
+            // Update active state
+            document.querySelectorAll('.nav-menu a').forEach(navLink => {
+                navLink.classList.remove('active');
             });
-        }
+            link.classList.add('active');
+            
+            // Add fade-out class
+            document.body.classList.add('fade-out');
+            
+            // Navigate after a shorter fade-out
+            setTimeout(() => {
+                window.location.href = targetUrl;
+            }, 200);
+        });
     });
 
     // Remove fade-out class when page loads

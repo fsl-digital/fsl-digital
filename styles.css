@@ -126,12 +126,17 @@ body {
 }
 
 .nav-menu a {
+    padding: 8px 16px;
     text-decoration: none;
     color: var(--text-color);
-    padding: 0.5rem 1rem;
-    border-radius: 4px;
     transition: all 0.3s ease;
-    position: relative;
+}
+
+.nav-menu a.active {
+    background: linear-gradient(to right, #ff0000 0%, #0066ff 100%);
+    border-radius: 4px;
+    padding: 8px 12px;
+    color: white;
 }
 
 .nav-menu a::after {
@@ -148,20 +153,6 @@ body {
 
 .nav-menu a:hover::after {
     width: 80%;
-}
-
-.nav-menu a.active {
-    background: linear-gradient(
-        to right,
-        rgba(255, 0, 0, 0.2),
-        rgba(0, 0, 255, 0.2)
-    );
-    color: var(--text-color);
-}
-
-.nav-menu a.active::after {
-    width: 80%;
-    background: rgb(255, 0, 0);
 }
 
 .nav-left {
@@ -1326,4 +1317,13 @@ body.fade-out {
     .nav-right {
         margin-left: 0;
     }
+}
+
+/* Navigation active state */
+.nav-menu li a.active {
+    background: linear-gradient(to right, #ff0000 0%, #0066ff 100%);
+    border-radius: 4px;
+    padding: 8px 12px;
+    color: rgb(0, 0, 112);
+    opacity: 0.5; /* 50% transparency */
 }
