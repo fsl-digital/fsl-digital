@@ -1,0 +1,520 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>News & Events - FSL Digital</title>
+    <link rel="icon" href="favicon/favicon.ico" type="image/x-icon">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <link rel="stylesheet" href="styles.css">
+    <style>
+        .content-wrapper {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 2rem;
+            margin: 2rem auto;
+            max-width: 1400px;
+            padding: 0 2rem;
+        }
+
+        .news-section, .events-section, .media-section {
+            width: 100%;
+        }
+
+        .section-content {
+            background: white;
+            border-radius: 8px;
+            padding: 1.5rem;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            margin-top: 1rem;
+            display: none; /* Hidden by default */
+        }
+
+        .section-content.active {
+            display: block; /* Shown when active */
+        }
+
+        .section-title {
+            color: #333;
+            margin: 0 0 1.5rem;
+            padding: 1rem;
+            border-radius: 8px;
+            background: #f8f9fa;
+            cursor: pointer;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            transition: background-color 0.3s;
+        }
+
+        .section-title:hover {
+            background: #e9ecef;
+        }
+
+        .section-title.active {
+            background: #007bff;
+            color: white;
+        }
+
+        .toggle-icon {
+            transition: transform 0.3s;
+        }
+
+        .section-title.active .toggle-icon {
+            transform: rotate(180deg);
+        }
+
+        .news-grid, .events-grid {
+            display: grid;
+            gap: 1.5rem;
+        }
+
+        .news-item, .event-item {
+            margin-bottom: 1.5rem;
+            padding-bottom: 1.5rem;
+            border-bottom: 1px solid #eee;
+            background: white;
+            border-radius: 8px;
+            padding: 1.5rem;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+
+        .news-item:last-child, .event-item:last-child {
+            border-bottom: none;
+            margin-bottom: 0;
+            padding-bottom: 0;
+        }
+
+        .news-date, .event-date {
+            color: #666;
+            font-size: 0.9em;
+            margin-bottom: 0.5rem;
+        }
+
+        .news-title, .event-title {
+            color: #333;
+            font-size: 1.2em;
+            margin-bottom: 1rem;
+        }
+
+        .news-content, .event-content {
+            color: #444;
+            line-height: 1.6;
+        }
+
+        /* Media Section Styles */
+        .media-section {
+            margin-top: 2rem;
+        }
+
+        .subsection {
+            margin-top: 2rem;
+        }
+
+        .subsection-title {
+            color: #333;
+            margin: 0 0 1rem;
+            padding: 0.5rem 1rem;
+            background: #f8f9fa;
+            border-radius: 4px;
+            font-size: 1.1em;
+        }
+
+        .subsection-content {
+            display: none;
+        }
+
+        .subsection-content.active {
+            display: block;
+        }
+
+        .subsection-title.toggle-subsection {
+            cursor: pointer;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .subsection-title.toggle-subsection:hover {
+            background: #e9ecef;
+        }
+
+        .subsection-title.toggle-subsection.active {
+            background: #007bff;
+            color: white;
+        }
+
+        .subsection-title.toggle-subsection .toggle-icon {
+            transition: transform 0.3s;
+        }
+
+        .subsection-title.toggle-subsection.active .toggle-icon {
+            transform: rotate(180deg);
+        }
+
+        /* Gallery Styles */
+        .container {
+            position: relative;
+            margin-top: 1rem;
+            text-align: center;
+        }
+
+        .mySlides {
+            display: none;
+        }
+
+        .mySlides img {
+            width: 50% !important;
+            margin: 0 auto;
+            display: block;
+        }
+
+        .cursor {
+            cursor: pointer;
+        }
+
+        .prev,
+        .next {
+            cursor: pointer;
+            position: absolute;
+            top: 50%;
+            transform: translateY(-50%);
+            width: auto;
+            padding: 16px;
+            color: white;
+            font-weight: bold;
+            font-size: 20px;
+            border-radius: 0 3px 3px 0;
+            user-select: none;
+            -webkit-user-select: none;
+            background-color: rgba(0, 0, 0, 0.3);
+            text-decoration: none;
+            transition: background-color 0.3s;
+        }
+
+        .prev {
+            left: 0;
+        }
+
+        .next {
+            right: 0;
+            border-radius: 3px 0 0 3px;
+        }
+
+        .prev:hover,
+        .next:hover {
+            background-color: rgba(0, 0, 0, 0.8);
+        }
+
+        .numbertext {
+            color: #f2f2f2;
+            font-size: 12px;
+            padding: 8px 12px;
+            position: absolute;
+            top: 0;
+        }
+
+        .caption-container {
+            text-align: center;
+            background-color: #222;
+            padding: 2px 16px;
+            color: white;
+        }
+
+        .row:after {
+            content: "";
+            display: table;
+            clear: both;
+        }
+
+        .column {
+            float: left;
+            width: 16.66%;
+        }
+
+        .demo {
+            opacity: 0.6;
+        }
+
+        .active,
+        .demo:hover {
+            opacity: 1;
+        }
+
+        .event-badge {
+            display: inline-block;
+            padding: 0.25rem 0.75rem;
+            border-radius: 15px;
+            font-size: 0.8em;
+            margin-bottom: 0.5rem;
+        }
+
+        .event-badge.upcoming {
+            background-color: #e3f2fd;
+            color: #1976d2;
+        }
+
+        .event-badge.past {
+            background-color: #f5f5f5;
+            color: #666;
+        }
+
+        @media (max-width: 768px) {
+            .content-wrapper {
+                grid-template-columns: 1fr;
+            }
+
+            .news-section {
+                order: -1; /* Makes news appear first on mobile */
+            }
+        }
+    </style>
+</head>
+<body>
+    <img src="background_photo.jpg" class="background-img" alt="background" style="opacity:0.4;">
+    <div id="nav-placeholder"></div>
+    <main>
+        <h1 class="main-title">News & Events</h1>
+
+        <div class="content-wrapper">
+            <!-- News Section -->
+            <section id="news" class="news-section">
+                <h2 class="section-title" data-translate="news">
+                    <span>News</span>
+                    <i class="fas fa-chevron-down toggle-icon"></i>
+                </h2>
+                <div class="section-content">
+                    <div class="news-grid">
+                        <div class="news-item">
+                            <div class="news-date">April 5, 2025</div>
+                            <h3 class="news-title">Registration Open for International Workshop</h3>
+                            <div class="news-content">
+                                <p>We are pleased to announce that registration is now open for our International Workshop on Historical Language Teaching. Early bird registration is available until April 30, 2025.</p>
+                                <p><a href="#">Register Now</a></p>
+                            </div>
+                        </div>
+                        <div class="news-item">
+                            <div class="news-date">March 25, 2025</div>
+                            <h3 class="news-title">Launch Conference Success</h3>
+                            <div class="news-content">
+                                <p>The FSL Digital Launch Conference was a great success with over 150 participants from 12 countries. Thank you to all speakers and attendees for their valuable contributions.</p>
+                                <p><a href="#">View Conference Highlights</a></p>
+                            </div>
+                        </div>
+                        <div class="news-item">
+                            <div class="news-date">February 20, 2025</div>
+                            <h3 class="news-title">New Digital Tools Workshop Series Announced</h3>
+                            <div class="news-content">
+                                <p>Following the success of our first workshop, we are excited to announce a series of monthly workshops focusing on different aspects of digital tools in historical research.</p>
+                                <p><a href="#">View Workshop Schedule</a></p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Events Section -->
+            <section id="events" class="events-section">
+                <h2 class="section-title" data-translate="events">
+                    <span>Events</span>
+                    <i class="fas fa-chevron-down toggle-icon"></i>
+                </h2>
+                <div class="section-content">
+                    <div class="events-grid">
+                        <div class="event-item">
+                            <span class="event-badge upcoming">Upcoming</span>
+                            <div class="event-date">May 15-16, 2025</div>
+                            <h3 class="event-title">International Workshop on Historical Language Teaching</h3>
+                            <div class="event-content">
+                                <p>Join us for a two-day workshop exploring the evolution of language teaching methodologies from the medieval period to the early modern era. The workshop will feature presentations from leading scholars in the field.</p>
+                                <p><strong>Location:</strong> TU Darmstadt, Germany<br>
+                                <strong>Registration:</strong> Open until May 1, 2025</p>
+                            </div>
+                        </div>
+                        <div class="event-item">
+                            <span class="event-badge upcoming">Upcoming</span>
+                            <div class="event-date">June 8, 2025</div>
+                            <h3 class="event-title">Digital Humanities Summer School</h3>
+                            <div class="event-content">
+                                <p>A one-day intensive course on digital methods in historical linguistics and language teaching research. Perfect for graduate students and early-career researchers.</p>
+                                <p><strong>Location:</strong> Virtual Event<br>
+                                <strong>Registration:</strong> Opens April 15, 2025</p>
+                            </div>
+                        </div>
+                        <div class="event-item">
+                            <span class="event-badge past">Past</span>
+                            <div class="event-date">March 20-21, 2025</div>
+                            <h3 class="event-title">FSL Digital Launch Conference</h3>
+                            <div class="event-content">
+                                <p>Our successful launch conference brought together researchers from across Europe to discuss the future of digital historical linguistics.</p>
+                                <p><strong>Location:</strong> Berlin-Brandenburg Academy of Sciences<br>
+                                <strong>Materials:</strong> <a href="#">View Presentations</a></p>
+                            </div>
+                        </div>
+                        <div class="event-item">
+                            <span class="event-badge past">Past</span>
+                            <div class="event-date">February 15, 2025</div>
+                            <h3 class="event-title">Workshop: Digital Tools in Historical Research</h3>
+                            <div class="event-content">
+                                <p>A hands-on workshop introducing participants to the latest digital tools and methodologies in historical research.</p>
+                                <p><strong>Location:</strong> University of Mainz<br>
+                                <strong>Materials:</strong> <a href="#">Download Workshop Materials</a></p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+        </div>
+
+        <!-- Media Section - Full Width -->
+        <div class="content-wrapper" style="grid-template-columns: 1fr;">
+            <section id="media" class="media-section">
+                <h2 class="section-title" data-translate="media">
+                    <span>Media</span>
+                    <i class="fas fa-chevron-down toggle-icon"></i>
+                </h2>
+                <div class="section-content">
+                    <!-- Photo Subsection -->
+                    <div class="subsection">
+                        <h3 class="subsection-title toggle-subsection">
+                            <span>Photos</span>
+                            <i class="fas fa-chevron-down toggle-icon"></i>
+                        </h3>
+                        <div class="subsection-content">
+                            <!-- Container for the image gallery -->
+                            <div class="container">
+                                <!-- Full-width images with number text -->
+                                <div class="mySlides">
+                                    <div class="numbertext">1 / 7</div>
+                                    <img src="photo/1.png">
+                                </div>
+
+                                <div class="mySlides">
+                                    <div class="numbertext">2 / 7</div>
+                                    <img src="photo/2.png">
+                                </div>
+
+                                <div class="mySlides">
+                                    <div class="numbertext">3 / 7</div>
+                                    <img src="photo/3.png">
+                                </div>
+
+                                <div class="mySlides">
+                                    <div class="numbertext">4 / 7</div>
+                                    <img src="photo/4.png">
+                                </div>
+
+                                <div class="mySlides">
+                                    <div class="numbertext">5 / 7</div>
+                                    <img src="photo/5.png">
+                                </div>
+
+                                <div class="mySlides">
+                                    <div class="numbertext">6 / 7</div>
+                                    <img src="photo/6.png">
+                                </div>
+
+                                <div class="mySlides">
+                                    <div class="numbertext">7 / 7</div>
+                                    <img src="photo/7.png">
+                                </div>
+
+                                <!-- Next and previous buttons -->
+                                <a class="prev" onclick="plusSlides(-1)">&#10094;</a>
+                                <a class="next" onclick="plusSlides(1)">&#10095;</a>
+
+                                <!-- Image text -->
+                                <div class="caption-container">
+                                    <p id="caption"></p>
+                                </div>
+
+                                <!-- Thumbnail images -->
+                                <div class="row">
+                                    <div class="column">
+                                        <img class="demo cursor" src="photo/1.png" style="width:100%" onclick="currentSlide(1)" alt="1">
+                                    </div>
+                                    <div class="column">
+                                        <img class="demo cursor" src="photo/2.png" style="width:100%" onclick="currentSlide(2)" alt="2">
+                                    </div>
+                                    <div class="column">
+                                        <img class="demo cursor" src="photo/3.png" style="width:100%" onclick="currentSlide(3)" alt="3">
+                                    </div>
+                                    <div class="column">
+                                        <img class="demo cursor" src="photo/4.png" style="width:100%" onclick="currentSlide(4)" alt="4">
+                                    </div>
+                                    <div class="column">
+                                        <img class="demo cursor" src="photo/5.png" style="width:100%" onclick="currentSlide(5)" alt="5">
+                                    </div>
+                                    <div class="column">
+                                        <img class="demo cursor" src="photo/6.png" style="width:100%" onclick="currentSlide(6)" alt="6">
+                                    </div>
+                                    <div class="column">
+                                        <img class="demo cursor" src="photo/7.png" style="width:100%" onclick="currentSlide(7)" alt="7">
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Pressemappe Subsection -->
+                    <div class="subsection">
+                        <h3 class="subsection-title toggle-subsection">
+                            <span>Pressemappe</span>
+                            <i class="fas fa-chevron-down toggle-icon"></i>
+                        </h3>
+                        <div class="subsection-content">
+                            <ul class="press-kit-list">
+                                <li style="margin-bottom: 1rem;">
+                                    <i class="fas fa-file-pdf" style="color: #dc3545; margin-right: 0.5rem;"></i>
+                                    <a href="#" style="text-decoration: none; color: #333;">Press Release 2025 (PDF)</a>
+                                </li>
+                                <li style="margin-bottom: 1rem;">
+                                    <i class="fas fa-file-pdf" style="color: #dc3545; margin-right: 0.5rem;"></i>
+                                    <a href="#" style="text-decoration: none; color: #333;">Media Kit 2025 (PDF)</a>
+                                </li>
+                                <li style="margin-bottom: 1rem;">
+                                    <i class="fas fa-images" style="color: #28a745; margin-right: 0.5rem;"></i>
+                                    <a href="#" style="text-decoration: none; color: #333;">High-Resolution Logo Package (ZIP)</a>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </section>
+        </div>
+    </main>
+    <div id="footer-placeholder"></div>
+    <script src="js/include-components.js"></script>
+    <script type="module" src="script.js"></script>
+    <script src="js/gallery.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            // Get all section and subsection titles
+            const sectionTitles = document.querySelectorAll('.section-title');
+            const subsectionTitles = document.querySelectorAll('.toggle-subsection');
+            
+            // Add click event to each section title
+            sectionTitles.forEach(title => {
+                title.addEventListener('click', () => {
+                    title.classList.toggle('active');
+                    const content = title.nextElementSibling;
+                    content.classList.toggle('active');
+                });
+            });
+
+            // Add click event to each subsection title
+            subsectionTitles.forEach(title => {
+                title.addEventListener('click', (e) => {
+                    e.stopPropagation(); // Prevent triggering parent section toggle
+                    title.classList.toggle('active');
+                    const content = title.nextElementSibling;
+                    content.classList.toggle('active');
+                });
+            });
+
+            // Initialize the first slide
+            showSlides(1);
+        });
+    </script>
+</body>
+</html>

@@ -1,0 +1,171 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Liv Büchler - FSL Digital</title>
+    <link rel="stylesheet" href="../styles.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+    <style>
+        .profile-container {
+            max-width: 800px;
+            margin: 2rem auto;
+            padding: 2rem;
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 12px;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+        }
+
+        .profile-header {
+            display: flex;
+            align-items: center;
+            gap: 2rem;
+            margin-bottom: 2rem;
+            padding-bottom: 2rem;
+            border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+        }
+
+        .profile-photo {
+            width: 200px;
+            height: 200px;
+            border-radius: 50%;
+            object-fit: cover;
+            border: 4px solid rgba(255, 0, 0, 0.15);
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+        }
+
+        .profile-info h1 {
+            font-size: 2rem;
+            margin-bottom: 0.5rem;
+            color: var(--text-color);
+        }
+
+        .profile-info .title {
+            font-size: 1.1rem;
+            color: #555;
+            margin-bottom: 1rem;
+            line-height: 1.6;
+        }
+
+        .profile-section {
+            margin-bottom: 2rem;
+        }
+
+        .profile-section h2 {
+            color: var(--text-color);
+            font-size: 1.4rem;
+            margin-bottom: 1rem;
+            padding-bottom: 0.5rem;
+            border-bottom: 2px solid rgba(255, 0, 0, 0.3);
+        }
+
+        .profile-section ul {
+            list-style: none;
+            padding: 0;
+        }
+
+        .profile-section li {
+            position: relative;
+            padding-left: 1.5rem;
+            margin-bottom: 0.8rem;
+            color: #555;
+            line-height: 1.6;
+        }
+
+        .profile-section li:before {
+            content: '•';
+            position: absolute;
+            left: 0;
+            color: rgb(255, 0, 0);
+        }
+
+        .back-button {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            color: rgb(255, 0, 0);
+            text-decoration: none;
+            font-weight: 500;
+            margin-bottom: 1rem;
+            transition: all 0.3s;
+        }
+
+        .back-button:hover {
+            color: darkred;
+            transform: translateX(-3px);
+        }
+    </style>
+</head>
+<body>
+    <main>
+        <div class="profile-container">
+            <a href="../team.html" class="back-button">
+                <i class="fas fa-arrow-left"></i> Back to Team
+            </a>
+            
+            <div class="profile-header">
+                <img src="../team_photo/liv.jpg" alt="Liv Büchler" class="profile-photo">
+                <div class="profile-info">
+                    <h1>Liv Büchler</h1>
+                    <div class="title">
+                        <p>Wissenschaftliche Mitarbeiterin und Doktorandin</p>
+                        <p>Historische Fremdsprachenlehrwerke digital</p>
+                        <p>Berlin-Brandenburgische Akademie der Wissenschaften</p>
+                    </div>
+                    <div class="contact">
+                        <a href="mailto:liv.buechler@bbaw.de">liv.buechler@bbaw.de</a>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="profile-section">
+                    <h2>Liv Büchler | BBAW Berlin</h2>
+                    <p style="line-height: 1.6; margin-bottom: 2rem;">
+                        Mein Name ist Liv Büchler und ich bin wissenschaftliche Mitarbeiterin und Doktorandin am Berliner Standort des Projekts FSL digital. In meinem Promotionsprojekt untersuche ich Personenreferenzen in den Lehrwerken. Darüber hinaus bin ich an historischer Mündlichkeit interessiert und nehme daher insbesondere die Dialogteile in den Blick.
+                    </p>
+                </div>
+
+                <div class="profile-section">
+                    <h2>Aktuelle Tätigkeit</h2>
+                    <p style="line-height: 1.6; margin-bottom: 2rem;">
+                        An der Freien Universität Berlin gebe ich Lehrveranstaltungen zum Sprachwandel und an der Schnittstelle Deutsch als Fremdsprache und Historische Linguistik.
+                    </p>
+                </div>
+
+                <div class="profile-section">
+                    <h2>Vorherige Position</h2>
+                    <p style="line-height: 1.6; margin-bottom: 2rem;">
+                        Vor Projektstart an der BBAW war ich wissenschaftliche Mitarbeiterin im Teilprojekt „Fremdsprachenlernen und -lehren: Neukonfigurationen der Volkssprachlichkeit in der Frühen Neuzeit“ im SFB „Episteme in Bewegung“ (FU Berlin).
+                    </p>
+                </div>
+
+                <div class="profile-section">
+                    <h2>Links</h2>
+                    <ul>
+                        <li><a href="https://www.geisteswissenschaften.fu-berlin.de/we04/germanistik/mitarbeiter/wimi/buechler/index.html" target="_blank" rel="noopener">Webseite der FU Berlin</a></li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+        <div class="footer-logos">
+            <a href="https://www.bbaw.de/" target="_blank">
+                <img src="../footer/bbaw.png" alt="BBAW Logo" class="footer-logo">
+            </a>
+            <a href="https://www.akademienunion.de/" target="_blank">
+                <img src="../footer/Union_Grau_650dpi.jpg" alt="Union Logo" class="footer-logo">
+            </a>
+            <a href="https://www.adwmainz.de/startseite.html" target="_blank">
+                <img src="../footer/mainz.png" alt="Mainz Logo" class="footer-logo">
+            </a>
+        </div>
+        <div class="footer-credit">
+            <p>Developed and maintained by</p>
+            <a href="https://www.linglit.tu-darmstadt.de/institutlinglit/fachgebiete/ccl/index.en.jsp" target="_blank">
+                <img src="../footer/TU_Darmstadt_Logo.svg" alt="TU Darmstadt Logo" class="tu-logo">
+            </a>
+        </div>
+    </main>
+
+    <script type="module" src="../script.js"></script>
+</body>
+</html>

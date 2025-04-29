@@ -1,0 +1,275 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Publications - FSL Digital</title>
+    <link rel="icon" href="favicon/favicon.ico" type="image/x-icon">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <link rel="stylesheet" href="styles.css">
+    <style>
+        .content-wrapper {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 2rem;
+            margin: 2rem auto;
+            max-width: 1400px;
+            padding: 0 2rem;
+        }
+
+        .publication-section {
+            width: 100%;
+        }
+
+        .publication-content {
+            background: white;
+            border-radius: 8px;
+            padding: 1.5rem;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            margin-top: 1rem;
+            display: none; /* Hidden by default */
+        }
+
+        .publication-content.active {
+            display: block; /* Shown when active */
+        }
+
+        .section-title {
+            color: #333;
+            margin: 0 0 1.5rem;
+            padding: 1rem;
+            border-radius: 8px;
+            background: #f8f9fa;
+            cursor: pointer;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            transition: background-color 0.3s;
+        }
+
+        .section-title:hover {
+            background: #e9ecef;
+        }
+
+        .section-title.active {
+            background: #007bff;
+            color: white;
+        }
+
+        .publication-item {
+            margin-bottom: 1.5rem;
+            padding-bottom: 1.5rem;
+            border-bottom: 1px solid #eee;
+        }
+
+        .publication-item:last-child {
+            border-bottom: none;
+            margin-bottom: 0;
+            padding-bottom: 0;
+        }
+
+        .publication-title {
+            font-size: 1.1em;
+            color: #333;
+            margin-bottom: 0.5rem;
+        }
+
+        .publication-authors {
+            color: #666;
+            font-style: italic;
+            margin-bottom: 0.5rem;
+        }
+
+        .publication-details {
+            color: #444;
+            font-size: 0.9em;
+        }
+
+        .toggle-icon {
+            transition: transform 0.3s;
+        }
+
+        .section-title.active .toggle-icon {
+            transform: rotate(180deg);
+        }
+
+        @media (max-width: 768px) {
+            .content-wrapper {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <img src="background_photo.jpg" class="background-img" alt="background" style="opacity:0.4;">
+    
+    <header>
+        <nav class="navbar">
+            <div class="nav-left">
+                <div class="logo-container">
+                    <img src="logo/fsl_logo.gif" alt="FSL Logo" class="logo">
+                </div>
+                <h1 class="site-title">F<span>|</span> S <span>|</span> L <span class="digital">&lt;digital/&gt;</span></h1>
+            </div>
+
+            <div class="nav-center">
+                <ul class="nav-menu">
+                    <li><a href="index.html">Home</a></li>
+                    <li><a href="project.html">Project</a></li>
+                    <li><a href="team.html">Team</a></li>
+                    <li><a href="corpus.html">Corpus</a></li>
+                    <li><a href="news.html">News/Events</a></li>
+                    <li><a href="publication.html" class="active">Publication</a></li>
+                </ul>
+            </div>
+
+            <div class="nav-right">
+                <div class="controls">
+                    <div class="language-toggle">
+                        <label class="switch">
+                            <input type="checkbox" id="langToggle">
+                            <span class="slider">
+                                <img src="flags/gb.svg" alt="English" class="flag-icon en-flag">
+                                <img src="flags/de.svg" alt="German" class="flag-icon de-flag">
+                            </span>
+                        </label>
+                    </div>
+                </div>
+            </div>
+        </nav>
+    </header>
+
+    <main>
+        <h1 class="main-title">Publications</h1>
+
+        <div class="content-wrapper">
+            <!-- New Publications Section -->
+            <section id="new-publications" class="publication-section">
+                <h2 class="section-title" data-translate="newPublications">
+                    <span>Neuerscheinungen</span>
+                    <i class="fas fa-chevron-down toggle-icon"></i>
+                </h2>
+                <div class="publication-content">
+                    <div class="publication-item">
+                        <h3 class="publication-title">Digital Methods in Historical Language Teaching Research</h3>
+                        <div class="publication-authors">Michael Weiß, Sarah Schmidt</div>
+                        <div class="publication-details">
+                            <p>Journal of Digital Humanities, 2025<br>
+                            Volume 12, Issue 2, pp. 45-67<br>
+                            DOI: 10.1234/jdh.2025.123</p>
+                        </div>
+                    </div>
+                    <div class="publication-item">
+                        <h3 class="publication-title">Historical Language Teaching Materials: A Digital Perspective</h3>
+                        <div class="publication-authors">Anna Weber, Thomas Müller</div>
+                        <div class="publication-details">
+                            <p>Digital Scholarship in the Humanities, 2024<br>
+                            Volume 39, Issue 4, pp. 789-810<br>
+                            DOI: 10.1234/dsh.2024.456</p>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Secondary Literature Section -->
+            <section id="secondary-literature" class="publication-section">
+                <h2 class="section-title" data-translate="secondaryLiterature">
+                    <span>Sekundärliteratur</span>
+                    <i class="fas fa-chevron-down toggle-icon"></i>
+                </h2>
+                <div class="publication-content">
+                    <div class="publication-item">
+                        <h3 class="publication-title">The Evolution of Language Teaching Methods: 1800-1950</h3>
+                        <div class="publication-authors">Klaus Schneider, Maria Fischer</div>
+                        <div class="publication-details">
+                            <p>Historical Linguistics Review, 2024<br>
+                            Volume 45, Issue 1, pp. 112-134<br>
+                            DOI: 10.1234/hlr.2024.789</p>
+                        </div>
+                    </div>
+                    <div class="publication-item">
+                        <h3 class="publication-title">Digitizing Historical Teaching Materials: Best Practices</h3>
+                        <div class="publication-authors">Lisa Wagner, Peter Koch</div>
+                        <div class="publication-details">
+                            <p>Digital Archives Quarterly, 2023<br>
+                            Volume 8, Issue 3, pp. 223-245<br>
+                            DOI: 10.1234/daq.2023.012</p>
+                        </div>
+                    </div>
+                </div>
+            </section>
+        </div>
+    </main>
+
+    <footer>
+        <div class="footer-content">
+            <div class="footer-left">
+                <div class="footer-logos-container">
+                    <div class="footer-logos">
+                        <a href="https://www.bbaw.de/" target="_blank">
+                            <img src="footer/bbaw.png" alt="BBAW Logo" class="footer-logo">
+                        </a>
+                        <a href="https://www.akademienunion.de/" target="_blank">
+                            <img src="footer/Union_Grau_650dpi.jpg" alt="Union Logo" class="footer-logo">
+                        </a>
+                        <a href="https://www.adwmainz.de/startseite.html" target="_blank">
+                            <img src="footer/mainz.png" alt="Mainz Logo" class="footer-logo">
+                        </a>
+                    </div>
+                    <div class="footer-logos">
+                        <img src="footer/fb.png" alt="FB Logo" class="footer-logo">
+                        <img src="footer/uh.png" alt="UH Logo" class="footer-logo">
+                        <img src="footer/da.png" alt="DA Logo" class="footer-logo">
+                    </div>
+                </div>
+            </div>
+            <div class="footer-center">
+                <div class="social-icons">
+                    <a href="https://www.instagram.com/fsl_digital/" target="_blank">
+                        <i class="fa-brands fa-instagram fa-xl" style="color: #B197FC;"></i>
+                    </a>
+                    <a href="#" target="_blank">
+                        <i class="fa-brands fa-linkedin fa-xl" style="color: #74C0FC;"></i>
+                    </a>
+                    <a href="https://fedihum.org/@fsldigital" target="_blank">
+                        <i class="fa-brands fa-mastodon fa-xl" style="color: #B197FC;"></i>
+                    </a>
+                    <a href="https://bsky.app/profile/fsldigital.bsky.social" target="_blank">
+                        <i class="fa-solid fa-dove fa-xl" style="color: #74C0FC;"></i>
+                    </a>
+                </div>
+            </div>
+            <div class="footer-right">
+                <div class="footer-credit">
+                    <p>Developed and maintained by</p>
+                    <a href="https://www.linglit.tu-darmstadt.de/institutlinglit/fachgebiete/ccl/index.en.jsp" target="_blank">
+                        <img src="footer/TU_Darmstadt_Logo.svg" alt="TU Darmstadt Logo" class="tu-logo">
+                    </a>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <script type="module" src="script.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            // Get all section titles
+            const sectionTitles = document.querySelectorAll('.section-title');
+            
+            // Add click event to each section title
+            sectionTitles.forEach(title => {
+                title.addEventListener('click', () => {
+                    // Toggle active class on the title
+                    title.classList.toggle('active');
+                    
+                    // Get the content div that follows the title
+                    const content = title.nextElementSibling;
+                    
+                    // Toggle active class on the content
+                    content.classList.toggle('active');
+                });
+            });
+        });
+    </script>
+</body>
+</html>

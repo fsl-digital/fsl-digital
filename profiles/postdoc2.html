@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Post Doc Name 2 - Profile</title>
+    <link rel="icon" href="../favicon/favicon.ico" type="image/x-icon">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <link rel="stylesheet" href="../styles.css">
+    <style>
+        .profile-content {
+            max-width: 800px;
+            margin: 2rem auto;
+            padding: 2rem;
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 8px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+        }
+
+        .profile-header {
+            display: flex;
+            align-items: center;
+            gap: 2rem;
+            margin-bottom: 2rem;
+        }
+
+        .profile-photo {
+            width: 200px;
+            height: 200px;
+            border-radius: 50%;
+            object-fit: cover;
+            border: 3px solid rgba(255, 0, 0, 0.2);
+        }
+
+        .profile-info h1 {
+            font-size: 2rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .profile-section {
+            margin-bottom: 2rem;
+        }
+
+        .profile-section h2 {
+            color: rgb(255, 0, 0);
+            font-size: 1.5rem;
+            margin-bottom: 1rem;
+            padding-bottom: 0.5rem;
+            border-bottom: 2px solid rgba(255, 0, 0, 0.2);
+        }
+
+        .back-button {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            color: rgb(255, 0, 0);
+            text-decoration: none;
+            margin-bottom: 1rem;
+            transition: color 0.3s;
+        }
+
+        .back-button:hover {
+            color: darkred;
+        }
+    </style>
+</head>
+<body>
+    <main>
+        <div class="profile-content">
+            <a href="../team.html" class="back-button">
+                <i class="fas fa-arrow-left"></i> Back to Team
+            </a>
+            <div class="profile-header">
+                <img src="../placeholder.jpg" alt="Post Doc Name 2" class="profile-photo">
+                <div class="profile-info">
+                    <h1>Post Doc Name 2</h1>
+                    <p>Post Doctoral Researcher</p>
+                    <p><a href="mailto:postdoc2@example.com">postdoc2@example.com</a></p>
+                </div>
+            </div>
+
+            <section class="profile-section">
+                <h2>Research Interests</h2>
+                <ul>
+                    <li>Language Learning Technology</li>
+                    <li>Educational Data Mining</li>
+                    <li>Machine Learning in Education</li>
+                </ul>
+            </section>
+
+            <section class="profile-section">
+                <h2>Education</h2>
+                <ul>
+                    <li>Ph.D. in Educational Technology</li>
+                    <li>M.Sc. in Computer Science</li>
+                    <li>B.Eng. in Software Engineering</li>
+                </ul>
+            </section>
+
+            <section class="profile-section">
+                <h2>Publications</h2>
+                <ul>
+                    <li>Publication 1 (2024)</li>
+                    <li>Publication 2 (2023)</li>
+                    <li>Publication 3 (2022)</li>
+                </ul>
+            </section>
+
+            <section class="profile-section">
+                <h2>Current Projects</h2>
+                <ul>
+                    <li>Project 1 Description</li>
+                    <li>Project 2 Description</li>
+                </ul>
+            </section>
+        </div>
+        <div class="footer-logos">
+            <a href="https://www.bbaw.de/" target="_blank">
+                <img src="../footer/bbaw.png" alt="BBAW Logo" class="footer-logo">
+            </a>
+            <a href="https://www.akademienunion.de/" target="_blank">
+                <img src="../footer/Union_Grau_650dpi.jpg" alt="Union Logo" class="footer-logo">
+            </a>
+            <a href="https://www.adwmainz.de/startseite.html" target="_blank">
+                <img src="../footer/mainz.png" alt="Mainz Logo" class="footer-logo">
+            </a>
+        </div>
+        <div class="footer-credit">
+            <p>Developed and maintained by</p>
+            <a href="https://www.linglit.tu-darmstadt.de/institutlinglit/fachgebiete/ccl/index.en.jsp" target="_blank">
+                <img src="../footer/TU_Darmstadt_Logo.svg" alt="TU Darmstadt Logo" class="tu-logo">
+            </a>
+        </div>
+    </main>
+</body>
+</html>

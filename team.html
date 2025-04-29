@@ -1,0 +1,308 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Team - FSL Digital</title>
+    
+    <!-- Resource Hints -->
+    <link rel="preconnect" href="https://cdnjs.cloudflare.com">
+    <link rel="dns-prefetch" href="https://cdnjs.cloudflare.com">
+    
+    <!-- Preload critical assets -->
+    <link rel="preload" href="background_photo.jpg" as="image">
+    <link rel="preload" href="logo/fsl_logo.gif" as="image">
+    <link rel="preload" href="styles.css" as="style">
+    <link rel="preload" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" as="style">
+    <link rel="preload" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/webfonts/fa-solid-900.woff2" as="font" type="font/woff2" crossorigin>
+    
+    <!-- Favicon -->
+    <link rel="icon" href="favicon/favicon.ico" type="image/x-icon">
+    
+    <!-- Stylesheets -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <link rel="stylesheet" href="styles.css">
+    
+    <!-- Font loading optimization -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Arial:wght@400;700&display=swap" rel="stylesheet">
+    
+    <!-- Inline critical CSS -->
+    <style>
+        /* Critical rendering path CSS */
+        :root { --text-color: #333; --bg-color: #ffffff; }
+        body { margin: 0; font-family: Arial, sans-serif; opacity: 1; }
+        .navbar { position: fixed; top: 0; left: 0; right: 0; z-index: 1000; background: linear-gradient(to right, rgba(255,0,0,0.15), rgba(0,0,255,0.15)); }
+        .background-img { position: fixed; width: 100%; height: 100%; object-fit: cover; z-index: -1; }
+    </style>
+</head>
+<body>
+    <img src="background_photo.jpg" class="background-img" alt="background" style="opacity:0.4;" fetchpriority="high">
+    <div id="nav-placeholder"></div>
+    <main>
+        <div class="team-intro">
+            <div class="team-banner">
+                <img src="media/team.png" alt="Team Banner" class="team-banner-image">
+            </div>
+            <p class="team-description" data-translate="teamDescription">Wir arbeiten gemeinsam an drei Arbeitsstellen in Berlin, Darmstadt und Hamburg und werden dabei unterstützt von der Berlin-Brandenburgischen Akademie der Wissenschaften, der Akademie der Wissenschaften und Literatur Mainz sowie weiteren Wissenschaftler:innen und Einrichtungen.</p>
+        </div>
+        <h1 class="main-title" data-translate="teamTitle">Our Team</h1>
+        <div class="content">
+            <!-- Professor Section -->
+            <section class="team-section professor-section">
+                <div class="section-header">
+                    <h2 data-translate="professor">Professor</h2>
+                    <button class="toggle-btn" aria-label="Toggle Professor section">
+                        <i class="fas fa-chevron-up"></i>
+                    </button>
+                </div>
+                <div class="team-grid">
+                    <div class="team-member">
+                        <img src="team_photo/RappAndrea.jpg" alt="Prof. Dr. Andrea Rapp" class="member-photo" loading="lazy">
+                        <h3 class="member-name">Prof. Dr. Andrea Rapp</h3>
+                        <p class="member-title">Akademie der Wissenschaften und der Literatur Mainz / Technische Universität Darmstadt </p>
+                        <div class="member-contact">
+                            <a href="mailto:rapp@linglit.tu-darmstadt.de">Email</a>
+                            <span class="separator">|</span>
+                            <a href="https://www.linglit.tu-darmstadt.de/institutlinglit/mitarbeitende/andrearapp/index.de.jsp" target="_blank" rel="noopener">Profile</a>
+                        </div>
+                    </div>
+                    <div class="team-member">
+                        <img src="team_photo/Simon.png" alt="Prof. Dr. Horst Simon" class="member-photo" loading="lazy">
+                        <h3 class="member-name">Prof. Dr. Horst Simon</h3>
+                        <p class="member-title">Professor für Historische Sprachwissenschaft an der FU</p>
+                        <div class="member-contact">
+                            <a href="mailto:horst.simon@fu-berlin.de">Email</a>
+                            <span class="separator">|</span>
+                            <a href="https://www.geisteswissenschaften.fu-berlin.de/we04/linguistik/histling/mitarbeiter_innen/prof/simon/index.html" target="_blank" rel="noopener">Profile</a>
+                        </div>
+                    </div>
+                    <div class="team-member">
+                        <img src="team_photo/natalia-filatkina.jpg" alt="Prof. Dr. Natalia Filatkina" class="member-photo" loading="lazy">
+                        <h3 class="member-name">Prof. Dr. Natalia Filatkina</h3>
+                        <p class="member-title">Vizepräsidentin der Universität Hamburg</p>
+                        <div class="member-contact">
+                            <a href="mailto:vp2@uni-hamburg.de">Email</a>
+                            <span class="separator">|</span>
+                            <a href="https://www.uni-hamburg.de/uhh/organisation/praesidium/vp2.html" target="_blank" rel="noopener">Profile</a>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Post Doctoral Section -->
+            <section class="team-section postdoc-section">
+                <div class="section-header">
+                    <h2 data-translate="postDoc">Post Doctoral</h2>
+                    <button class="toggle-btn" aria-label="Toggle Post Doctoral section">
+                        <i class="fas fa-chevron-up"></i>
+                    </button>
+                </div>
+                <div class="team-grid">
+                    <div class="team-member">
+                        <img src="team_photo/Klingebeil.jpg" alt="Dr. Josephine Klingebeil-Schieke" class="member-photo" loading="lazy">
+                        <h3 class="member-name">Dr. Josephine Klingebeil-Schieke</h3>
+                        <p class="member-title">Arbeitsstellenleiterin<br>Historische Fremdsprachenlehrwerke digital. Sprachgeschichte, Sprachvorstellungen und Alltagskommunikation im Kontext der Mehrsprachigkeit im Europa der Frühen Neuzeit</p>
+                        <div class="member-contact">
+                            <a href="mailto:josephine.klingebeil-schieke@bbaw.de">Email</a>
+                            <span class="separator">|</span>
+                            <a href="profiles/klingebeil.html" class="show-more" data-translate="showMore">Show more <i class="fas fa-arrow-right"></i></a>
+                        </div>
+                    </div>
+                    <div class="team-member">
+                        <img src="team_photo/KerstinRoth.jpg" alt="Dr. Kerstin Roth" class="member-photo" loading="lazy">
+                        <h3 class="member-name">Dr. Kerstin Roth</h3>
+                        <p class="member-title" data-translate="rothTitle">Research Associate and Head of Office (Hamburg) of the Academy Project Historical Foreign Language Teaching Materials Digital (FSL Digital, BBAW/Mainz)</p>
+                        <div class="member-contact">
+                            <a href="mailto:kerstin.roth@uni-hamburg.de">Email</a>
+                            <span class="separator">|</span>
+                            <a href="profiles/roth.html" class="show-more" data-translate="showMore">Show more <i class="fas fa-arrow-right"></i></a>
+                        </div>
+                    </div>
+                    <div class="team-member">
+                        <img src="team_photo/no_photo.jpg" alt="Dr. Luise Borek" class="member-photo" loading="lazy">
+                        <h3 class="member-name">Dr. Luise Borek</h3>
+                        <p class="member-title" data-translate="borekTitle">Post Doctoral Researcher<br>Technical University of Darmstadt (on leave), Union of German Academies of Sciences<br><em>Currently on leave until 2026.</em></p>
+                        <div class="member-contact">
+                            <a href="mailto:luise.borek@tu-darmstadt.de">Email</a>
+                            <span class="separator">|</span>
+                            <a href="profiles/borek.html" class="show-more" data-translate="showMore">Show more <i class="fas fa-arrow-right"></i></a>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Ph.D Section -->
+            <section class="team-section">
+                <div class="section-header">
+                    <h2 data-translate="phd">Ph.D</h2>
+                    <button class="toggle-btn" aria-label="Toggle Ph.D section">
+                        <i class="fas fa-chevron-up"></i>
+                    </button>
+                </div>
+                <div class="team-grid">
+                    <div class="team-member">
+                        <img src="team_photo/dp.jpg" alt="Debajyoti Paul Chowdhury" class="member-photo" loading="lazy">
+                        <h3 class="member-name">Debajyoti Paul Chowdhury</h3>
+                        <p class="member-title" data-translate="dpTitle">Research Associate<br>Corpus and Computational Linguistics<br>Technical University of Darmstadt</p>
+                        <div class="member-contact">
+                            <a href="mailto:debajyoti.chowdhury@tu-darmstadt.de">Email</a>
+                        </div>
+                    </div>
+                    <div class="team-member">
+                        <img src="team_photo/BandtElena.jpg" alt="Elena Bandt" class="member-photo" loading="lazy">
+                        <h3 class="member-name">Elena Bandt</h3>
+                        <p class="member-title">Wissenschaftliche Mitarbeiterin<br>Historische Fremdsprachenlehrwerke digital<br>Berlin-Brandenburgische Akademie der Wissenschaften</p>
+                        <div class="member-contact">
+                            <a href="mailto:elena.bandt@bbaw.de">Email</a>
+                            <span class="separator">|</span>
+                            <a href="profiles/bandt.html" class="show-more" data-translate="showMore">Show more <i class="fas fa-arrow-right"></i></a>
+                        </div>
+                    </div>
+                    <div class="team-member">
+                        <img src="team_photo/no_photo.jpg" alt="Elena Volkanovska" class="member-photo" loading="lazy">
+                        <h3 class="member-name">Elena Volkanovska</h3>
+                        <p class="member-title" data-translate="volkanovskaTitle">Research Associate<br>BMBF Joint Project InsightsNet<br>Technical University of Darmstadt</p>
+                        <div class="member-contact">
+                            <a href="mailto:elena.volkanovska@tu-darmstadt.de">Email</a>
+                        </div>
+                    </div>
+                    <div class="team-member">
+                        <img src="team_photo/no_photo.jpg" alt="Lisa Scharrer" class="member-photo" loading="lazy">
+                        <h3 class="member-name">Lisa Scharrer, M.A.</h3>
+                        <p class="member-title">Wissenschaftliche Mitarbeiterin<br>Institut für Sprach- und Literaturwissenschaft<br>Technische Universität Darmstadt</p>
+                        <div class="member-contact">
+                            <a href="mailto:lisa.scharrer@tu-darmstadt.de">Email</a>
+                        </div>
+                    </div>
+                    <div class="team-member">
+                        <img src="team_photo/liv.jpg" alt="Liv Büchler" class="member-photo" loading="lazy">
+                        <h3 class="member-name">Liv Büchler</h3>
+                        <p class="member-title">Wissenschaftliche Mitarbeiterin<br>Historische Fremdsprachenlehrwerke digital<br>Berlin-Brandenburgische Akademie der Wissenschaften</p>
+                        <div class="member-contact">
+                            <a href="mailto:liv.buechler@bbaw.de">Email</a>
+                            <span class="separator">|</span>
+                            <a href="profiles/buechler.html" class="show-more" data-translate="showMore">Show more <i class="fas fa-arrow-right"></i></a>
+                        </div>
+                    </div>
+
+                    </div>
+                </div>
+            </section>
+            <section class="team-section">
+                <div class="section-header">
+                    <h2 data-translate="shk">SHK</h2>
+                    <button class="toggle-btn" aria-label="Toggle SHK section">
+                        <i class="fas fa-chevron-up"></i>
+                    </button>
+                </div>
+                <div class="team-grid">
+                    <div class="team-member">
+                        <img src="team_photo/SchrammAnja.jpg" alt="Anja Schramm" class="member-photo" loading="lazy">
+                        <h3 class="member-name">Anja Schramm</h3>
+                        <p class="member-title">Studentische Hilfskraft<br>Berlin-Brandenburgische Akademie der Wissenschaften</p>
+                        <div class="member-contact">
+                            <a href="mailto:anja.schramm@bbaw.de">Email</a>
+                        </div>
+                    </div>
+                    <div class="team-member">
+                        <img src="team_photo/no_photo.jpg" alt="Carlotta Schilke" class="member-photo" loading="lazy">
+                        <h3 class="member-name">Carlotta Schilke</h3>
+                        <p class="member-title">Studentische Hilfskraft<br>Berlin-Brandenburgische Akademie der Wissenschaften</p>
+                    </div>
+                    <div class="team-member">
+                        <img src="team_photo/Vertullo.jpg" alt="Francesca Romana Vertullo" class="member-photo" loading="lazy">
+                        <h3 class="member-name">Francesca Romana Vertullo</h3>
+                        <p class="member-title">Studentische Hilfskraft<br>Universität Hamburg</p>
+                        <div class="member-contact">
+                            <a href="mailto:francesca.romana.vertullo@uni-hamburg.de">Email</a>
+                        </div>
+                    </div>
+                    <div class="team-member">
+                        <img src="team_photo/no_photo.jpg" alt="Falco Risch" class="member-photo" loading="lazy">
+                        <h3 class="member-name">Falco Risch</h3>
+                        <p class="member-title">Studentische Hilfskraft<br>Technische Universität Darmstadt</p>
+                    </div>
+                    <div class="team-member">
+                        <img src="team_photo/no_photo.jpg" alt="Miriam Hinterholzer" class="member-photo" loading="lazy">
+                        <h3 class="member-name">Miriam Hinterholzer</h3>
+                        <p class="member-title">Studentische Hilfskraft<br>Universität Hamburg</p>
+                        <div class="member-contact">
+                            <a href="mailto:miriam.hinterholzer@studium.uni-hamburg.de">Email</a>
+                        </div>
+                    </div>
+                    <div class="team-member">
+                        <img src="team_photo/Scholl.jpg" alt="Peer Scholl" class="member-photo" loading="lazy">
+                        <h3 class="member-name">Peer Scholl</h3>
+                        <p class="member-title">Studentische Hilfskraft<br>Berlin-Brandenburgische Akademie der Wissenschaften</p>
+                        <div class="member-contact">
+                            <a href="mailto:peer.scholl@bbaw.de">Email</a>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Side by Side Sections Container -->
+            <div class="side-by-side-sections">
+                <!-- Werkstudent:innen Section -->
+                <section class="team-section werkstudent-section">
+                    <div class="section-header">
+                        <h2 data-translate="werkstudent">Working Students</h2>
+                        <button class="toggle-btn" aria-label="Toggle Working Students section">
+                            <i class="fas fa-chevron-up"></i>
+                        </button>
+                    </div>
+                    <div class="team-grid">
+                        <div class="team-member">
+                            <img src="team_photo/no_photo.jpg" alt="Alexandra Franz" class="member-photo" loading="lazy">
+                            <h3 class="member-name">Alexandra Franz</h3>
+                            <p class="member-title" data-translate="franzTitle">Working Student<br>Technical University of Darmstadt</p>
+                        </div>
+                        <div class="team-member">
+                            <img src="team_photo/no_photo.jpg" alt="Ekaterina Funk" class="member-photo" loading="lazy">
+                            <h3 class="member-name">Ekaterina Funk</h3>
+                            <p class="member-title" data-translate="funkTitle">Working Student<br>Technical University of Darmstadt</p>
+                        </div>
+                        <div class="team-member">
+                            <img src="team_photo/no_photo.jpg" alt="Stefanie Anna Voss" class="member-photo" loading="lazy">
+                            <h3 class="member-name">Stefanie Anna Voss</h3>
+                            <p class="member-title" data-translate="vossTitle">Working Student<br>Technical University of Darmstadt</p>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- Kooperationspartner:innen Section -->
+                <section class="team-section kooperation-section">
+                    <div class="section-header">
+                        <h2 data-translate="kooperation">Cooperation Partners</h2>
+                        <button class="toggle-btn" aria-label="Toggle Cooperation Partners section">
+                            <i class="fas fa-chevron-up"></i>
+                        </button>
+                    </div>
+                    <div class="team-grid">
+                        <div class="team-member">
+                            <img src="team_photo/no_photo.jpg" alt="Dr. Julia Hübner" class="member-photo" loading="lazy">
+                            <h3 class="member-name">Dr. Julia Hübner</h3>
+                            <p class="member-title" data-translate="huebnerTitle">Cooperation Partner<br>University of Hamburg</p>
+                        </div>
+                        <div class="team-member">
+                            <img src="team_photo/no_photo.jpg" alt="Dr. Elizaveta Zimont" class="member-photo" loading="lazy">
+                            <h3 class="member-name">Dr. Elizaveta Zimont</h3>
+                            <p class="member-title" data-translate="zimontTitle">Cooperation Partner<br>University of Hamburg</p>
+                        </div>
+                        <div class="team-member">
+                            <img src="team_photo/no_photo.jpg" alt="Linda Gennies" class="member-photo" loading="lazy">
+                            <h3 class="member-name">Linda Gennies</h3>
+                            <p class="member-title" data-translate="genniesTitle">Cooperation Partner<br>University of Hamburg</p>
+                        </div>
+                    </div>
+                </section>
+            </div>
+        </div>
+    </main>
+    <div id="footer-placeholder"></div>
+    <script src="js/include-components.js"></script>
+    <script type="module" src="script.js"></script>
+</body>
+</html>

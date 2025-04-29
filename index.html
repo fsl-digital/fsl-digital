@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Fremdsprachenlehrwerke Digital</title>
+    <link rel="icon" href="favicon/favicon.ico" type="image/x-icon">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <link rel="stylesheet" href="styles.css">
+    <style>
+        .background-img {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            object-fit: contain;
+            z-index: -1;
+        }
+    </style>
+</head>
+<body>
+    <img src="background_photo.jpg" class="background-img" alt="background" style="opacity:0.4;">
+    <div id="nav-placeholder"></div>
+    <main>
+        <h1 class="main-title" data-translate="mainTitle">Fremd <span>|</span> Sprachen <span>|</span> Lehrwerke</h1>
+        <div class="title-underline">
+            <div class="line-blue"></div>
+            <div class="line-red"></div>
+        </div>
+
+        <div class="book-sections">
+            <div class="book-section">
+                <a href="corpus.html" class="book-link">
+                    <div class="book-image">
+                        <img src="media/book1.jpg" alt="Historical Language Book 1" loading="lazy">
+                    </div>
+                </a>
+            </div>
+            <div class="book-section">
+                <a href="news.html" class="book-link">
+                    <div class="book-image">
+                        <img src="media/book2.jpg" alt="Historical Language Book 2" loading="lazy">
+                    </div>
+                </a>
+            </div>
+            <div class="book-section">
+                <a href="publication.html" class="book-link">
+                    <div class="book-image">
+                        <img src="media/book3.jpg" alt="Historical Language Book 3" loading="lazy">
+                    </div>
+                </a>
+            </div>
+        </div>
+    </main>
+    <div id="footer-placeholder"></div>
+    <script src="js/include-components.js"></script>
+    <script src="script.js"></script>
+</body>
+</html>

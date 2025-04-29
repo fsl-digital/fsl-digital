@@ -1,0 +1,219 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dr. Kerstin Roth - Profile</title>
+    <link rel="stylesheet" href="../styles.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+    <style>
+        .profile-container {
+            max-width: 800px;
+            margin: 2rem auto;
+            padding: 2rem;
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 12px;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+        }
+
+        .profile-header {
+            display: flex;
+            align-items: center;
+            gap: 2rem;
+            margin-bottom: 2rem;
+            padding-bottom: 2rem;
+            border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+        }
+
+        .profile-photo {
+            width: 200px;
+            height: 200px;
+            border-radius: 50%;
+            object-fit: cover;
+            border: 4px solid rgba(255, 0, 0, 0.15);
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+        }
+
+        .profile-info h1 {
+            font-size: 2rem;
+            margin-bottom: 0.5rem;
+            color: var(--text-color);
+        }
+
+        .profile-info .title {
+            font-size: 1.1rem;
+            color: #555;
+            margin-bottom: 1rem;
+            line-height: 1.6;
+        }
+
+        .profile-section {
+            margin-bottom: 2rem;
+        }
+
+        .profile-section h2 {
+            color: var(--text-color);
+            font-size: 1.4rem;
+            margin-bottom: 1rem;
+            padding-bottom: 0.5rem;
+            border-bottom: 2px solid rgba(255, 0, 0, 0.3);
+        }
+
+        .profile-section ul {
+            list-style: none;
+            padding: 0;
+        }
+
+        .profile-section li {
+            position: relative;
+            padding-left: 1.5rem;
+            margin-bottom: 0.8rem;
+            color: #555;
+            line-height: 1.6;
+        }
+
+        .profile-section li:before {
+            content: '•';
+            position: absolute;
+            left: 0;
+            color: rgb(255, 0, 0);
+        }
+
+        .back-button {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            color: rgb(255, 0, 0);
+            text-decoration: none;
+            font-weight: 500;
+            margin-bottom: 1rem;
+            transition: all 0.3s;
+        }
+
+        .back-button:hover {
+            color: darkred;
+            transform: translateX(-3px);
+        }
+
+        .interview-section .question-block {
+            margin-bottom: 2.5rem;
+        }
+
+        .interview-section h3 {
+            color: var(--text-color);
+            font-size: 1.2rem;
+            margin-bottom: 1rem;
+            font-weight: 500;
+        }
+
+        .interview-section p {
+            line-height: 1.6;
+            color: #333;
+            margin-bottom: 1rem;
+        }
+
+        .interview-section blockquote {
+            margin: 1.5rem 0;
+            padding: 1.5rem 2rem;
+            background: rgba(0, 0, 0, 0.03);
+            border-left: 4px solid rgb(255, 0, 0);
+            font-family: 'Times New Roman', serif;
+            font-style: italic;
+            color: #444;
+            line-height: 1.8;
+            position: relative;
+        }
+
+        .interview-section blockquote::before {
+            content: '“';
+            position: absolute;
+            left: 10px;
+            top: 0;
+            font-size: 3rem;
+            color: rgba(255, 0, 0, 0.2);
+            font-family: Georgia, serif;
+        }
+    </style>
+</head>
+<body>
+    <main>
+        <div class="profile-container">
+            <a href="../team.html" class="back-button">
+                <i class="fas fa-arrow-left"></i> Back to Team
+            </a>
+            
+            <div class="profile-header">
+                <img src="../team_photo/KerstinRoth.jpg" alt="Dr. Kerstin Roth" class="profile-photo">
+                <div class="profile-info">
+                    <h1>Dr. Kerstin Roth</h1>
+                    <div class="title">
+                        <p>Wissenschaftliche Mitarbeiterin und Arbeitsstellenleitung (Hamburg)</p>
+                        <p>Akademienvorhabens „historische Fremdsprachenlehrwerke digital" (FSL digital, BBAW/Mainz)</p>
+                    </div>
+                    <div class="contact">
+                        <a href="mailto:kerstin.roth@uni-hamburg.de">kerstin.roth@uni-hamburg.de</a>
+                    </div>
+                </div>
+            </div>
+
+            <div class="profile-section">
+                <h2>Kerstin Roth | ASL Hamburg (seit 04|2024)</h2>
+                <p style="line-height: 1.6; margin-bottom: 2rem;">
+                    Kerstin Roth arbeitet als Postdoc und Arbeitsstellenleiterin am Standort Hamburg des Projekts FSL digital. An der Ruprecht-Karls-Universität Heidelberg und der Technischen Universität Dresden gab sie Lehrveranstaltungen im Bereich der historischen Sprachwissenschaft/Sprachgeschichte. In ihrer Promotion hat sie sich mit Sprachgebrauch im 18. Jahrhundert beschäftigt und insbesondere mit Lebensbeschreibungen aus der Herrnhuter Brüdergemeine auseinander gesetzt.
+                </p>
+            </div>
+
+            <div class="profile-section">
+                <h2>Links</h2>
+                <ul>
+                    <li><a href="https://www.slm.uni-hamburg.de/germanistik/personen/roth.html" target="_blank" rel="noopener">Webseite der UHH</a></li>
+                </ul>
+            </div>
+
+            <div class="profile-section interview-section">
+                <h2>3 Fragen an Kerstin Roth</h2>
+                
+                <div class="question-block">
+                    <h3>📖 Welches Fremdsprachenlehrwerk begeistert dich aktuell ganz besonders?</h3>
+                    <p>Aktuell fasziniert mich ganz besonders der Schluͤſſel zur Polniſchen und Teutſchen Sprach von Jeremias Roter (1585—1630) aus dem Jahr 1616. Jeremias Roter bietet ein Lehrwerk, das sowohl von Deutschen als auch von Polen genutzt werden kann, um die Sprache der anderen zu verstehen. Mir gefällt die Metapher vom Schlüssel, die er im Titel seines Werkes verwendet. Sein Schlüssel ermöglicht es — um im Bild zu bleiben — sich einen neue Sprache auf- und damit zu erschließen.</p>
+                </div>
+
+                <div class="question-block">
+                    <h3>💬 Welches Zitat aus einem Fremdsprachenlehrwerk ist mir gerade sehr wichtig?</h3>
+                    <blockquote>
+                        Jedoch / ſo iſt // die wiſſenschafft mancher= // ley Sprachen / jetziger zeit /  // zum gemeinen Leben / das  // eine Nation die ander / im  // Handel und Wandel ver=  // ſtehen moͤge / hoch noͤtig // und nuͤtzlich.
+                    </blockquote>
+                    <p>Ich finde es beeindruckend, wie heute ganz aktuelle Themen, wie Handel in heutigem Sprachgebrauch, Wirtschaft ohne Zweifel mit dem Fremdspracherwerb verbunden ist. Jeremias Roter bietet uns ein überzeugendes Plädoyer für das Erlernen einer Fremdsprache.</p>
+                </div>
+
+                <div class="question-block">
+                    <h3>✨ Was interessiert dich, wenn du nicht an FSL arbeitest?</h3>
+                    <p>Ich interessiere mich für die Geschichte der deutschen Sprache und hier insbesondere für den Sprachgebrauch von Frauen in den vorherigen Jahrhunderten. Mit einigen Poetinnen und Wissenschaftlerinnen, ihrem Sprachgebrauch und ihren Möglichkeiten sich in der Gesellschaft zu präsentieren habe ich mich bereits in einzelnen Aufsätzen auseinander gesetzt.</p>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <footer>
+        <div class="footer-logos">
+            <a href="https://www.bbaw.de/" target="_blank">
+                <img src="../footer/bbaw.png" alt="BBAW Logo" class="footer-logo">
+            </a>
+            <a href="https://www.akademienunion.de/" target="_blank">
+                <img src="../footer/Union_Grau_650dpi.jpg" alt="Union Logo" class="footer-logo">
+            </a>
+            <a href="https://www.adwmainz.de/startseite.html" target="_blank">
+                <img src="../footer/mainz.png" alt="Mainz Logo" class="footer-logo">
+            </a>
+        </div>
+        <div class="footer-credit">
+            <p>Developed and maintained by</p>
+            <a href="https://www.linglit.tu-darmstadt.de/institutlinglit/fachgebiete/ccl/index.en.jsp" target="_blank">
+                <img src="../footer/TU_Darmstadt_Logo.svg" alt="TU Darmstadt Logo" class="tu-logo">
+            </a>
+        </div>
+    </footer>
+
+    <script type="module" src="../script.js"></script>
+</body>
+</html>
