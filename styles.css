@@ -461,13 +461,14 @@ main {
 footer {
     background: #ffffff;
     border-top: 1px solid var(--nav-border);
-    padding: 2rem;
+    padding: 2rem 0; /* Only vertical padding */
     margin-top: auto;
-    width: 100%;
+    width: 100vw; /* Full viewport width */
+    box-sizing: border-box;
 }
 
 .footer-content {
-    max-width: 1200px;
+    max-width: 1700px;
     margin: 0 auto;
     display: flex;
     justify-content: space-between;
@@ -575,11 +576,13 @@ footer {
     }
 }
 
+
 /* Ensure footer stays at bottom */
 body {
     min-height: 100vh;
     display: flex;
     flex-direction: column;
+    margin: 0;
 }
 
 main {
