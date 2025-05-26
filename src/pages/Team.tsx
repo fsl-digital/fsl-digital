@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import Header from '@/components/Header';
 import Footer from '@/components/Footer';
+import { getImagePath } from '@/lib/image-utils';
 
 const sections = [
   { key: 'leader', title: { en: 'Team Leader', de: 'Teamleiter' } },
@@ -50,7 +51,7 @@ const Team = ({ lang = 'en', setLang }) => {
                   {section.key === 'leader' && (
                     <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
                       <div className="flex flex-col items-center h-full justify-between bg-transparent">
-                        <img src="/lovable-uploads/team_photo/RappAndrea.jpg" alt="Prof. Dr. Andrea Rapp" className="w-48 h-48 object-cover rounded-lg shadow-md mb-4" />
+                        <img src={getImagePath('/lovable-uploads/team_photo/RappAndrea.jpg')} alt="Prof. Dr. Andrea Rapp" className="w-48 h-48 object-cover rounded-lg shadow-md mb-4" />
                         <h3 className="text-lg font-bold font-sans">
                           <a href="https://www.linglit.tu-darmstadt.de/institutlinglit/mitarbeitende/andrearapp/index.de.jsp" target="_blank" rel="noopener noreferrer" className="hover:text-blue-600 transition">Prof. Dr. Andrea Rapp</a>
                         </h3>
@@ -72,7 +73,7 @@ const Team = ({ lang = 'en', setLang }) => {
                         </div>
                       </div>
                       <div className="flex flex-col items-center h-full justify-between bg-transparent">
-                        <img src="/lovable-uploads/team_photo/Simon.png" alt="Prof. Dr. Horst Simon" className="w-48 h-48 object-cover rounded-lg shadow-md mb-4" />
+                        <img src={getImagePath('/lovable-uploads/team_photo/Simon.png')} alt="Prof. Dr. Horst Simon" className="w-48 h-48 object-cover rounded-lg shadow-md mb-4" />
                         <h3 className="text-lg font-bold font-sans">
                           <a href="https://www.geisteswissenschaften.fu-berlin.de/we04/linguistik/histling/mitarbeiter_innen/prof/simon/index.html" target="_blank" rel="noopener noreferrer" className="hover:text-blue-600 transition">Prof. Dr. Horst Simon</a>
                         </h3>
@@ -88,7 +89,7 @@ const Team = ({ lang = 'en', setLang }) => {
                         </div>
                       </div>
                       <div className="flex flex-col items-center h-full justify-between bg-transparent">
-                        <img src="/lovable-uploads/team_photo/natalia-filatkina.jpg" alt="Prof. Dr. Natalia Filatkina" className="w-48 h-48 object-cover rounded-lg shadow-md mb-4" />
+                        <img src={getImagePath('/lovable-uploads/team_photo/natalia-filatkina.jpg')} alt="Prof. Dr. Natalia Filatkina" className="w-48 h-48 object-cover rounded-lg shadow-md mb-4" />
                         <h3 className="text-lg font-bold font-sans">
                           <a href="https://www.uni-hamburg.de/uhh/organisation/praesidium/vp2.html" target="_blank" rel="noopener noreferrer" className="hover:text-blue-600 transition">Prof. Dr. Natalia Filatkina</a>
                         </h3>
@@ -116,7 +117,7 @@ const Team = ({ lang = 'en', setLang }) => {
                   {section.key === 'postdoc' && (
                     <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
                       <div className="flex flex-col items-center h-full justify-between bg-transparent">
-                        <img src="/lovable-uploads/team_photo/Klingebeil.jpg" alt="Dr. Josephine Klingebeil-Schieke" className="w-48 h-48 object-cover rounded-lg shadow-md mb-4" />
+                        <img src={getImagePath('/lovable-uploads/team_photo/Klingebeil.jpg')} alt="Dr. Josephine Klingebeil-Schieke" className="w-48 h-48 object-cover rounded-lg shadow-md mb-4" />
                         <h3 className="text-lg font-bold font-sans">Dr. Josephine Klingebeil-Schieke</h3>
                         <p className="text-center text-gray-700 mb-2 text-sm">
                           {lang === 'en' ? 'Berlin-Brandenburg Academy of Sciences and Humanities' : 'Berlin-Brandenburgische Akademie der Wissenschaften'}
@@ -126,7 +127,7 @@ const Team = ({ lang = 'en', setLang }) => {
                         </div>
                       </div>
                       <div className="flex flex-col items-center h-full justify-between bg-transparent">
-                        <img src="/lovable-uploads/team_photo/KerstinRoth.jpg" alt="Dr. Kerstin Roth" className="w-48 h-48 object-cover rounded-lg shadow-md mb-4" />
+                        <img src={getImagePath('/lovable-uploads/team_photo/KerstinRoth.jpg')} alt="Dr. Kerstin Roth" className="w-48 h-48 object-cover rounded-lg shadow-md mb-4" />
                         <h3 className="text-lg font-bold font-sans">Dr. Kerstin Roth</h3>
                         <p className="text-center text-gray-700 mb-2 text-sm">
                           {lang === 'en' ? 'University of Hamburg' : 'Universität Hamburg'}
@@ -136,7 +137,7 @@ const Team = ({ lang = 'en', setLang }) => {
                         </div>
                       </div>
                       <div className="flex flex-col items-center h-full justify-between bg-transparent">
-                        <img src="/lovable-uploads/team_photo/no_photo.jpg" alt="Dr. Luise Borek" className="w-48 h-48 object-cover rounded-lg shadow-md mb-4" />
+                        <img src={getImagePath('/lovable-uploads/team_photo/no_photo.jpg')} alt="Dr. Luise Borek" className="w-48 h-48 object-cover rounded-lg shadow-md mb-4" />
                         <h3 className="text-lg font-bold font-sans">Dr. Luise Borek</h3>
                         <p className="text-center text-gray-700 mb-2 text-sm">
                           {lang === 'en' ? (
@@ -162,7 +163,7 @@ const Team = ({ lang = 'en', setLang }) => {
                   {section.key === 'phd' && (
                     <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
                       <div className="flex flex-col items-center h-full justify-between bg-transparent">
-                        <img src="/lovable-uploads/team_photo/dp.jpg" alt="Debajyoti Paul Chowdhury" className="w-48 h-48 object-cover rounded-lg shadow-md mb-4" />
+                        <img src={getImagePath('/lovable-uploads/team_photo/dp.jpg')} alt="Debajyoti Paul Chowdhury" className="w-48 h-48 object-cover rounded-lg shadow-md mb-4" />
                         <h3 className="text-lg font-bold font-sans">Debajyoti Paul Chowdhury</h3>
                         <p className="text-center text-gray-700 mb-2 text-sm">{lang === 'en' ? 'Technical University of Darmstadt' : 'Technische Universität Darmstadt'}</p>
                         <div className="mt-auto w-full flex justify-center items-center gap-2 flex-nowrap">
@@ -170,7 +171,7 @@ const Team = ({ lang = 'en', setLang }) => {
                         </div>
                       </div>
                       <div className="flex flex-col items-center h-full justify-between bg-transparent">
-                        <img src="/lovable-uploads/team_photo/BandtElena.jpg" alt="Elena Bandt" className="w-48 h-48 object-cover rounded-lg shadow-md mb-4" />
+                        <img src={getImagePath('/lovable-uploads/team_photo/BandtElena.jpg')} alt="Elena Bandt" className="w-48 h-48 object-cover rounded-lg shadow-md mb-4" />
                         <h3 className="text-lg font-bold font-sans">Elena Bandt</h3>
                         <p className="text-center text-gray-700 mb-2 text-sm">{lang === 'en' ? 'Berlin-Brandenburg Academy of Sciences and Humanities' : 'Berlin-Brandenburgische Akademie der Wissenschaften'}</p>
                         <div className="mt-auto w-full flex justify-center items-center gap-2 flex-nowrap">
@@ -178,7 +179,7 @@ const Team = ({ lang = 'en', setLang }) => {
                         </div>
                       </div>
                       <div className="flex flex-col items-center h-full justify-between bg-transparent">
-                        <img src="/lovable-uploads/team_photo/no_photo.jpg" alt="Elena Volkanovska" className="w-48 h-48 object-cover rounded-lg shadow-md mb-4" />
+                        <img src={getImagePath('/lovable-uploads/team_photo/no_photo.jpg')} alt="Elena Volkanovska" className="w-48 h-48 object-cover rounded-lg shadow-md mb-4" />
                         <h3 className="text-lg font-bold font-sans">Elena Volkanovska</h3>
                         <p className="text-center text-gray-700 mb-2 text-sm">{lang === 'en' ? 'Technical University of Darmstadt' : 'Technische Universität Darmstadt'}</p>
                         <div className="mt-auto w-full flex justify-center items-center gap-2 flex-nowrap">
@@ -186,7 +187,7 @@ const Team = ({ lang = 'en', setLang }) => {
                         </div>
                       </div>
                       <div className="flex flex-col items-center h-full justify-between bg-transparent">
-                        <img src="/lovable-uploads/team_photo/no_photo.jpg" alt="Lisa Scharrer" className="w-48 h-48 object-cover rounded-lg shadow-md mb-4" />
+                        <img src={getImagePath('/lovable-uploads/team_photo/no_photo.jpg')} alt="Lisa Scharrer" className="w-48 h-48 object-cover rounded-lg shadow-md mb-4" />
                         <h3 className="text-lg font-bold font-sans">Lisa Scharrer</h3>
                         <p className="text-center text-gray-700 mb-2 text-sm">{lang === 'en' ? 'Technical University of Darmstadt' : 'Technische Universität Darmstadt'}</p>
                         <div className="mt-auto w-full flex justify-center items-center gap-2 flex-nowrap">
@@ -194,7 +195,7 @@ const Team = ({ lang = 'en', setLang }) => {
                         </div>
                       </div>
                       <div className="flex flex-col items-center h-full justify-between bg-transparent">
-                        <img src="/lovable-uploads/team_photo/liv.jpg" alt="Liv Büchler" className="w-48 h-48 object-cover rounded-lg shadow-md mb-4" />
+                        <img src={getImagePath('/lovable-uploads/team_photo/liv.jpg')} alt="Liv Büchler" className="w-48 h-48 object-cover rounded-lg shadow-md mb-4" />
                         <h3 className="text-lg font-bold font-sans">Liv Büchler</h3>
                         <p className="text-center text-gray-700 mb-2 text-sm">{lang === 'en' ? 'Freie Universität Berlin' : 'Freie Universität Berlin'}</p>
                         <div className="mt-auto w-full flex justify-center items-center gap-2 flex-nowrap">
@@ -202,7 +203,7 @@ const Team = ({ lang = 'en', setLang }) => {
                         </div>
                       </div>
                       <div className="flex flex-col items-center h-full justify-between bg-transparent">
-                        <img src="/lovable-uploads/team_photo/no_photo.jpg" alt="Miriam Hinterholzer" className="w-48 h-48 object-cover rounded-lg shadow-md mb-4" />
+                        <img src={getImagePath('/lovable-uploads/team_photo/no_photo.jpg')} alt="Miriam Hinterholzer" className="w-48 h-48 object-cover rounded-lg shadow-md mb-4" />
                         <h3 className="text-lg font-bold font-sans">Miriam Hinterholzer</h3>
                         <p className="text-center text-gray-700 mb-2 text-sm">{lang === 'en' ? 'University of Hamburg' : 'Universität Hamburg'}</p>
                         <div className="mt-auto w-full flex justify-center items-center gap-2 flex-nowrap">
@@ -214,27 +215,27 @@ const Team = ({ lang = 'en', setLang }) => {
                   {section.key === 'assistant' && (
                     <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
                       <div className="flex flex-col items-center">
-                        <img src="/lovable-uploads/team_photo/SchrammAnja.jpg" alt="Anja Schramm" className="w-48 h-48 object-cover rounded-lg shadow-md mb-4" />
+                        <img src={getImagePath('/lovable-uploads/team_photo/SchrammAnja.jpg')} alt="Anja Schramm" className="w-48 h-48 object-cover rounded-lg shadow-md mb-4" />
                         <h3 className="text-lg font-bold font-sans">Anja Schramm</h3>
                         <p className="text-center text-gray-700 mb-2 text-sm">{lang === 'en' ? 'Berlin-Brandenburg Academy of Sciences and Humanities' : 'Berlin-Brandenburgische Akademie der Wissenschaften'}</p>
                       </div>
                       <div className="flex flex-col items-center">
-                        <img src="/lovable-uploads/team_photo/no_photo.jpg" alt="Carlotta Schilke" className="w-48 h-48 object-cover rounded-lg shadow-md mb-4" />
+                        <img src={getImagePath('/lovable-uploads/team_photo/no_photo.jpg')} alt="Carlotta Schilke" className="w-48 h-48 object-cover rounded-lg shadow-md mb-4" />
                         <h3 className="text-lg font-bold font-sans">Carlotta Schilke</h3>
                         <p className="text-center text-gray-700 mb-2 text-sm">{lang === 'en' ? 'Berlin-Brandenburg Academy of Sciences and Humanities' : 'Berlin-Brandenburgische Akademie der Wissenschaften'}</p>
                       </div>
                       <div className="flex flex-col items-center">
-                        <img src="/lovable-uploads/team_photo/Vertullo.jpg" alt="Francesca Romana Vertullo" className="w-48 h-48 object-cover rounded-lg shadow-md mb-4" />
+                        <img src={getImagePath('/lovable-uploads/team_photo/Vertullo.jpg')} alt="Francesca Romana Vertullo" className="w-48 h-48 object-cover rounded-lg shadow-md mb-4" />
                         <h3 className="text-lg font-bold font-sans">Francesca Romana Vertullo</h3>
                         <p className="text-center text-gray-700 mb-2 text-sm">{lang === 'en' ? 'University of Hamburg' : 'Universität Hamburg'}</p>
                       </div>
                       <div className="flex flex-col items-center">
-                        <img src="/lovable-uploads/team_photo/no_photo.jpg" alt="Falco Risch" className="w-48 h-48 object-cover rounded-lg shadow-md mb-4" />
+                        <img src={getImagePath('/lovable-uploads/team_photo/no_photo.jpg')} alt="Falco Risch" className="w-48 h-48 object-cover rounded-lg shadow-md mb-4" />
                         <h3 className="text-lg font-bold font-sans">Falco Risch</h3>
                         <p className="text-center text-gray-700 mb-2 text-sm">{lang === 'en' ? 'Technical University of Darmstadt' : 'Technische Universität Darmstadt'}</p>
                       </div>
                       <div className="flex flex-col items-center">
-                        <img src="/lovable-uploads/team_photo/Scholl.jpg" alt="Peer Scholl" className="w-48 h-48 object-cover rounded-lg shadow-md mb-4" />
+                        <img src={getImagePath('/lovable-uploads/team_photo/Scholl.jpg')} alt="Peer Scholl" className="w-48 h-48 object-cover rounded-lg shadow-md mb-4" />
                         <h3 className="text-lg font-bold font-sans">Peer Scholl</h3>
                         <p className="text-center text-gray-700 mb-2 text-sm">{lang === 'en' ? 'Berlin-Brandenburg Academy of Sciences and Humanities' : 'Berlin-Brandenburgische Akademie der Wissenschaften'}</p>
                       </div>
@@ -265,15 +266,15 @@ const Team = ({ lang = 'en', setLang }) => {
                   {section.key === 'working' && (
                     <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
                       <div className="flex flex-col items-center">
-                        <img src="/lovable-uploads/team_photo/no_photo.jpg" alt="Alexandra Franz" className="w-48 h-48 object-cover rounded-lg shadow-md mb-4" />
+                        <img src={getImagePath('/lovable-uploads/team_photo/no_photo.jpg')} alt="Alexandra Franz" className="w-48 h-48 object-cover rounded-lg shadow-md mb-4" />
                         <h3 className="text-lg font-bold font-sans">Alexandra Franz</h3>
                       </div>
                       <div className="flex flex-col items-center">
-                        <img src="/lovable-uploads/team_photo/no_photo.jpg" alt="Ekaterina Funk" className="w-48 h-48 object-cover rounded-lg shadow-md mb-4" />
+                        <img src={getImagePath('/lovable-uploads/team_photo/no_photo.jpg')} alt="Ekaterina Funk" className="w-48 h-48 object-cover rounded-lg shadow-md mb-4" />
                         <h3 className="text-lg font-bold font-sans">Ekaterina Funk</h3>
                       </div>
                       <div className="flex flex-col items-center">
-                        <img src="/lovable-uploads/team_photo/no_photo.jpg" alt="Stefanie Anna Voss" className="w-48 h-48 object-cover rounded-lg shadow-md mb-4" />
+                        <img src={getImagePath('/lovable-uploads/team_photo/no_photo.jpg')} alt="Stefanie Anna Voss" className="w-48 h-48 object-cover rounded-lg shadow-md mb-4" />
                         <h3 className="text-lg font-bold font-sans">Stefanie Anna Voss</h3>
                       </div>
                     </div>
@@ -281,19 +282,19 @@ const Team = ({ lang = 'en', setLang }) => {
                   {section.key === 'partners' && (
                     <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
                       <div className="flex flex-col items-center">
-                        <img src="/lovable-uploads/team_photo/no_photo.jpg" alt="Julia Hübner" className="w-48 h-48 object-cover rounded-lg shadow-md mb-4" />
+                        <img src={getImagePath('/lovable-uploads/team_photo/no_photo.jpg')} alt="Julia Hübner" className="w-48 h-48 object-cover rounded-lg shadow-md mb-4" />
                         <h3 className="text-lg font-bold font-sans">Julia Hübner</h3>
                         <p className="text-center text-gray-700 mb-2 text-sm">
                           {lang === 'en' ? 'University of Hamburg' : 'Universität Hamburg'}
                         </p>
                       </div>
                       <div className="flex flex-col items-center">
-                        <img src="/lovable-uploads/team_photo/no_photo.jpg" alt="Elizaveta Zimont" className="w-48 h-48 object-cover rounded-lg shadow-md mb-4" />
+                        <img src={getImagePath('/lovable-uploads/team_photo/no_photo.jpg')} alt="Elizaveta Zimont" className="w-48 h-48 object-cover rounded-lg shadow-md mb-4" />
                         <h3 className="text-lg font-bold font-sans">Elizaveta Zimont</h3>
                         <p className="text-center text-gray-700 mb-2 text-sm">Université de Reims Champagne-Ardenne</p>
                       </div>
                       <div className="flex flex-col items-center">
-                        <img src="/lovable-uploads/team_photo/no_photo.jpg" alt="Linda Gennies" className="w-48 h-48 object-cover rounded-lg shadow-md mb-4" />
+                        <img src={getImagePath('/lovable-uploads/team_photo/no_photo.jpg')} alt="Linda Gennies" className="w-48 h-48 object-cover rounded-lg shadow-md mb-4" />
                         <h3 className="text-lg font-bold font-sans">Linda Gennies</h3>
                         <p className="text-center text-gray-700 mb-2 text-sm">
                           {lang === 'en' ? 'Freie Universität Berlin' : 'Freie Universität Berlin'}
