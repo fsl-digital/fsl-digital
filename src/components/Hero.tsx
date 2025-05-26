@@ -1,4 +1,5 @@
 import React, { useState, useEffect, useRef } from 'react';
+import { getImagePath } from '@/lib/image-utils';
 
 const content = {
   en: {
@@ -20,13 +21,13 @@ const content = {
 };
 
 const images = [
-  '/lovable-uploads/photo/photo1.png',
-  '/lovable-uploads/photo/photo2.png',
-  '/lovable-uploads/photo/photo3.png',
-  '/lovable-uploads/photo/photo4.png',
-  '/lovable-uploads/photo/photo5.png',
-  '/lovable-uploads/photo/photo6.png',
-  '/lovable-uploads/photo/photo7.png',
+  getImagePath('/lovable-uploads/photo/photo1.png'),
+  getImagePath('/lovable-uploads/photo/photo2.png'),
+  getImagePath('/lovable-uploads/photo/photo3.png'),
+  getImagePath('/lovable-uploads/photo/photo4.png'),
+  getImagePath('/lovable-uploads/photo/photo5.png'),
+  getImagePath('/lovable-uploads/photo/photo6.png'),
+  getImagePath('/lovable-uploads/photo/photo7.png'),
 ];
 
 const FADE_DURATION = 1000; // ms
