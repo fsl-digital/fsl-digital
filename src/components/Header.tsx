@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { Menu, X } from 'lucide-react';
+import { Link } from 'react-router-dom';
 
 const navLabels = {
   en: [
@@ -27,9 +28,9 @@ const Header = ({ lang, setLang }) => {
     <header className="py-4 border-b fixed top-0 left-0 right-0 bg-white z-50 shadow-sm">
       <div className="container-custom flex justify-between items-center">
         <div className="flex items-center">
-          <a href="/" className="flex items-center">
+          <Link to="/" className="flex items-center">
             <img src="/lovable-uploads/FSL-WBM_klein.svg" alt="FSL Logo" className="max-h-20 w-auto" />
-          </a>
+          </Link>
         </div>
 
         {/* Mobile menu button */}
@@ -45,7 +46,7 @@ const Header = ({ lang, setLang }) => {
         {/* Desktop Navigation */}
         <nav className="hidden lg:flex space-x-8">
           {navLabels[lang].map((item) => (
-            <a key={item.href} href={item.href} className="nav-link">{item.label}</a>
+            <Link key={item.href} to={item.href} className="nav-link">{item.label}</Link>
           ))}
         </nav>
 
@@ -72,7 +73,7 @@ const Header = ({ lang, setLang }) => {
         <div className="lg:hidden absolute top-16 left-0 right-0 bg-white z-50 shadow-lg">
           <div className="container-custom py-4 flex flex-col space-y-4">
             {navLabels[lang].map((item) => (
-              <a key={item.href} href={item.href} className="nav-link" onClick={() => setIsMenuOpen(false)}>{item.label}</a>
+              <Link key={item.href} to={item.href} className="nav-link" onClick={() => setIsMenuOpen(false)}>{item.label}</Link>
             ))}
             <div className="flex items-center pt-2">
               <button
