@@ -81,7 +81,7 @@ const Hero = ({ lang = "en" }) => {
             <h1 className="text-4xl font-bold leading-tight mb-6">
               {content[lang].heading}
             </h1>
-            <p className="text-xl text-gray-600 mb-8">
+            <p className="text-xl text-gray-600 mb-8 text-justify">
               {content[lang].description}
             </p>
           </div>

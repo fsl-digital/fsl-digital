@@ -4,8 +4,8 @@ import Footer from '@/components/Footer';
 import { getImagePath } from '@/lib/image-utils';
 
 const sections = [
-  { key: 'leader', title: { en: 'Team Leader', de: 'Teamleiter' } },
-  { key: 'postdoc', title: { en: 'Post Doctoral', de: 'Postdoktorand' } },
+  { key: 'leader', title: { en: 'PI', de: 'Projektleitung' } },
+  { key: 'postdoc', title: { en: 'Team Leader', de: 'Arbeitsstellenleitung' } },
   { key: 'phd', title: { en: 'P.h.D', de: 'Doktorand' } },
   { key: 'assistant', title: { en: 'Student Assistant', de: 'Studentische Hilfskraft' } },
 ];
@@ -13,6 +13,7 @@ const sections = [
 const bottomSections = [
   { key: 'working', title: { en: 'Working Students', de: 'Werkstudenten' } },
   { key: 'partners', title: { en: 'Cooperation Partners', de: 'Kooperationspartner' } },
+  { key: 'alumni', title: { en: 'Team Alumni', de: 'Team Alumni' } },
 ];
 
 const ArrowIcon = ({ open }) => (
@@ -302,7 +303,10 @@ const Team = ({ lang = 'en', setLang }) => {
                       </div>
                     </div>
                   )}
-                  {section.key !== 'working' && section.key !== 'partners' && (
+                  {section.key === 'alumni' && (
+                    <p className="text-gray-700">Content for {section.title[lang]} goes here.</p>
+                  )}
+                  {section.key !== 'working' && section.key !== 'partners' && section.key !== 'alumni' && (
                     <p className="text-gray-700">Content for {section.title[lang]} goes here.</p>
                   )}
                 </div>
