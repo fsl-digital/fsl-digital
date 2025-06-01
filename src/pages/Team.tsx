@@ -3,6 +3,21 @@ import Header from '@/components/Header';
 import Footer from '@/components/Footer';
 import { getImagePath } from '@/lib/image-utils';
 
+// Helper function to get last name
+const getLastName = (fullName) => {
+  const parts = fullName.split(' ');
+  return parts[parts.length - 1];
+};
+
+// Helper function to sort members by last name
+const sortMembersByLastName = (members) => {
+  return [...members].sort((a, b) => {
+    const lastNameA = getLastName(a.name);
+    const lastNameB = getLastName(b.name);
+    return lastNameA.localeCompare(lastNameB);
+  });
+};
+
 const sections = [
   { key: 'leader', title: { en: 'PI', de: 'Projektleitung' } },
   { key: 'postdoc', title: { en: 'Team Leader', de: 'Arbeitsstellenleitung' } },
@@ -31,6 +46,217 @@ const Team = ({ lang = 'en', setLang }) => {
 
   const toggle = (key) => setOpen((prev) => ({ ...prev, [key]: !prev[key] }));
 
+  // Define team members for each section
+  const leaderMembers = [
+    {
+      name: "Prof. Dr. Andrea Rapp",
+      image: '/lovable-uploads/team_photo/RappAndrea.jpg',
+      link: "https://www.linglit.tu-darmstadt.de/institutlinglit/mitarbeitende/andrearapp/index.de.jsp",
+      email: "andrea.rapp@tu-darmstadt.de",
+      institution: {
+        en: "German Studies - Computational Philology and Medieval Studies\nTechnical University of Darmstadt",
+        de: "Germanistik - Computerphilologie und Mediävistik\nTechnische Universität Darmstadt"
+      }
+    },
+    {
+      name: "Prof. Dr. Horst Simon",
+      image: '/lovable-uploads/team_photo/Simon.png',
+      link: "https://www.geisteswissenschaften.fu-berlin.de/we04/linguistik/histling/mitarbeiter_innen/prof/simon/index.html",
+      email: "horst.simon@fu-berlin.de",
+      institution: {
+        en: "German Historical Linguistics - Freie Universität Berlin",
+        de: "Deutsche historische Linguistik - Freie Universität Berlin"
+      }
+    },
+    {
+      name: "Prof. Dr. Natalia Filatkina",
+      image: '/lovable-uploads/team_photo/natalia-filatkina.jpg',
+      link: "https://www.uni-hamburg.de/uhh/organisation/praesidium/vp2.html",
+      email: "natalia.filatkina@uni-hamburg.de",
+      institution: {
+        en: "Vice President for Studies and Teaching\nLinguistics of German with a focus on digital historical linguistics\nUniversity of Hamburg",
+        de: "Vizepräsidentin für Studium und Lehre\nLinguistik des Deutschen mit Schwerpunkt digitale historische Sprachwissenschaft\nUniversität Hamburg"
+      }
+    }
+  ];
+
+  const postdocMembers = [
+    {
+      name: "Dr. Luise Borek",
+      image: '/lovable-uploads/team_photo/no_photo.jpg',
+      email: "luise.borek@tu-darmstadt.de",
+      institution: {
+        en: "Technical University of Darmstadt (on leave)\nUnion of German Academies of Sciences\nCurrently on leave until 2026",
+        de: "Technische Universität Darmstadt (beurlaubt)\nUnion der deutschen Akademien der Wissenschaften\nDerzeit beurlaubt bis 2026"
+      }
+    },
+    {
+      name: "Dr. Josephine Klingebeil-Schieke",
+      image: '/lovable-uploads/team_photo/Klingebeil.jpg',
+      email: "klingebeil@bbaw.de",
+      institution: {
+        en: "Berlin-Brandenburg Academy of Sciences and Humanities",
+        de: "Berlin-Brandenburgische Akademie der Wissenschaften"
+      }
+    },
+    {
+      name: "Dr. Kerstin Roth",
+      image: '/lovable-uploads/team_photo/KerstinRoth.jpg',
+      email: "kerstin.roth@uni-hamburg.de",
+      institution: {
+        en: "University of Hamburg",
+        de: "Universität Hamburg"
+      }
+    }
+  ];
+
+  const phdMembers = [
+    {
+      name: "Elena Bandt",
+      image: '/lovable-uploads/team_photo/BandtElena.jpg',
+      email: "elena.bandt@bbaw.de",
+      institution: {
+        en: "Berlin-Brandenburg Academy of Sciences and Humanities",
+        de: "Berlin-Brandenburgische Akademie der Wissenschaften"
+      }
+    },
+    {
+      name: "Liv Büchler",
+      image: '/lovable-uploads/team_photo/liv.jpg',
+      email: "liv.buechler@bbaw.de",
+      institution: {
+        en: "Freie Universität Berlin",
+        de: "Freie Universität Berlin"
+      }
+    },
+    {
+      name: "Debajyoti Paul Chowdhury",
+      image: '/lovable-uploads/team_photo/dp.jpg',
+      email: "debajyoti.chowdhury@tu-darmstadt.de",
+      institution: {
+        en: "Technical University of Darmstadt",
+        de: "Technische Universität Darmstadt"
+      }
+    },
+    {
+      name: "Miriam Hinterholzer",
+      image: '/lovable-uploads/team_photo/no_photo.jpg',
+      email: "miriam.hinterholzer@uni-hamburg.de",
+      institution: {
+        en: "University of Hamburg",
+        de: "Universität Hamburg"
+      }
+    },
+    {
+      name: "Lisa Scharrer",
+      image: '/lovable-uploads/team_photo/no_photo.jpg',
+      email: "lisa.scharrer@tu-darmstadt.de",
+      institution: {
+        en: "Technical University of Darmstadt",
+        de: "Technische Universität Darmstadt"
+      }
+    },
+    {
+      name: "Elena Volkanovska",
+      image: '/lovable-uploads/team_photo/no_photo.jpg',
+      email: "elena.volkanovska@tu-darmstadt.de",
+      institution: {
+        en: "Technical University of Darmstadt",
+        de: "Technische Universität Darmstadt"
+      }
+    }
+  ];
+
+  const assistantMembers = [
+    {
+      name: "Falco Risch",
+      image: '/lovable-uploads/team_photo/no_photo.jpg',
+      institution: {
+        en: "Technical University of Darmstadt",
+        de: "Technische Universität Darmstadt"
+      }
+    },
+    {
+      name: "Carlotta Schilke",
+      image: '/lovable-uploads/team_photo/no_photo.jpg',
+      institution: {
+        en: "Berlin-Brandenburg Academy of Sciences and Humanities",
+        de: "Berlin-Brandenburgische Akademie der Wissenschaften"
+      }
+    },
+    {
+      name: "Anja Schramm",
+      image: '/lovable-uploads/team_photo/SchrammAnja.jpg',
+      institution: {
+        en: "Berlin-Brandenburg Academy of Sciences and Humanities",
+        de: "Berlin-Brandenburgische Akademie der Wissenschaften"
+      }
+    },
+    {
+      name: "Peer Scholl",
+      image: '/lovable-uploads/team_photo/Scholl.jpg',
+      institution: {
+        en: "Berlin-Brandenburg Academy of Sciences and Humanities",
+        de: "Berlin-Brandenburgische Akademie der Wissenschaften"
+      }
+    },
+    {
+      name: "Francesca Romana Vertullo",
+      image: '/lovable-uploads/team_photo/Vertullo.jpg',
+      institution: {
+        en: "University of Hamburg",
+        de: "Universität Hamburg"
+      }
+    }
+  ];
+
+  const workingMembers = [
+    {
+      name: "Alexandra Franz",
+      image: '/lovable-uploads/team_photo/no_photo.jpg'
+    },
+    {
+      name: "Ekaterina Funk",
+      image: '/lovable-uploads/team_photo/no_photo.jpg'
+    },
+    {
+      name: "Stefanie Anna Voss",
+      image: '/lovable-uploads/team_photo/no_photo.jpg'
+    }
+  ];
+
+  const partnerMembers = [
+    {
+      name: "Linda Gennies",
+      image: '/lovable-uploads/team_photo/no_photo.jpg',
+      institution: {
+        en: "Freie Universität Berlin",
+        de: "Freie Universität Berlin"
+      }
+    },
+    {
+      name: "Julia Hübner",
+      image: '/lovable-uploads/team_photo/no_photo.jpg',
+      institution: {
+        en: "University of Hamburg",
+        de: "Universität Hamburg"
+      }
+    },
+    {
+      name: "Elizaveta Zimont",
+      image: '/lovable-uploads/team_photo/no_photo.jpg',
+      institution: "Université de Reims Champagne-Ardenne"
+    }
+  ];
+
+  // Sort all members by last name
+  const sortedLeaderMembers = sortMembersByLastName(leaderMembers);
+  const sortedPostdocMembers = sortMembersByLastName(postdocMembers);
+  const sortedPhdMembers = sortMembersByLastName(phdMembers);
+  const sortedAssistantMembers = sortMembersByLastName(assistantMembers);
+  const sortedWorkingMembers = sortMembersByLastName(workingMembers);
+  const sortedPartnerMembers = sortMembersByLastName(partnerMembers);
+
   return (
     <div className="min-h-screen bg-[url('/lovable-uploads/team-bg.jpg')] bg-cover bg-center">
       <Header lang={lang} setLang={setLang} />
@@ -51,199 +277,66 @@ const Team = ({ lang = 'en', setLang }) => {
                 <div className="p-4 bg-white bg-opacity-80 rounded shadow mb-2 animate-fade-in">
                   {section.key === 'leader' && (
                     <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-                      <div className="flex flex-col items-center h-full justify-between bg-transparent">
-                        <img src={getImagePath('/lovable-uploads/team_photo/RappAndrea.jpg')} alt="Prof. Dr. Andrea Rapp" className="w-48 h-48 object-cover rounded-lg shadow-md mb-4" />
-                        <h3 className="text-lg font-bold font-sans">
-                          <a href="https://www.linglit.tu-darmstadt.de/institutlinglit/mitarbeitende/andrearapp/index.de.jsp" target="_blank" rel="noopener noreferrer" className="hover:text-blue-600 transition">Prof. Dr. Andrea Rapp</a>
-                        </h3>
-                        <p className="text-center text-gray-700 mb-2 text-sm">
-                          {lang === 'en' ? (
-                            <>
-                              German Studies - Computational Philology and Medieval Studies<br />
-                              Technical University of Darmstadt
-                            </>
-                          ) : (
-                            <>
-                              Germanistik - Computerphilologie und Mediävistik<br />
-                              Technische Universität Darmstadt
-                            </>
-                          )}
-                        </p>
-                        <div className="mt-auto w-full flex justify-center">
-                          <a href="mailto:andrea.rapp@tu-darmstadt.de" className="px-3 py-1 bg-gray-100 text-gray-700 rounded font-medium border border-gray-300 hover:bg-gray-200 transition">Email</a>
+                      {sortedLeaderMembers.map((member, index) => (
+                        <div key={index} className="flex flex-col items-center h-full justify-between bg-transparent">
+                          <img src={getImagePath(member.image)} alt={member.name} className="w-48 h-48 object-cover rounded-lg shadow-md mb-4" />
+                          <h3 className="text-lg font-bold font-sans">
+                            <a href={member.link} target="_blank" rel="noopener noreferrer" className="hover:text-blue-600 transition">{member.name}</a>
+                          </h3>
+                          <p className="text-center text-gray-700 mb-2 text-sm whitespace-pre-line">
+                            {member.institution[lang]}
+                          </p>
+                          <div className="mt-auto w-full flex justify-center">
+                            <a href={`mailto:${member.email}`} className="px-3 py-1 bg-gray-100 text-gray-700 rounded font-medium border border-gray-300 hover:bg-gray-200 transition">Email</a>
+                          </div>
                         </div>
-                      </div>
-                      <div className="flex flex-col items-center h-full justify-between bg-transparent">
-                        <img src={getImagePath('/lovable-uploads/team_photo/Simon.png')} alt="Prof. Dr. Horst Simon" className="w-48 h-48 object-cover rounded-lg shadow-md mb-4" />
-                        <h3 className="text-lg font-bold font-sans">
-                          <a href="https://www.geisteswissenschaften.fu-berlin.de/we04/linguistik/histling/mitarbeiter_innen/prof/simon/index.html" target="_blank" rel="noopener noreferrer" className="hover:text-blue-600 transition">Prof. Dr. Horst Simon</a>
-                        </h3>
-                        <p className="text-center text-gray-700 mb-2 text-sm">
-                          {lang === 'en' ? (
-                            'German Historical Linguistics - Freie Universität Berlin'
-                          ) : (
-                            'Deutsche historische Linguistik - Freie Universität Berlin'
-                          )}
-                        </p>
-                        <div className="mt-auto w-full flex justify-center">
-                          <a href="mailto:horst.simon@fu-berlin.de" className="px-3 py-1 bg-gray-100 text-gray-700 rounded font-medium border border-gray-300 hover:bg-gray-200 transition">Email</a>
-                        </div>
-                      </div>
-                      <div className="flex flex-col items-center h-full justify-between bg-transparent">
-                        <img src={getImagePath('/lovable-uploads/team_photo/natalia-filatkina.jpg')} alt="Prof. Dr. Natalia Filatkina" className="w-48 h-48 object-cover rounded-lg shadow-md mb-4" />
-                        <h3 className="text-lg font-bold font-sans">
-                          <a href="https://www.uni-hamburg.de/uhh/organisation/praesidium/vp2.html" target="_blank" rel="noopener noreferrer" className="hover:text-blue-600 transition">Prof. Dr. Natalia Filatkina</a>
-                        </h3>
-                        <p className="text-center text-gray-700 mb-2 text-sm">
-                          {lang === 'en' ? (
-                            <>
-                              Vice President for Studies and Teaching<br />
-                              Linguistics of German with a focus on digital historical linguistics<br />
-                              University of Hamburg
-                            </>
-                          ) : (
-                            <>
-                              Vizepräsidentin für Studium und Lehre<br />
-                              Linguistik des Deutschen mit Schwerpunkt digitale historische Sprachwissenschaft<br />
-                              Universität Hamburg
-                            </>
-                          )}
-                        </p>
-                        <div className="mt-auto w-full flex justify-center">
-                          <a href="mailto:natalia.filatkina@uni-hamburg.de" className="px-3 py-1 bg-gray-100 text-gray-700 rounded font-medium border border-gray-300 hover:bg-gray-200 transition">Email</a>
-                        </div>
-                      </div>
+                      ))}
                     </div>
                   )}
                   {section.key === 'postdoc' && (
                     <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-                      <div className="flex flex-col items-center h-full justify-between bg-transparent">
-                        <img src={getImagePath('/lovable-uploads/team_photo/Klingebeil.jpg')} alt="Dr. Josephine Klingebeil-Schieke" className="w-48 h-48 object-cover rounded-lg shadow-md mb-4" />
-                        <h3 className="text-lg font-bold font-sans">Dr. Josephine Klingebeil-Schieke</h3>
-                        <p className="text-center text-gray-700 mb-2 text-sm">
-                          {lang === 'en' ? 'Berlin-Brandenburg Academy of Sciences and Humanities' : 'Berlin-Brandenburgische Akademie der Wissenschaften'}
-                        </p>
-                        <div className="mt-auto w-full flex justify-center">
-                          <a href="mailto:klingebeil@bbaw.de" className="px-3 py-1 bg-gray-100 text-gray-700 rounded font-medium border border-gray-300 hover:bg-gray-200 transition">Email</a>
+                      {sortedPostdocMembers.map((member, index) => (
+                        <div key={index} className="flex flex-col items-center h-full justify-between bg-transparent">
+                          <img src={getImagePath(member.image)} alt={member.name} className="w-48 h-48 object-cover rounded-lg shadow-md mb-4" />
+                          <h3 className="text-lg font-bold font-sans">{member.name}</h3>
+                          <p className="text-center text-gray-700 mb-2 text-sm whitespace-pre-line">
+                            {member.institution[lang]}
+                          </p>
+                          <div className="mt-auto w-full flex justify-center">
+                            <a href={`mailto:${member.email}`} className="px-3 py-1 bg-gray-100 text-gray-700 rounded font-medium border border-gray-300 hover:bg-gray-200 transition">Email</a>
+                          </div>
                         </div>
-                      </div>
-                      <div className="flex flex-col items-center h-full justify-between bg-transparent">
-                        <img src={getImagePath('/lovable-uploads/team_photo/KerstinRoth.jpg')} alt="Dr. Kerstin Roth" className="w-48 h-48 object-cover rounded-lg shadow-md mb-4" />
-                        <h3 className="text-lg font-bold font-sans">Dr. Kerstin Roth</h3>
-                        <p className="text-center text-gray-700 mb-2 text-sm">
-                          {lang === 'en' ? 'University of Hamburg' : 'Universität Hamburg'}
-                        </p>
-                        <div className="mt-auto w-full flex justify-center">
-                          <a href="mailto:kerstin.roth@uni-hamburg.de" className="px-3 py-1 bg-gray-100 text-gray-700 rounded font-medium border border-gray-300 hover:bg-gray-200 transition">Email</a>
-                        </div>
-                      </div>
-                      <div className="flex flex-col items-center h-full justify-between bg-transparent">
-                        <img src={getImagePath('/lovable-uploads/team_photo/no_photo.jpg')} alt="Dr. Luise Borek" className="w-48 h-48 object-cover rounded-lg shadow-md mb-4" />
-                        <h3 className="text-lg font-bold font-sans">Dr. Luise Borek</h3>
-                        <p className="text-center text-gray-700 mb-2 text-sm">
-                          {lang === 'en' ? (
-                            <>
-                              Technical University of Darmstadt (on leave)<br />
-                              Union of German Academies of Sciences<br />
-                              Currently on leave until 2026
-                            </>
-                          ) : (
-                            <>
-                              Technische Universität Darmstadt (beurlaubt)<br />
-                              Union der deutschen Akademien der Wissenschaften<br />
-                              Derzeit beurlaubt bis 2026
-                            </>
-                          )}
-                        </p>
-                        <div className="mt-auto w-full flex justify-center">
-                          <a href="mailto:luise.borek@tu-darmstadt.de" className="px-3 py-1 bg-gray-100 text-gray-700 rounded font-medium border border-gray-300 hover:bg-gray-200 transition">Email</a>
-                        </div>
-                      </div>
+                      ))}
                     </div>
                   )}
                   {section.key === 'phd' && (
                     <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-                      <div className="flex flex-col items-center h-full justify-between bg-transparent">
-                        <img src={getImagePath('/lovable-uploads/team_photo/dp.jpg')} alt="Debajyoti Paul Chowdhury" className="w-48 h-48 object-cover rounded-lg shadow-md mb-4" />
-                        <h3 className="text-lg font-bold font-sans">Debajyoti Paul Chowdhury</h3>
-                        <p className="text-center text-gray-700 mb-2 text-sm">{lang === 'en' ? 'Technical University of Darmstadt' : 'Technische Universität Darmstadt'}</p>
-                        <div className="mt-auto w-full flex justify-center items-center gap-2 flex-nowrap">
-                          <a href="mailto:debajyoti.chowdhury@tu-darmstadt.de" className="px-3 py-1 bg-gray-100 text-gray-700 rounded font-medium border border-gray-300 hover:bg-gray-200 transition">Email</a>
+                      {sortedPhdMembers.map((member, index) => (
+                        <div key={index} className="flex flex-col items-center h-full justify-between bg-transparent">
+                          <img src={getImagePath(member.image)} alt={member.name} className="w-48 h-48 object-cover rounded-lg shadow-md mb-4" />
+                          <h3 className="text-lg font-bold font-sans">{member.name}</h3>
+                          <p className="text-center text-gray-700 mb-2 text-sm">
+                            {member.institution[lang]}
+                          </p>
+                          <div className="mt-auto w-full flex justify-center">
+                            <a href={`mailto:${member.email}`} className="px-3 py-1 bg-gray-100 text-gray-700 rounded font-medium border border-gray-300 hover:bg-gray-200 transition">Email</a>
+                          </div>
                         </div>
-                      </div>
-                      <div className="flex flex-col items-center h-full justify-between bg-transparent">
-                        <img src={getImagePath('/lovable-uploads/team_photo/BandtElena.jpg')} alt="Elena Bandt" className="w-48 h-48 object-cover rounded-lg shadow-md mb-4" />
-                        <h3 className="text-lg font-bold font-sans">Elena Bandt</h3>
-                        <p className="text-center text-gray-700 mb-2 text-sm">{lang === 'en' ? 'Berlin-Brandenburg Academy of Sciences and Humanities' : 'Berlin-Brandenburgische Akademie der Wissenschaften'}</p>
-                        <div className="mt-auto w-full flex justify-center items-center gap-2 flex-nowrap">
-                          <a href="mailto:elena.bandt@bbaw.de" className="px-3 py-1 bg-gray-100 text-gray-700 rounded font-medium border border-gray-300 hover:bg-gray-200 transition">Email</a>
-                        </div>
-                      </div>
-                      <div className="flex flex-col items-center h-full justify-between bg-transparent">
-                        <img src={getImagePath('/lovable-uploads/team_photo/no_photo.jpg')} alt="Elena Volkanovska" className="w-48 h-48 object-cover rounded-lg shadow-md mb-4" />
-                        <h3 className="text-lg font-bold font-sans">Elena Volkanovska</h3>
-                        <p className="text-center text-gray-700 mb-2 text-sm">{lang === 'en' ? 'Technical University of Darmstadt' : 'Technische Universität Darmstadt'}</p>
-                        <div className="mt-auto w-full flex justify-center items-center gap-2 flex-nowrap">
-                          <a href="mailto:elena.volkanovska@tu-darmstadt.de" className="px-3 py-1 bg-gray-100 text-gray-700 rounded font-medium border border-gray-300 hover:bg-gray-200 transition">Email</a>
-                        </div>
-                      </div>
-                      <div className="flex flex-col items-center h-full justify-between bg-transparent">
-                        <img src={getImagePath('/lovable-uploads/team_photo/no_photo.jpg')} alt="Lisa Scharrer" className="w-48 h-48 object-cover rounded-lg shadow-md mb-4" />
-                        <h3 className="text-lg font-bold font-sans">Lisa Scharrer</h3>
-                        <p className="text-center text-gray-700 mb-2 text-sm">{lang === 'en' ? 'Technical University of Darmstadt' : 'Technische Universität Darmstadt'}</p>
-                        <div className="mt-auto w-full flex justify-center items-center gap-2 flex-nowrap">
-                          <a href="mailto:lisa.scharrer@tu-darmstadt.de" className="px-3 py-1 bg-gray-100 text-gray-700 rounded font-medium border border-gray-300 hover:bg-gray-200 transition">Email</a>
-                        </div>
-                      </div>
-                      <div className="flex flex-col items-center h-full justify-between bg-transparent">
-                        <img src={getImagePath('/lovable-uploads/team_photo/liv.jpg')} alt="Liv Büchler" className="w-48 h-48 object-cover rounded-lg shadow-md mb-4" />
-                        <h3 className="text-lg font-bold font-sans">Liv Büchler</h3>
-                        <p className="text-center text-gray-700 mb-2 text-sm">{lang === 'en' ? 'Freie Universität Berlin' : 'Freie Universität Berlin'}</p>
-                        <div className="mt-auto w-full flex justify-center items-center gap-2 flex-nowrap">
-                          <a href="mailto:liv.buechler@bbaw.de" className="px-3 py-1 bg-gray-100 text-gray-700 rounded font-medium border border-gray-300 hover:bg-gray-200 transition">Email</a>
-                        </div>
-                      </div>
-                      <div className="flex flex-col items-center h-full justify-between bg-transparent">
-                        <img src={getImagePath('/lovable-uploads/team_photo/no_photo.jpg')} alt="Miriam Hinterholzer" className="w-48 h-48 object-cover rounded-lg shadow-md mb-4" />
-                        <h3 className="text-lg font-bold font-sans">Miriam Hinterholzer</h3>
-                        <p className="text-center text-gray-700 mb-2 text-sm">{lang === 'en' ? 'University of Hamburg' : 'Universität Hamburg'}</p>
-                        <div className="mt-auto w-full flex justify-center items-center gap-2 flex-nowrap">
-                          <a href="mailto:miriam.hinterholzer@uni-hamburg.de" className="px-3 py-1 bg-gray-100 text-gray-700 rounded font-medium border border-gray-300 hover:bg-gray-200 transition">Email</a>
-                        </div>
-                      </div>
+                      ))}
                     </div>
                   )}
                   {section.key === 'assistant' && (
                     <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-                      <div className="flex flex-col items-center">
-                        <img src={getImagePath('/lovable-uploads/team_photo/SchrammAnja.jpg')} alt="Anja Schramm" className="w-48 h-48 object-cover rounded-lg shadow-md mb-4" />
-                        <h3 className="text-lg font-bold font-sans">Anja Schramm</h3>
-                        <p className="text-center text-gray-700 mb-2 text-sm">{lang === 'en' ? 'Berlin-Brandenburg Academy of Sciences and Humanities' : 'Berlin-Brandenburgische Akademie der Wissenschaften'}</p>
-                      </div>
-                      <div className="flex flex-col items-center">
-                        <img src={getImagePath('/lovable-uploads/team_photo/no_photo.jpg')} alt="Carlotta Schilke" className="w-48 h-48 object-cover rounded-lg shadow-md mb-4" />
-                        <h3 className="text-lg font-bold font-sans">Carlotta Schilke</h3>
-                        <p className="text-center text-gray-700 mb-2 text-sm">{lang === 'en' ? 'Berlin-Brandenburg Academy of Sciences and Humanities' : 'Berlin-Brandenburgische Akademie der Wissenschaften'}</p>
-                      </div>
-                      <div className="flex flex-col items-center">
-                        <img src={getImagePath('/lovable-uploads/team_photo/Vertullo.jpg')} alt="Francesca Romana Vertullo" className="w-48 h-48 object-cover rounded-lg shadow-md mb-4" />
-                        <h3 className="text-lg font-bold font-sans">Francesca Romana Vertullo</h3>
-                        <p className="text-center text-gray-700 mb-2 text-sm">{lang === 'en' ? 'University of Hamburg' : 'Universität Hamburg'}</p>
-                      </div>
-                      <div className="flex flex-col items-center">
-                        <img src={getImagePath('/lovable-uploads/team_photo/no_photo.jpg')} alt="Falco Risch" className="w-48 h-48 object-cover rounded-lg shadow-md mb-4" />
-                        <h3 className="text-lg font-bold font-sans">Falco Risch</h3>
-                        <p className="text-center text-gray-700 mb-2 text-sm">{lang === 'en' ? 'Technical University of Darmstadt' : 'Technische Universität Darmstadt'}</p>
-                      </div>
-                      <div className="flex flex-col items-center">
-                        <img src={getImagePath('/lovable-uploads/team_photo/Scholl.jpg')} alt="Peer Scholl" className="w-48 h-48 object-cover rounded-lg shadow-md mb-4" />
-                        <h3 className="text-lg font-bold font-sans">Peer Scholl</h3>
-                        <p className="text-center text-gray-700 mb-2 text-sm">{lang === 'en' ? 'Berlin-Brandenburg Academy of Sciences and Humanities' : 'Berlin-Brandenburgische Akademie der Wissenschaften'}</p>
-                      </div>
+                      {sortedAssistantMembers.map((member, index) => (
+                        <div key={index} className="flex flex-col items-center">
+                          <img src={getImagePath(member.image)} alt={member.name} className="w-48 h-48 object-cover rounded-lg shadow-md mb-4" />
+                          <h3 className="text-lg font-bold font-sans">{member.name}</h3>
+                          <p className="text-center text-gray-700 mb-2 text-sm">
+                            {member.institution[lang]}
+                          </p>
+                        </div>
+                      ))}
                     </div>
-                  )}
-                  {section.key !== 'leader' && section.key !== 'postdoc' && section.key !== 'phd' && section.key !== 'assistant' && (
-                    <p className="text-gray-700">Content for {section.title[lang]} goes here.</p>
                   )}
                 </div>
               )}
@@ -266,47 +359,28 @@ const Team = ({ lang = 'en', setLang }) => {
                 <div className="p-4 bg-white bg-opacity-80 rounded shadow mb-2 animate-fade-in">
                   {section.key === 'working' && (
                     <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-                      <div className="flex flex-col items-center">
-                        <img src={getImagePath('/lovable-uploads/team_photo/no_photo.jpg')} alt="Alexandra Franz" className="w-48 h-48 object-cover rounded-lg shadow-md mb-4" />
-                        <h3 className="text-lg font-bold font-sans">Alexandra Franz</h3>
-                      </div>
-                      <div className="flex flex-col items-center">
-                        <img src={getImagePath('/lovable-uploads/team_photo/no_photo.jpg')} alt="Ekaterina Funk" className="w-48 h-48 object-cover rounded-lg shadow-md mb-4" />
-                        <h3 className="text-lg font-bold font-sans">Ekaterina Funk</h3>
-                      </div>
-                      <div className="flex flex-col items-center">
-                        <img src={getImagePath('/lovable-uploads/team_photo/no_photo.jpg')} alt="Stefanie Anna Voss" className="w-48 h-48 object-cover rounded-lg shadow-md mb-4" />
-                        <h3 className="text-lg font-bold font-sans">Stefanie Anna Voss</h3>
-                      </div>
+                      {sortedWorkingMembers.map((member, index) => (
+                        <div key={index} className="flex flex-col items-center">
+                          <img src={getImagePath(member.image)} alt={member.name} className="w-48 h-48 object-cover rounded-lg shadow-md mb-4" />
+                          <h3 className="text-lg font-bold font-sans">{member.name}</h3>
+                        </div>
+                      ))}
                     </div>
                   )}
                   {section.key === 'partners' && (
                     <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-                      <div className="flex flex-col items-center">
-                        <img src={getImagePath('/lovable-uploads/team_photo/no_photo.jpg')} alt="Julia Hübner" className="w-48 h-48 object-cover rounded-lg shadow-md mb-4" />
-                        <h3 className="text-lg font-bold font-sans">Julia Hübner</h3>
-                        <p className="text-center text-gray-700 mb-2 text-sm">
-                          {lang === 'en' ? 'University of Hamburg' : 'Universität Hamburg'}
-                        </p>
-                      </div>
-                      <div className="flex flex-col items-center">
-                        <img src={getImagePath('/lovable-uploads/team_photo/no_photo.jpg')} alt="Elizaveta Zimont" className="w-48 h-48 object-cover rounded-lg shadow-md mb-4" />
-                        <h3 className="text-lg font-bold font-sans">Elizaveta Zimont</h3>
-                        <p className="text-center text-gray-700 mb-2 text-sm">Université de Reims Champagne-Ardenne</p>
-                      </div>
-                      <div className="flex flex-col items-center">
-                        <img src={getImagePath('/lovable-uploads/team_photo/no_photo.jpg')} alt="Linda Gennies" className="w-48 h-48 object-cover rounded-lg shadow-md mb-4" />
-                        <h3 className="text-lg font-bold font-sans">Linda Gennies</h3>
-                        <p className="text-center text-gray-700 mb-2 text-sm">
-                          {lang === 'en' ? 'Freie Universität Berlin' : 'Freie Universität Berlin'}
-                        </p>
-                      </div>
+                      {sortedPartnerMembers.map((member, index) => (
+                        <div key={index} className="flex flex-col items-center">
+                          <img src={getImagePath(member.image)} alt={member.name} className="w-48 h-48 object-cover rounded-lg shadow-md mb-4" />
+                          <h3 className="text-lg font-bold font-sans">{member.name}</h3>
+                          <p className="text-center text-gray-700 mb-2 text-sm">
+                            {typeof member.institution === 'string' ? member.institution : member.institution[lang]}
+                          </p>
+                        </div>
+                      ))}
                     </div>
                   )}
                   {section.key === 'alumni' && (
-                    <p className="text-gray-700">Content for {section.title[lang]} goes here.</p>
-                  )}
-                  {section.key !== 'working' && section.key !== 'partners' && section.key !== 'alumni' && (
                     <p className="text-gray-700">Content for {section.title[lang]} goes here.</p>
                   )}
                 </div>
