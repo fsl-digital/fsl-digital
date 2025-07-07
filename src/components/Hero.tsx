@@ -27,15 +27,31 @@ const content = {
   }
 };
 
-const images = [
-  getImagePath('/lovable-uploads/photo/photo1.png'),
-  getImagePath('/lovable-uploads/photo/photo2.png'),
-  getImagePath('/lovable-uploads/photo/photo3.png'),
-  getImagePath('/lovable-uploads/photo/photo4.png'),
-  getImagePath('/lovable-uploads/photo/photo5.png'),
-  getImagePath('/lovable-uploads/photo/photo6.png'),
-  getImagePath('/lovable-uploads/photo/photo7.png'),
+// Add CSV captions for each image
+const imageCaptions = {
+  'TeamfotoBerlin2024.jpg': {
+    credits: '(c) FSL digital',
+    en: 'The photo shows the project team.',
+    de: 'Das Foto zeigt das Projektteam.'
+  },
+  'TeamtreffenHamburg2025.jpg': {
+    credits: '(c) FLS digital',
+    en: 'The photo shows the project team.',
+    de: 'Das Foto zeigt das Projektteam.'
+  },
+  'Anonym1614Heidelberg.png': {
+    credits: 'cc PDM 1.0 https://doi.org/10.11588/diglit.33210#0003',
+    en: 'Colloqvia Et Dictionariolvm Sex Lingvarvm Heidelberg 1614',
+    de: 'Colloqvia Et Dictionariolvm Sex Lingvarvm Heidelberg 1614'
+  }
+};
+
+const imageFiles = [
+  'Anonym1614Heidelberg.png',
+  'TeamfotoBerlin2024.jpg',
+  'TeamtreffenHamburg2025.jpg',
 ];
+const images = imageFiles.map((file) => getImagePath(`/lovable-uploads/photo/${file}`));
 
 const FADE_DURATION = 1000; // ms
 const SLIDE_INTERVAL = 5000; // ms
@@ -44,6 +60,7 @@ const Hero = ({ lang = "en" }) => {
   const [current, setCurrent] = useState(0);
   const [fade, setFade] = useState(true);
   const timerRef = useRef(null);
+  const [modalOpen, setModalOpen] = useState(false);
 
   // Arrow navigation handlers
   const goTo = (idx) => {
@@ -80,6 +97,13 @@ const Hero = ({ lang = "en" }) => {
     // eslint-disable-next-line
   }, []);
 
+  // Modal close handler
+  const handleModalClose = (e) => {
+    if (e.target.classList.contains('modal-bg')) {
+      setModalOpen(false);
+    }
+  };
+
   return (
     <section id="about" className="py-20 bg-gray-50">
       <div className="container-custom">
@@ -90,11 +114,11 @@ const Hero = ({ lang = "en" }) => {
             </h1>
             <p className="text-xl text-gray-600 mb-8 text-justify">
               {/* Image container with float for text wrapping */}
-              <div className="relative h-80 flex flex-col items-center justify-center group float-right ml-8 mb-4">
+              <div className="relative h-[28rem] flex flex-col items-center justify-center group float-right ml-8 mb-4">
                 {/* Left Arrow */}
                 <button
                   onClick={handlePrev}
-                  className="absolute left-2 top-1/2 -translate-y-1/2 bg-white bg-opacity-70 hover:bg-primary hover:text-white text-3xl rounded-full w-10 h-10 flex items-center justify-center shadow transition-all opacity-0 group-hover:opacity-100 z-20"
+                  className="absolute left-2 top-1/2 -translate-y-1/2 bg-white bg-opacity-70 hover:bg-primary hover:text-white text-3xl rounded-full w-12 h-12 flex items-center justify-center shadow transition-all opacity-0 group-hover:opacity-100 z-20"
                   aria-label="Previous photo"
                   style={{ outline: 'none', border: 'none' }}
                 >
@@ -104,13 +128,20 @@ const Hero = ({ lang = "en" }) => {
                 <img
                   src={images[current]}
                   alt="slide"
-                  className={`w-96 h-72 object-cover border-4 border-primary bg-white shadow-lg transition-opacity duration-1000 ${fade ? 'opacity-0' : 'opacity-100'}`}
+                  className={`w-[32rem] h-[24rem] object-cover bg-white shadow-lg transition-opacity duration-1000 ${fade ? 'opacity-0' : 'opacity-100'} cursor-zoom-in`}
                   style={{ borderRadius: 0 }}
+                  onClick={() => setModalOpen(true)}
                 />
+                {/* Caption and credits */}
+                <div className="text-center mt-2 text-xs text-gray-700">
+                  <span>{imageCaptions[imageFiles[current]][lang]}</span>
+                  <br />
+                  <span className="italic text-gray-500">{imageCaptions[imageFiles[current]].credits}</span>
+                </div>
                 {/* Right Arrow */}
                 <button
                   onClick={handleNext}
-                  className="absolute right-2 top-1/2 -translate-y-1/2 bg-white bg-opacity-70 hover:bg-primary hover:text-white text-3xl rounded-full w-10 h-10 flex items-center justify-center shadow transition-all opacity-0 group-hover:opacity-100 z-20"
+                  className="absolute right-2 top-1/2 -translate-y-1/2 bg-white bg-opacity-70 hover:bg-primary hover:text-white text-3xl rounded-full w-12 h-12 flex items-center justify-center shadow transition-all opacity-0 group-hover:opacity-100 z-20"
                   aria-label="Next photo"
                   style={{ outline: 'none', border: 'none' }}
                 >
@@ -122,6 +153,53 @@ const Hero = ({ lang = "en" }) => {
           </div>
         </div>
       </div>
+      {/* Modal for zoomed image */}
+      {modalOpen && (
+        <div
+          className="modal-bg fixed inset-0 bg-black bg-opacity-80 flex items-center justify-center z-50"
+          onClick={handleModalClose}
+        >
+          <div className="relative">
+            {/* Left Arrow in Modal */}
+            <button
+              onClick={() => setCurrent((current - 1 + images.length) % images.length)}
+              className="absolute left-2 top-1/2 -translate-y-1/2 bg-white bg-opacity-70 hover:bg-primary hover:text-white text-3xl rounded-full w-10 h-10 flex items-center justify-center shadow z-10"
+              aria-label="Previous photo"
+              style={{ outline: 'none', border: 'none' }}
+            >
+              {'<'}
+            </button>
+            {/* Close Button */}
+            <button
+              className="absolute top-2 right-2 text-white text-3xl bg-black bg-opacity-50 rounded-full w-10 h-10 flex items-center justify-center z-10 hover:bg-opacity-80"
+              onClick={() => setModalOpen(false)}
+              aria-label="Close"
+            >
+              &times;
+            </button>
+            <img
+              src={images[current]}
+              alt="zoomed slide"
+              className="max-w-[90vw] max-h-[80vh] object-contain bg-white rounded shadow-lg"
+            />
+            {/* Caption and credits in modal */}
+            <div className="text-center mt-4 text-base text-white">
+              <span>{imageCaptions[imageFiles[current]][lang]}</span>
+              <br />
+              <span className="italic text-gray-300">{imageCaptions[imageFiles[current]].credits}</span>
+            </div>
+            {/* Right Arrow in Modal */}
+            <button
+              onClick={() => setCurrent((current + 1) % images.length)}
+              className="absolute right-2 top-1/2 -translate-y-1/2 bg-white bg-opacity-70 hover:bg-primary hover:text-white text-3xl rounded-full w-10 h-10 flex items-center justify-center shadow z-10"
+              aria-label="Next photo"
+              style={{ outline: 'none', border: 'none' }}
+            >
+              {'>'}
+            </button>
+          </div>
+        </div>
+      )}
     </section>
   );
 };

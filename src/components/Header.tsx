@@ -6,19 +6,21 @@ import { getImagePath } from '@/lib/image-utils';
 const navLabels = {
   en: [
     { href: '/', label: 'Home' },
-    { href: '/project', label: 'Project' },
+    { href: '/concept', label: 'Concept' },
     { href: '/team', label: 'Team' },
     { href: '/corpus', label: 'Corpus' },
     { href: '/news', label: 'News/Events' },
     { href: '/publications', label: 'Publications' },
+    { href: '/bibliography', label: 'Bibliography' },
   ],
   de: [
     { href: '/', label: 'Startseite' },
-    { href: '/project', label: 'Projekt' },
+    { href: '/concept', label: 'Konzept' },
     { href: '/team', label: 'Team' },
     { href: '/corpus', label: 'Korpus' },
     { href: '/news', label: 'Neuigkeiten/Veranstaltungen' },
     { href: '/publications', label: 'Publikation' },
+    { href: '/bibliography', label: 'Bibliographie' },
   ],
 };
 

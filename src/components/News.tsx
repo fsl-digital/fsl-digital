@@ -1,6 +1,7 @@
 import React from 'react';
 import { Calendar, Users, Award } from 'lucide-react';
 import { Link } from 'react-router-dom';
+import { getUpcomingEvents } from '@/data/events';
 
 interface NewsItemProps {
   title: string;
@@ -53,29 +54,20 @@ const BookIcon = (props: React.ComponentProps<typeof Users>) => (
   </svg>
 );
 
-const News = ({ lang = 'en' }) => {
-  const upcomingEvents = [
-    {
-      title: "International Workshop on Knowledge Extraction",
-      date: "June 15-16, 2025",
-      type: "event" as const,
-      description: "Join us for our annual workshop bringing together researchers and practitioners in knowledge extraction."
-    },
-    {
-      title: "Seminar Series: Knowledge Representation in Context",
-      date: "March 1-30, 2025",
-      type: "event" as const,
-      description: "Weekly seminars exploring contextual factors in knowledge representation, with guest speakers from Europe and North America."
-    }
-  ];
+interface NewsProps {
+  lang?: 'en' | 'de';
+}
+
+const News = ({ lang = 'en' }: NewsProps) => {
+  const upcomingEvents = getUpcomingEvents(lang).slice(0, 2);
 
   return (
     <section id="news" className="py-20">
       <div className="container-custom">
-        <h2 className="section-title text-center">{lang === 'en' ? 'Announcement' : 'Ankündigung'}</h2>
+        <h2 className="section-title text-center">{lang === 'en' ? 'News' : 'Ankündigung'}</h2>
         <p className="section-subtitle text-center mx-auto">
           {lang === 'en' 
-            ? 'Stay up to date with our upcoming events'
+            ? (<span>Follow us on <a href="https://www.instagram.com/fsl_digital/" target="_blank" rel="noopener noreferrer" className="text-primary underline hover:text-secondary">Instagram</a> for more news</span>)
             : 'Bleiben Sie auf dem Laufenden über unsere kommenden Veranstaltungen'}
         </p>
         

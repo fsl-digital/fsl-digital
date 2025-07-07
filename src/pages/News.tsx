@@ -2,6 +2,7 @@ import React, { useEffect } from 'react';
 import { Calendar, Users, Award } from 'lucide-react';
 import Header from '@/components/Header';
 import Footer from '@/components/Footer';
+import { getUpcomingEvents, getPastEvents } from '@/data/events';
 
 interface NewsItemProps {
   title: string;
@@ -55,40 +56,18 @@ const BookIcon = (props: React.ComponentProps<typeof Users>) => (
   </svg>
 );
 
-const News = ({ lang = 'en', setLang }) => {
+interface NewsProps {
+  lang?: 'en' | 'de';
+  setLang?: (lang: 'en' | 'de') => void;
+}
+
+const News = ({ lang = 'en', setLang }: NewsProps) => {
   useEffect(() => {
     window.scrollTo(0, 0);
   }, []);
 
-  const upcomingEvents = [
-    {
-      title: "International Workshop on Knowledge Extraction",
-      date: "June 15-16, 2025",
-      type: "event" as const,
-      description: "Join us for our annual workshop bringing together researchers and practitioners in knowledge extraction."
-    },
-    {
-      title: "Seminar Series: Knowledge Representation in Context",
-      date: "March 1-30, 2025",
-      type: "event" as const,
-      description: "Weekly seminars exploring contextual factors in knowledge representation, with guest speakers from Europe and North America."
-    }
-  ];
-
-  const pastEvents = [
-    {
-      title: "New Publication in Computational Linguistics Journal",
-      date: "May 4, 2024",
-      type: "publication" as const,
-      description: "Our team's latest research on semantic parsing has been accepted for publication in the Journal of Computational Linguistics."
-    },
-    {
-      title: "Research Grant Awarded by German Research Foundation",
-      date: "April 20, 2024",
-      type: "award" as const,
-      description: "SFB Episteme has been awarded a three-year grant to continue research on cross-domain knowledge integration."
-    }
-  ];
+  const upcomingEvents = getUpcomingEvents(lang);
+  const pastEvents = getPastEvents(lang);
 
   return (
     <div className="min-h-screen">

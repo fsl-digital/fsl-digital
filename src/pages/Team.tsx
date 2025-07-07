@@ -19,16 +19,17 @@ const sortMembersByLastName = (members) => {
 };
 
 const sections = [
-  { key: 'leader', title: { en: 'PI', de: 'Projektleitung' } },
-  { key: 'postdoc', title: { en: 'Team Leader', de: 'Arbeitsstellenleitung' } },
-  { key: 'phd', title: { en: 'P.h.D', de: 'Doktorand' } },
-  { key: 'assistant', title: { en: 'Student Assistant', de: 'Studentische Hilfskraft' } },
+  { key: 'leader', title: { en: 'Spokespersons', de: 'Sprecher' } },
+  { key: 'postdoc', title: { en: 'Post Doctoral Researchers', de: 'Postdoktoranden' } },
+  { key: 'phd', title: { en: 'Ph. D. Researchers', de: 'Doktoranden' } },
+
+  { key: 'assistant', title: { en: 'Student Assistants', de: 'Studentische Hilfskräfte' } },
 ];
 
 const bottomSections = [
   { key: 'working', title: { en: 'Working Students', de: 'Werkstudenten' } },
   { key: 'partners', title: { en: 'Cooperation Partners', de: 'Kooperationspartner' } },
-  { key: 'alumni', title: { en: 'Team Alumni', de: 'Team Alumni' } },
+  { key: 'alumni', title: { en: 'Former Staff Members', de: 'Ehemalige Mitarbeiter' } },
 ];
 
 const ArrowIcon = ({ open }) => (
@@ -83,11 +84,11 @@ const Team = ({ lang = 'en', setLang }) => {
   const postdocMembers = [
     {
       name: "Dr. Luise Borek",
-      image: '/lovable-uploads/team_photo/no_photo.jpg',
+      image: '/lovable-uploads/team_photo/no_photo.png',
       email: "luise.borek@tu-darmstadt.de",
       institution: {
-        en: "Technical University of Darmstadt (on leave)\nUnion of German Academies of Sciences\nCurrently on leave until 2026",
-        de: "Technische Universität Darmstadt (beurlaubt)\nUnion der deutschen Akademien der Wissenschaften\nDerzeit beurlaubt bis 2026"
+        en: "Technical University of Darmstadt\nUnion of German Academies of Sciences\nCurrently on leave until 2026",
+        de: "Technische Universität Darmstadt\nUnion der deutschen Akademien der Wissenschaften\nDerzeit beurlaubt bis 2026"
       }
     },
     {
@@ -140,7 +141,7 @@ const Team = ({ lang = 'en', setLang }) => {
     },
     {
       name: "Miriam Hinterholzer",
-      image: '/lovable-uploads/team_photo/no_photo.jpg',
+      image: '/lovable-uploads/team_photo/miriam.jpg',
       email: "miriam.hinterholzer@uni-hamburg.de",
       institution: {
         en: "University of Hamburg",
@@ -149,7 +150,7 @@ const Team = ({ lang = 'en', setLang }) => {
     },
     {
       name: "Lisa Scharrer",
-      image: '/lovable-uploads/team_photo/no_photo.jpg',
+      image: '/lovable-uploads/team_photo/lisa.jpg',
       email: "lisa.scharrer@tu-darmstadt.de",
       institution: {
         en: "Technical University of Darmstadt",
@@ -158,7 +159,7 @@ const Team = ({ lang = 'en', setLang }) => {
     },
     {
       name: "Elena Volkanovska",
-      image: '/lovable-uploads/team_photo/no_photo.jpg',
+      image: '/lovable-uploads/team_photo/no_photo.png',
       email: "elena.volkanovska@tu-darmstadt.de",
       institution: {
         en: "Technical University of Darmstadt",
@@ -170,7 +171,7 @@ const Team = ({ lang = 'en', setLang }) => {
   const assistantMembers = [
     {
       name: "Falco Risch",
-      image: '/lovable-uploads/team_photo/no_photo.jpg',
+      image: '/lovable-uploads/team_photo/no_photo.png',
       institution: {
         en: "Technical University of Darmstadt",
         de: "Technische Universität Darmstadt"
@@ -178,7 +179,7 @@ const Team = ({ lang = 'en', setLang }) => {
     },
     {
       name: "Carlotta Schilke",
-      image: '/lovable-uploads/team_photo/no_photo.jpg',
+      image: '/lovable-uploads/team_photo/Carlotta.jpg',
       institution: {
         en: "Berlin-Brandenburg Academy of Sciences and Humanities",
         de: "Berlin-Brandenburgische Akademie der Wissenschaften"
@@ -213,22 +214,22 @@ const Team = ({ lang = 'en', setLang }) => {
   const workingMembers = [
     {
       name: "Alexandra Franz",
-      image: '/lovable-uploads/team_photo/no_photo.jpg'
+      image: '/lovable-uploads/team_photo/no_photo.png'
     },
     {
       name: "Ekaterina Funk",
-      image: '/lovable-uploads/team_photo/no_photo.jpg'
+      image: '/lovable-uploads/team_photo/no_photo.png'
     },
     {
       name: "Stefanie Anna Voss",
-      image: '/lovable-uploads/team_photo/no_photo.jpg'
+      image: '/lovable-uploads/team_photo/no_photo.png'
     }
   ];
 
   const partnerMembers = [
     {
       name: "Linda Gennies",
-      image: '/lovable-uploads/team_photo/no_photo.jpg',
+      image: '/lovable-uploads/team_photo/no_photo.png',
       institution: {
         en: "Freie Universität Berlin",
         de: "Freie Universität Berlin"
@@ -236,7 +237,7 @@ const Team = ({ lang = 'en', setLang }) => {
     },
     {
       name: "Julia Hübner",
-      image: '/lovable-uploads/team_photo/no_photo.jpg',
+      image: '/lovable-uploads/team_photo/no_photo.png',
       institution: {
         en: "University of Hamburg",
         de: "Universität Hamburg"
@@ -244,7 +245,7 @@ const Team = ({ lang = 'en', setLang }) => {
     },
     {
       name: "Elizaveta Zimont",
-      image: '/lovable-uploads/team_photo/no_photo.jpg',
+      image: '/lovable-uploads/team_photo/no_photo.png',
       institution: "Université de Reims Champagne-Ardenne"
     }
   ];
