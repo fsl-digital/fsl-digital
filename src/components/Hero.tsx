@@ -5,11 +5,10 @@ const content = {
   en: {
     heading: (
       <>
-        <>
-          Fremd <span className="text-red-600">|</span> Sprachen <span className="text-blue-900">|</span> Lehrwerke
-        </>
+        <span className="block text-center mb-1 text-5xl font-bold text-gray-800">Historical Foreign Language Textbooks digital</span>
+        <span className="text-lg block text-center mt-1 mb-3 text-gray-600">Language history, language attitudes and everyday communication in the context of multilingualism in Early Modern Europe</span>
         <br />
-        <br />
+        <span className="text-3xl font-bold text-center block">Fremd <span className="text-red-600">|</span> Sprachen <span className="text-blue-900">|</span> Lehrwerke</span>
       </>
     ),
     description: "This long-term project is the first to focus on full-text indexing, corpus linguistic processing, annotation, digital networking, and the linguistic, cultural, and historical evaluation of multilingual foreign language textbooks (FSL) from the early modern period, with a focus on works containing German. The project aims to develop practical methods for teaching knowledge about vernacular languages (pronunciation, grammar, vocabulary, pragmatics) as well as written and, above all, spoken language. The project aims to explore and examine the practical forms of teaching knowledge about vernacular languages (pronunciation, grammar, vocabulary, pragmatics) as well as written and, above all, oral everyday communication in the multilingual context of early modern Europe. In this way, a paradigm shift is sought insofar as a contribution is made to European language history, to research on language contact, and to foreign language acquisition based on sources that have been handed down throughout Europe but have hardly been studied to date, whose authors formed a socially heterogeneous group of so-called language masters and whose practical ideas about language (in contrast to contemporary theoretical scholarly discourse) have hardly been researched. As part of the project, all surviving material in which German is one of the languages (approx. 1044 FSL; approx. 626,400,000 characters in total) will be a tiered concept, sustainably processed, and made available for further analysis. This will make it possible for the first time to answer questions about the historical roots of today's multilingualism in Europe from the perspective of everyday language practice in foreign language acquisition and foreign language and knowledge transmission in the early modern period."
@@ -17,10 +16,10 @@ const content = {
   de: {
     heading: (
       <>
-        <>
-          Fremd <span className="text-red-600">|</span> Sprachen <span className="text-blue-900">|</span> Lehrwerke
-        </>
+        <span className="block text-center mb-1 text-5xl font-bold text-gray-800">Historische Fremdsprachenlehrwerke digital</span>
+        <span className="text-lg block text-center mt-1 mb-3 text-gray-600">Sprachgeschichte, Sprachvorstellungen und Alltagskommunikation im Kontext der Mehrsprachigkeit im Europa der Frühen Neuzeit</span>
         <br />
+        <span className="text-3xl font-bold text-center block">Fremd <span className="text-red-600">|</span> Sprachen <span className="text-blue-900">|</span> Lehrwerke</span>
       </>
     ),
     description: "Das Langzeitvorhaben widmet sich erstmalig der Volltexterschließung, korpuslinguistischen Aufbereitung, Annotation, digitalen Vernetzung sowie der sprach-, kultur- und wissenshistorischen Auswertung von mehrsprachigen Fremdsprachenlehrwerken (FSL) aus der Frühen Neuzeit mit einem Schwerpunkt auf den Deutsch beinhaltenden Werken. Das Projekt setzt sich zum Ziel, die praktischen Formen der Vermittlung des Wissens über die Vernakularsprachen (Aussprache, Grammatik, Wortschatz, Pragmatik) sowie der schriftlichen und vor allem der mündlichkeitsnahen Alltagskommunikation im mehrsprachigen Kontext des frühneuzeitlichen Europa zu erschließen und zu untersuchen. Auf diese Weise wird ein Paradigmenwechsel angestrebt, insofern als ein Beitrag zu den europäischen Sprach(en)geschichte(n), zur Erforschung von Sprachkontakt und zum Fremdsprachenerwerb anhand der im gesamten Europa überlieferten, aber bis jetzt kaum untersuchten Quellen geleistet wird, deren Autoren eine sozial heterogene Gruppe der sogenannten Sprachmeister bildeten und zu deren praxisbezogenen Sprachvorstellungen (im Unterschied zum zeitgenössischen theoretischen Gelehrtendiskurs) kaum Forschungsergebnisse vorliegen. Im Rahmen des Vorhabens wird das gesamte überlieferte Material, in dem das Deutsche eine der Sprachen ist (ca. 1044 FSL; insgesamt ca. 626.400.000 Zeichen) nach einem gestuften Konzept volltexterschlossen, nachhaltig aufbereitet und für weitere Analysen bereitgestellt. Damit wird es zum ersten Mal möglich sein, die historischen Wurzeln der heutigen Mehrsprachigkeit in Europa aus der Perspektive alltagssprachlicher Praxis des Fremdsprachenerwerbs und der Fremdsprachen- und Wissensvermittlung in der Frühen Neuzeit zu beantworten."

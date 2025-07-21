@@ -7,15 +7,8 @@ const footerText = {
     de: "Partner"
   },
   funding: {
-    en: `The project is funded by the Berlin-Brandenburg Academy of Sciences
-and Humanities as well as the Academy of Sciences, Humanities and
-Literature in Mainz has offices in Berlin, Hamburg, and Darmstadt.
-The academy project »FSL digital« is part of the academy programme, coordinated by
-the Union of the German Academies of Sciences and Humanities.`,
-    de: `Das Projekt wird von der Berlin-Brandenburgischen Akademie der Wissenschaften
-und der Akademie der Wissenschaften und der Literatur Mainz gefördert und hat Büros in Berlin, Hamburg und Darmstadt.
-Das Akademieprojekt »FSL digital« ist Teil des Akademienprogramms, koordiniert von
-der Union der deutschen Akademien der Wissenschaften.`
+    en: `The project is funded by the Berlin-Brandenburg Academy of Sciences and Humanities as well as the Academy of Sciences, Humanities and Literature in Mainz and has offices in Berlin, Hamburg and Darmstadt. The academy project FSL digital is part of the academy programme funded by the federal and state governments, which serves to preserve, safeguard and make our cultural heritage more visible. The programme is coordinated by the Union of the German Academies of Sciences and Humanities.`,
+    de: `Das Projekt wird gemeinsam von der Berlin-Brandenburgischen Akademie der Wissenschaften und der Akademie der Wissenschaften und der Literatur | Mainz getragen und besitzt Arbeitsstellen in Berlin, Hamburg und Darmstadt.\nDas Akademienvorhaben FSL digital ist Teil des von Bund und Ländern geförderten Akademienprogramms, das der Erhaltung, Sicherung und Vergegenwärtigung unseres kulturellen Erbes dient. Koordiniert wird das Programm von der Akademienunion.`
   },
   copyright: {
     en: "© 2025 FSL digital. All rights reserved.",
@@ -50,8 +43,8 @@ const Footer = ({ lang = "en" }) => {
             <div className="grid grid-cols-3 grid-rows-2 gap-4">
               <div className="bg-white p-3 rounded flex items-center justify-center">
                 <img 
-                  src={getImagePath('/lovable-uploads/e62e1d4c-eb23-4999-a343-7aa9eaef245d.png')} 
-                  alt="Berlin-Brandenburgische Akademie der Wissenschaften" 
+                  src={getImagePath('/lovable-uploads/b54eef16-85d4-4667-b0f1-9c94d089aeba.svg')} 
+                  alt="Union der Deutschen Akademien der Wissenschaften" 
                   className="max-h-16 w-auto"
                 />
               </div>
@@ -64,8 +57,8 @@ const Footer = ({ lang = "en" }) => {
               </div>
               <div className="bg-white p-3 rounded flex items-center justify-center">
                 <img 
-                  src={getImagePath('/lovable-uploads/TU_Darmstadt_Logo.svg')} 
-                  alt="Technische Universität Darmstadt" 
+                  src={getImagePath('/lovable-uploads/e62e1d4c-eb23-4999-a343-7aa9eaef245d.png')} 
+                  alt="Berlin-Brandenburgische Akademie der Wissenschaften" 
                   className="max-h-16 w-auto"
                 />
               </div>
@@ -85,8 +78,8 @@ const Footer = ({ lang = "en" }) => {
               </div>
               <div className="bg-white p-3 rounded flex items-center justify-center">
                 <img 
-                  src={getImagePath('/lovable-uploads/b54eef16-85d4-4667-b0f1-9c94d089aeba.svg')} 
-                  alt="Union der Deutschen Akademien der Wissenschaften" 
+                  src={getImagePath('/lovable-uploads/TU_Darmstadt_Logo.svg')} 
+                  alt="Technische Universität Darmstadt" 
                   className="max-h-16 w-auto"
                 />
               </div>

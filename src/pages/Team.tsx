@@ -2,6 +2,10 @@ import React, { useState } from 'react';
 import Header from '@/components/Header';
 import Footer from '@/components/Footer';
 import { getImagePath } from '@/lib/image-utils';
+import JosephineProfile from './profiles/JosephineProfile';
+import KerstinRothProfile from './profiles/KerstinRothProfile';
+import ElenaBandtProfile from './profiles/ElenaBandtProfile';
+import LivBuechlerProfile from './profiles/LivBuechlerProfile';
 
 // Helper function to get last name
 const getLastName = (fullName) => {
@@ -19,17 +23,16 @@ const sortMembersByLastName = (members) => {
 };
 
 const sections = [
-  { key: 'leader', title: { en: 'Spokespersons', de: 'Sprecher' } },
-  { key: 'postdoc', title: { en: 'Post Doctoral Researchers', de: 'Postdoktoranden' } },
-  { key: 'phd', title: { en: 'Ph. D. Researchers', de: 'Doktoranden' } },
-
+  { key: 'leader', title: { en: 'Spokespersons', de: 'Projektleitungen' } },
+  { key: 'postdoc', title: { en: 'Post Doctoral Researchers', de: 'Arbeitsstellenleitungen' } },
+  { key: 'phd', title: { en: 'Ph. D. Researchers', de: 'Doktorand:innen' } },
   { key: 'assistant', title: { en: 'Student Assistants', de: 'Studentische Hilfskräfte' } },
 ];
 
 const bottomSections = [
-  { key: 'working', title: { en: 'Working Students', de: 'Werkstudenten' } },
-  { key: 'partners', title: { en: 'Cooperation Partners', de: 'Kooperationspartner' } },
-  { key: 'alumni', title: { en: 'Former Staff Members', de: 'Ehemalige Mitarbeiter' } },
+  { key: 'working', title: { en: 'Further Staff', de: 'Weitere Mitarbeitende' } },
+  { key: 'partners', title: { en: 'Cooperation Partners', de: 'Kooperationspartner:innen' } },
+  { key: 'alumni', title: { en: 'Former Staff Members', de: 'Ehemalige Mitarbeitende' } },
 ];
 
 const ArrowIcon = ({ open }) => (
@@ -44,6 +47,10 @@ const ArrowIcon = ({ open }) => (
 
 const Team = ({ lang = 'en', setLang }) => {
   const [open, setOpen] = useState({});
+  const [showKlingebeilModal, setShowKlingebeilModal] = useState(false);
+  const [showRothModal, setShowRothModal] = useState(false);
+  const [showBandtModal, setShowBandtModal] = useState(false);
+  const [showBuechlerModal, setShowBuechlerModal] = useState(false);
 
   const toggle = (key) => setOpen((prev) => ({ ...prev, [key]: !prev[key] }));
 
@@ -126,8 +133,8 @@ const Team = ({ lang = 'en', setLang }) => {
       image: '/lovable-uploads/team_photo/liv.jpg',
       email: "liv.buechler@bbaw.de",
       institution: {
-        en: "Freie Universität Berlin",
-        de: "Freie Universität Berlin"
+        en: "Berlin-Brandenburg Academy of Sciences and Humanities",
+        de: "Berlin-Brandenburgische Akademie der Wissenschaften"
       }
     },
     {
@@ -261,135 +268,274 @@ const Team = ({ lang = 'en', setLang }) => {
   return (
     <div className="min-h-screen bg-[url('/lovable-uploads/team-bg.jpg')] bg-cover bg-center">
       <Header lang={lang} setLang={setLang} />
-      <div className="py-12 px-4">
-        <h2 className="text-4xl font-bold text-center mb-12">{lang === 'de' ? 'Unser Team' : 'Our Team'}</h2>
-        <div className="max-w-3xl mx-auto space-y-8">
-          {sections.map((section) => (
-            <div key={section.key}>
-              <button
-                className="w-full flex justify-between items-center text-left text-2xl font-semibold mb-2 focus:outline-none"
-                onClick={() => toggle(section.key)}
+      <main className="pt-16">
+        <section className="py-20">
+          <div className="container-custom">
+            <h1 className="text-4xl font-bold text-center mb-12">{lang === 'de' ? 'Unser Team' : 'Our Team'}</h1>
+            {/* Klingebeil Modal - styled like the HTML profile */}
+            {showKlingebeilModal && (
+              <div
+                className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50"
+                onClick={e => {
+                  if (e.target === e.currentTarget) setShowKlingebeilModal(false);
+                }}
               >
-                <span>{section.title[lang]}</span>
-                <ArrowIcon open={open[section.key]} />
-              </button>
-              <div className={`border-b-2 border-gray-300 mb-2`} />
-              {open[section.key] && (
-                <div className="p-4 bg-white bg-opacity-80 rounded shadow mb-2 animate-fade-in">
-                  {section.key === 'leader' && (
-                    <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-                      {sortedLeaderMembers.map((member, index) => (
-                        <div key={index} className="flex flex-col items-center h-full justify-between bg-transparent">
-                          <img src={getImagePath(member.image)} alt={member.name} className="w-48 h-48 object-cover rounded-lg shadow-md mb-4" />
-                          <h3 className="text-lg font-bold font-sans">
-                            <a href={member.link} target="_blank" rel="noopener noreferrer" className="hover:text-blue-600 transition">{member.name}</a>
-                          </h3>
-                          <p className="text-center text-gray-700 mb-2 text-sm whitespace-pre-line">
-                            {member.institution[lang]}
-                          </p>
-                          <div className="mt-auto w-full flex justify-center">
-                            <a href={`mailto:${member.email}`} className="px-3 py-1 bg-gray-100 text-gray-700 rounded font-medium border border-gray-300 hover:bg-gray-200 transition">Email</a>
-                          </div>
+                <div className="bg-white rounded-2xl shadow-2xl max-w-2xl w-full relative p-8 overflow-y-auto max-h-[95vh] border border-gray-200">
+                  <button
+                    className="absolute top-4 right-4 text-gray-600 hover:text-black text-2xl font-bold focus:outline-none"
+                    onClick={() => setShowKlingebeilModal(false)}
+                    aria-label="Close"
+                  >
+                    &times;
+                  </button>
+                  <JosephineProfile />
+                </div>
+              </div>
+            )}
+            {/* Roth Modal - styled like the HTML profile */}
+            {showRothModal && (
+              <div
+                className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50"
+                onClick={e => {
+                  if (e.target === e.currentTarget) setShowRothModal(false);
+                }}
+              >
+                <div className="bg-white rounded-2xl shadow-2xl max-w-2xl w-full relative p-8 overflow-y-auto max-h-[95vh] border border-gray-200">
+                  <button
+                    className="absolute top-4 right-4 text-gray-600 hover:text-black text-2xl font-bold focus:outline-none"
+                    onClick={() => setShowRothModal(false)}
+                    aria-label="Close"
+                  >
+                    &times;
+                  </button>
+                  <KerstinRothProfile />
+                </div>
+              </div>
+            )}
+            {/* Bandt Modal - styled like the HTML profile */}
+            {showBandtModal && (
+              <div
+                className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50"
+                onClick={e => {
+                  if (e.target === e.currentTarget) setShowBandtModal(false);
+                }}
+              >
+                <div className="bg-white rounded-2xl shadow-2xl max-w-2xl w-full relative p-8 overflow-y-auto max-h-[95vh] border border-gray-200">
+                  <button
+                    className="absolute top-4 right-4 text-gray-600 hover:text-black text-2xl font-bold focus:outline-none"
+                    onClick={() => setShowBandtModal(false)}
+                    aria-label="Close"
+                  >
+                    &times;
+                  </button>
+                  <ElenaBandtProfile />
+                </div>
+              </div>
+            )}
+            {/* Buechler Modal - styled like the HTML profile */}
+            {showBuechlerModal && (
+              <div
+                className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50"
+                onClick={e => {
+                  if (e.target === e.currentTarget) setShowBuechlerModal(false);
+                }}
+              >
+                <div className="bg-white rounded-2xl shadow-2xl max-w-2xl w-full relative p-8 overflow-y-auto max-h-[95vh] border border-gray-200">
+                  <button
+                    className="absolute top-4 right-4 text-gray-600 hover:text-black text-2xl font-bold focus:outline-none"
+                    onClick={() => setShowBuechlerModal(false)}
+                    aria-label="Close"
+                  >
+                    &times;
+                  </button>
+                  <LivBuechlerProfile />
+                </div>
+              </div>
+            )}
+            <div className="max-w-3xl mx-auto space-y-8">
+              {sections.map((section) => (
+                <div key={section.key}>
+                  <button
+                    className="w-full flex justify-between items-center text-left text-2xl font-semibold mb-2 focus:outline-none"
+                    onClick={() => toggle(section.key)}
+                  >
+                    <span>{section.title[lang]}</span>
+                    <ArrowIcon open={open[section.key]} />
+                  </button>
+                  <div className={`border-b-2 border-gray-300 mb-2`} />
+                  {open[section.key] && (
+                    <div className="p-4 bg-white bg-opacity-80 rounded shadow mb-2 animate-fade-in">
+                      {section.key === 'leader' && (
+                        <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+                          {sortedLeaderMembers.map((member, index) => (
+                            <div key={index} className="flex flex-col items-center h-full justify-between bg-transparent">
+                              <img src={getImagePath(member.image)} alt={member.name} className="w-48 h-48 object-cover rounded-lg shadow-md mb-4" />
+                              <h3 className="text-lg font-bold font-sans">
+                                <a href={member.link} target="_blank" rel="noopener noreferrer" className="hover:text-blue-600 transition">{member.name}</a>
+                              </h3>
+                              <p className="text-center text-gray-700 mb-2 text-sm whitespace-pre-line">
+                                {member.name === "Prof. Dr. Andrea Rapp" ? (
+                                  <>
+                                    {lang === 'en' ? (
+                                      <>
+                                        German Studies - Computational Philology and Medieval Studies<br />
+                                        Technical University of Darmstadt<br />
+                                        President of the Academy of Sciences and Literature Mainz
+                                      </>
+                                    ) : (
+                                      <>
+                                        Germanistik - Computerphilologie und Mediävistik<br />
+                                        Technische Universität Darmstadt<br />
+                                        Präsidentin der Akademie der Wissenschaften und der Literatur Mainz
+                                      </>
+                                    )}
+                                  </>
+                                ) : (
+                                  member.institution[lang]
+                                )}
+                              </p>
+                              <div className="mt-auto w-full flex justify-center">
+                                <a href={`mailto:${member.email}`} className="px-3 py-1 bg-gray-100 text-gray-700 rounded font-medium border border-gray-300 hover:bg-gray-200 transition">Email</a>
+                              </div>
+                            </div>
+                          ))}
                         </div>
-                      ))}
-                    </div>
-                  )}
-                  {section.key === 'postdoc' && (
-                    <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-                      {sortedPostdocMembers.map((member, index) => (
-                        <div key={index} className="flex flex-col items-center h-full justify-between bg-transparent">
-                          <img src={getImagePath(member.image)} alt={member.name} className="w-48 h-48 object-cover rounded-lg shadow-md mb-4" />
-                          <h3 className="text-lg font-bold font-sans">{member.name}</h3>
-                          <p className="text-center text-gray-700 mb-2 text-sm whitespace-pre-line">
-                            {member.institution[lang]}
-                          </p>
-                          <div className="mt-auto w-full flex justify-center">
-                            <a href={`mailto:${member.email}`} className="px-3 py-1 bg-gray-100 text-gray-700 rounded font-medium border border-gray-300 hover:bg-gray-200 transition">Email</a>
-                          </div>
+                      )}
+                      {section.key === 'postdoc' && (
+                        <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+                          {sortedPostdocMembers.map((member, index) => (
+                            <div key={index} className="flex flex-col items-center h-full justify-between bg-transparent">
+                              <img src={getImagePath(member.image)} alt={member.name} className="w-48 h-48 object-cover rounded-lg shadow-md mb-4" />
+                              <h3 className="text-lg font-bold font-sans">
+                                {member.name === 'Dr. Josephine Klingebeil-Schieke' ? (
+                                  <button
+                                    className="focus:outline-none transition-colors hover:text-blue-700"
+                                    style={{ background: 'none', border: 'none', padding: 0, margin: 0, cursor: 'pointer' }}
+                                    onClick={() => setShowKlingebeilModal(true)}
+                                  >
+                                    {member.name}
+                                  </button>
+                                ) : member.name === 'Dr. Kerstin Roth' ? (
+                                  <button
+                                    className="focus:outline-none transition-colors hover:text-blue-700"
+                                    style={{ background: 'none', border: 'none', padding: 0, margin: 0, cursor: 'pointer' }}
+                                    onClick={() => setShowRothModal(true)}
+                                  >
+                                    {member.name}
+                                  </button>
+                                ) : (
+                                  member.name
+                                )}
+                              </h3>
+                              <p className="text-center text-gray-700 mb-2 text-sm whitespace-pre-line">
+                                {member.institution[lang]}
+                              </p>
+                              <div className="mt-auto w-full flex justify-center">
+                                <a href={`mailto:${member.email}`} className="px-3 py-1 bg-gray-100 text-gray-700 rounded font-medium border border-gray-300 hover:bg-gray-200 transition">Email</a>
+                              </div>
+                            </div>
+                          ))}
                         </div>
-                      ))}
-                    </div>
-                  )}
-                  {section.key === 'phd' && (
-                    <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-                      {sortedPhdMembers.map((member, index) => (
-                        <div key={index} className="flex flex-col items-center h-full justify-between bg-transparent">
-                          <img src={getImagePath(member.image)} alt={member.name} className="w-48 h-48 object-cover rounded-lg shadow-md mb-4" />
-                          <h3 className="text-lg font-bold font-sans">{member.name}</h3>
-                          <p className="text-center text-gray-700 mb-2 text-sm">
-                            {member.institution[lang]}
-                          </p>
-                          <div className="mt-auto w-full flex justify-center">
-                            <a href={`mailto:${member.email}`} className="px-3 py-1 bg-gray-100 text-gray-700 rounded font-medium border border-gray-300 hover:bg-gray-200 transition">Email</a>
-                          </div>
+                      )}
+                      {section.key === 'phd' && (
+                        <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+                          {sortedPhdMembers.map((member, index) => (
+                            <div key={index} className="flex flex-col items-center h-full justify-between bg-transparent">
+                              <img src={getImagePath(member.image)} alt={member.name} className="w-48 h-48 object-cover rounded-lg shadow-md mb-4" />
+                              <h3 className="text-lg font-bold font-sans">
+                                {member.name === 'Elena Bandt' ? (
+                                  <button
+                                    className="focus:outline-none transition-colors hover:text-blue-700"
+                                    style={{ background: 'none', border: 'none', padding: 0, margin: 0, cursor: 'pointer' }}
+                                    onClick={() => setShowBandtModal(true)}
+                                  >
+                                    {member.name}
+                                  </button>
+                                ) : member.name === 'Liv Büchler' ? (
+                                  <button
+                                    className="focus:outline-none transition-colors hover:text-blue-700"
+                                    style={{ background: 'none', border: 'none', padding: 0, margin: 0, cursor: 'pointer' }}
+                                    onClick={() => setShowBuechlerModal(true)}
+                                  >
+                                    {member.name}
+                                  </button>
+                                ) : (
+                                  member.name
+                                )}
+                              </h3>
+                              <p className="text-center text-gray-700 mb-2 text-sm">
+                                {member.institution[lang]}
+                              </p>
+                              <div className="mt-auto w-full flex justify-center">
+                                <a href={`mailto:${member.email}`} className="px-3 py-1 bg-gray-100 text-gray-700 rounded font-medium border border-gray-300 hover:bg-gray-200 transition">Email</a>
+                              </div>
+                            </div>
+                          ))}
                         </div>
-                      ))}
-                    </div>
-                  )}
-                  {section.key === 'assistant' && (
-                    <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-                      {sortedAssistantMembers.map((member, index) => (
-                        <div key={index} className="flex flex-col items-center">
-                          <img src={getImagePath(member.image)} alt={member.name} className="w-48 h-48 object-cover rounded-lg shadow-md mb-4" />
-                          <h3 className="text-lg font-bold font-sans">{member.name}</h3>
-                          <p className="text-center text-gray-700 mb-2 text-sm">
-                            {member.institution[lang]}
-                          </p>
+                      )}
+                      {section.key === 'assistant' && (
+                        <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+                          {sortedAssistantMembers.map((member, index) => (
+                            <div key={index} className="flex flex-col items-center">
+                              <img src={getImagePath(member.image)} alt={member.name} className="w-48 h-48 object-cover rounded-lg shadow-md mb-4" />
+                              <h3 className="text-lg font-bold font-sans">{member.name}</h3>
+                              <p className="text-center text-gray-700 mb-2 text-sm">
+                                {member.institution[lang]}
+                              </p>
+                            </div>
+                          ))}
                         </div>
-                      ))}
+                      )}
                     </div>
                   )}
                 </div>
-              )}
-            </div>
-          ))}
-        </div>
-        
-        <div className="max-w-3xl mx-auto space-y-8 mt-8">
-          {bottomSections.map((section) => (
-            <div key={section.key}>
-              <button
-                className="w-full flex justify-between items-center text-left text-2xl font-semibold mb-2 focus:outline-none"
-                onClick={() => toggle(section.key)}
-              >
-                <span>{section.title[lang]}</span>
-                <ArrowIcon open={open[section.key]} />
-              </button>
-              <div className={`border-b-2 border-gray-300 mb-2`} />
-              {open[section.key] && (
-                <div className="p-4 bg-white bg-opacity-80 rounded shadow mb-2 animate-fade-in">
-                  {section.key === 'working' && (
-                    <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-                      {sortedWorkingMembers.map((member, index) => (
-                        <div key={index} className="flex flex-col items-center">
-                          <img src={getImagePath(member.image)} alt={member.name} className="w-48 h-48 object-cover rounded-lg shadow-md mb-4" />
-                          <h3 className="text-lg font-bold font-sans">{member.name}</h3>
+              ))}
+              {bottomSections.map((section) => (
+                <div key={section.key}>
+                  <button
+                    className="w-full flex justify-between items-center text-left text-2xl font-semibold mb-2 focus:outline-none"
+                    onClick={() => toggle(section.key)}
+                  >
+                    <span>{section.title[lang]}</span>
+                    <ArrowIcon open={open[section.key]} />
+                  </button>
+                  <div className={`border-b-2 border-gray-300 mb-2`} />
+                  {open[section.key] && (
+                    <div className="p-4 bg-white bg-opacity-80 rounded shadow mb-2 animate-fade-in">
+                      {section.key === 'working' && (
+                        <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+                          {sortedWorkingMembers.map((member, index) => (
+                            <div key={index} className="flex flex-col items-center">
+                              <img src={getImagePath(member.image)} alt={member.name} className="w-48 h-48 object-cover rounded-lg shadow-md mb-4" />
+                              <h3 className="text-lg font-bold font-sans">{member.name}</h3>
+                            </div>
+                          ))}
                         </div>
-                      ))}
-                    </div>
-                  )}
-                  {section.key === 'partners' && (
-                    <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-                      {sortedPartnerMembers.map((member, index) => (
-                        <div key={index} className="flex flex-col items-center">
-                          <img src={getImagePath(member.image)} alt={member.name} className="w-48 h-48 object-cover rounded-lg shadow-md mb-4" />
-                          <h3 className="text-lg font-bold font-sans">{member.name}</h3>
-                          <p className="text-center text-gray-700 mb-2 text-sm">
-                            {typeof member.institution === 'string' ? member.institution : member.institution[lang]}
-                          </p>
+                      )}
+                      {section.key === 'partners' && (
+                        <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+                          {sortedPartnerMembers.map((member, index) => (
+                            <div key={index} className="flex flex-col items-center">
+                              <img src={getImagePath(member.image)} alt={member.name} className="w-48 h-48 object-cover rounded-lg shadow-md mb-4" />
+                              <h3 className="text-lg font-bold font-sans">{member.name}</h3>
+                              <p className="text-center text-gray-700 mb-2 text-sm">
+                                {typeof member.institution === 'string' ? member.institution : member.institution[lang]}
+                              </p>
+                            </div>
+                          ))}
                         </div>
-                      ))}
+                      )}
+                      {section.key === 'alumni' && (
+                        <p className="text-gray-700">Content for {section.title[lang]} goes here.</p>
+                      )}
                     </div>
-                  )}
-                  {section.key === 'alumni' && (
-                    <p className="text-gray-700">Content for {section.title[lang]} goes here.</p>
                   )}
                 </div>
-              )}
+              ))}
             </div>
-          ))}
-        </div>
-      </div>
+          </div>
+        </section>
+      </main>
       <Footer lang={lang} />
     </div>
   );

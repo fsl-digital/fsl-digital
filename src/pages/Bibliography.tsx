@@ -5,7 +5,8 @@ import Footer from '@/components/Footer';
 // Improved CSV parser to handle quoted fields with commas
 function parseCSV(text: string) {
   const lines = text.trim().split('\n');
-  const headers = lines[0].split(',');
+  // Strip quotes from header names
+  const headers = lines[0].split(',').map(h => h.replace(/^"|"$/g, ''));
   return lines.slice(1)
     .map(line => {
       // Split by comma, but ignore commas inside quotes
@@ -36,10 +37,12 @@ const Bibliography = ({ lang = 'en', setLang }) => {
   const [error, setError] = useState('');
 
   useEffect(() => {
-    fetch('/public/lovable-uploads/publication/zotero/bibliography.csv')
+    fetch(`${import.meta.env.BASE_URL}lovable-uploads/bibliography/zotero/bibliography.csv`)
       .then(res => res.text())
       .then(text => {
+        console.log('CSV raw text:', text); // Debug
         const parsed = parseCSV(text);
+        console.log('Parsed CSV:', parsed); // Debug
         setEntries(parsed);
         setLoading(false);
       })
