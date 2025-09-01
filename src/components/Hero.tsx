@@ -170,6 +170,7 @@ const Hero = ({ lang = "en" }) => {
                 >
                   {'<'}
                 </button>
+                
                 {/* Image */}
                 <img
                   src={images[current]}
@@ -178,12 +179,14 @@ const Hero = ({ lang = "en" }) => {
                   style={{ borderRadius: 0 }}
                   onClick={handleModalOpen}
                 />
+                
                 {/* Caption and credits */}
-                <div className="text-center mt-2 text-xs text-gray-700">
+                <div className="text-center mt-4 text-xs text-gray-700">
                   <span>{imageCaptions[imageFiles[current]][lang]}</span>
                   <br />
                   <span className="italic text-gray-500">{imageCaptions[imageFiles[current]].credits}</span>
                 </div>
+                
                 {/* Right Arrow */}
                 <button
                   onClick={handleNext}
