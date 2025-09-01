@@ -10,8 +10,8 @@ const navLabels = {
     { href: '/team', label: 'Team' },
     { href: '/corpus', label: 'Corpus' },
     { href: '/news', label: 'News/Events' },
-    { href: '/publications', label: 'Publications' },
-    { href: '/bibliography', label: 'Bibliography' },
+    { href: '/publications', label: 'FSL Publications' },
+    { href: '/bibliography', label: 'Project Bibliography' },
   ],
   de: [
     { href: '/', label: 'Startseite' },
@@ -19,8 +19,8 @@ const navLabels = {
     { href: '/team', label: 'Team' },
     { href: '/corpus', label: 'Korpus' },
     { href: '/news', label: 'Neuigkeiten/Veranstaltungen' },
-    { href: '/publications', label: 'Publikation' },
-    { href: '/bibliography', label: 'Bibliographie' },
+    { href: '/publications', label: 'FSL Publikation' },
+    { href: '/bibliography', label: 'Projekt Bibliographie' },
   ],
 };
 

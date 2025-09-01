@@ -5,13 +5,14 @@ const content = {
   en: {
     heading: (
       <>
-        <span className="block text-center mb-1 text-5xl font-bold text-gray-800">Historical Foreign Language Textbooks digital</span>
-        <span className="text-lg block text-center mt-1 mb-3 text-gray-600">Language history, language attitudes and everyday communication in the context of multilingualism in Early Modern Europe</span>
+        <span className="block text-center mb-1 text-5xl font-bold text-gray-800">Historische Fremdsprachenlehrwerke digital</span>
+        <span className="text-xl block text-center mt-1 mb-3 text-gray-600">Language history, language attitudes and everyday communication in the context of multilingualism in Early Modern Europe</span>
         <br />
         <span className="text-3xl font-bold text-center block">Fremd <span className="text-red-600">|</span> Sprachen <span className="text-blue-900">|</span> Lehrwerke</span>
       </>
     ),
-    description: "This long-term project is the first to focus on full-text indexing, corpus linguistic processing, annotation, digital networking, and the linguistic, cultural, and historical evaluation of multilingual foreign language textbooks (FSL) from the early modern period, with a focus on works containing German. The project aims to develop practical methods for teaching knowledge about vernacular languages (pronunciation, grammar, vocabulary, pragmatics) as well as written and, above all, spoken language. The project aims to explore and examine the practical forms of teaching knowledge about vernacular languages (pronunciation, grammar, vocabulary, pragmatics) as well as written and, above all, oral everyday communication in the multilingual context of early modern Europe. In this way, a paradigm shift is sought insofar as a contribution is made to European language history, to research on language contact, and to foreign language acquisition based on sources that have been handed down throughout Europe but have hardly been studied to date, whose authors formed a socially heterogeneous group of so-called language masters and whose practical ideas about language (in contrast to contemporary theoretical scholarly discourse) have hardly been researched. As part of the project, all surviving material in which German is one of the languages (approx. 1044 FSL; approx. 626,400,000 characters in total) will be a tiered concept, sustainably processed, and made available for further analysis. This will make it possible for the first time to answer questions about the historical roots of today's multilingualism in Europe from the perspective of everyday language practice in foreign language acquisition and foreign language and knowledge transmission in the early modern period."
+    description: `This long-term project annotates and analyses multilingual foreign language textbooks (FSL) from the early modern period, with a focus on works containing German. 
+The project aims to explore and examine the practical forms of teaching knowledge about vernacular languages (pronunciation, grammar, vocabulary, pragmatics) as well as written and, above all, oral everyday communication in the multilingual context of early modern Europe. As part of the project, all surviving material will be a tiered concept, sustainably processed, and made available for further analysis.`
   },
   de: {
     heading: (
@@ -22,7 +23,7 @@ const content = {
         <span className="text-3xl font-bold text-center block">Fremd <span className="text-red-600">|</span> Sprachen <span className="text-blue-900">|</span> Lehrwerke</span>
       </>
     ),
-    description: "Das Langzeitvorhaben widmet sich erstmalig der Volltexterschließung, korpuslinguistischen Aufbereitung, Annotation, digitalen Vernetzung sowie der sprach-, kultur- und wissenshistorischen Auswertung von mehrsprachigen Fremdsprachenlehrwerken (FSL) aus der Frühen Neuzeit mit einem Schwerpunkt auf den Deutsch beinhaltenden Werken. Das Projekt setzt sich zum Ziel, die praktischen Formen der Vermittlung des Wissens über die Vernakularsprachen (Aussprache, Grammatik, Wortschatz, Pragmatik) sowie der schriftlichen und vor allem der mündlichkeitsnahen Alltagskommunikation im mehrsprachigen Kontext des frühneuzeitlichen Europa zu erschließen und zu untersuchen. Auf diese Weise wird ein Paradigmenwechsel angestrebt, insofern als ein Beitrag zu den europäischen Sprach(en)geschichte(n), zur Erforschung von Sprachkontakt und zum Fremdsprachenerwerb anhand der im gesamten Europa überlieferten, aber bis jetzt kaum untersuchten Quellen geleistet wird, deren Autoren eine sozial heterogene Gruppe der sogenannten Sprachmeister bildeten und zu deren praxisbezogenen Sprachvorstellungen (im Unterschied zum zeitgenössischen theoretischen Gelehrtendiskurs) kaum Forschungsergebnisse vorliegen. Im Rahmen des Vorhabens wird das gesamte überlieferte Material, in dem das Deutsche eine der Sprachen ist (ca. 1044 FSL; insgesamt ca. 626.400.000 Zeichen) nach einem gestuften Konzept volltexterschlossen, nachhaltig aufbereitet und für weitere Analysen bereitgestellt. Damit wird es zum ersten Mal möglich sein, die historischen Wurzeln der heutigen Mehrsprachigkeit in Europa aus der Perspektive alltagssprachlicher Praxis des Fremdsprachenerwerbs und der Fremdsprachen- und Wissensvermittlung in der Frühen Neuzeit zu beantworten."
+    description: `Das Langzeitvorhaben erfasst und untersucht historische Fremdsprachenlehrwerke aus der Frühen Neuzeit (15. bis 17. Jahrhundert), die Deutsch als Ziel- oder Ausgangssprache haben. Das Projekt setzt sich zum Ziel, die praktischen Formen der Vermittlung des Wissens über die Volkssprachen sowie vor allem der mündlichkeitsnahen Alltagskommunikation im mehrsprachigen Kontext des frühneuzeitlichen Europa anhand dieser Quellen zu erschließen und zu untersuchen. Die Sprachbücher werden vollständig digitalisiert, nachhaltig aufbereitet, philologisch tief bearbeitet und für weitere wissenschaftliche Analysen bereitgestellt.`
   }
 };
 
@@ -72,14 +73,19 @@ const Hero = ({ lang = "en" }) => {
   const handlePrev = () => {
     clearInterval(timerRef.current);
     goTo(current - 1);
-    startTimer(current - 1);
+    if (!modalOpen) {
+      startTimer(current - 1);
+    }
   };
   const handleNext = () => {
     clearInterval(timerRef.current);
     goTo(current + 1);
-    startTimer(current + 1);
+    if (!modalOpen) {
+      startTimer(current + 1);
+    }
   };
   const startTimer = (startIdx = current) => {
+    if (modalOpen) return; // Don't start timer if modal is open
     timerRef.current = setInterval(() => {
       setFade(true);
       setTimeout(() => {
@@ -96,11 +102,31 @@ const Hero = ({ lang = "en" }) => {
     // eslint-disable-next-line
   }, []);
 
-  // Modal close handler
+  // Modal handlers
+  const handleModalOpen = () => {
+    setModalOpen(true);
+    clearInterval(timerRef.current); // Pause auto-rotation
+  };
+
   const handleModalClose = (e) => {
     if (e.target.classList.contains('modal-bg')) {
       setModalOpen(false);
+      startTimer(); // Resume auto-rotation
     }
+  };
+
+  const handleModalCloseButton = () => {
+    setModalOpen(false);
+    startTimer(); // Resume auto-rotation
+  };
+
+  // Modal navigation handlers (don't restart timer)
+  const handleModalPrev = () => {
+    setCurrent((current - 1 + images.length) % images.length);
+  };
+
+  const handleModalNext = () => {
+    setCurrent((current + 1) % images.length);
   };
 
   return (
@@ -129,7 +155,7 @@ const Hero = ({ lang = "en" }) => {
                   alt="slide"
                   className={`w-[32rem] h-[24rem] object-cover bg-white shadow-lg transition-opacity duration-1000 ${fade ? 'opacity-0' : 'opacity-100'} cursor-zoom-in`}
                   style={{ borderRadius: 0 }}
-                  onClick={() => setModalOpen(true)}
+                  onClick={handleModalOpen}
                 />
                 {/* Caption and credits */}
                 <div className="text-center mt-2 text-xs text-gray-700">
@@ -161,7 +187,7 @@ const Hero = ({ lang = "en" }) => {
           <div className="relative">
             {/* Left Arrow in Modal */}
             <button
-              onClick={() => setCurrent((current - 1 + images.length) % images.length)}
+              onClick={handleModalPrev}
               className="absolute left-2 top-1/2 -translate-y-1/2 bg-white bg-opacity-70 hover:bg-primary hover:text-white text-3xl rounded-full w-10 h-10 flex items-center justify-center shadow z-10"
               aria-label="Previous photo"
               style={{ outline: 'none', border: 'none' }}
@@ -171,7 +197,7 @@ const Hero = ({ lang = "en" }) => {
             {/* Close Button */}
             <button
               className="absolute top-2 right-2 text-white text-3xl bg-black bg-opacity-50 rounded-full w-10 h-10 flex items-center justify-center z-10 hover:bg-opacity-80"
-              onClick={() => setModalOpen(false)}
+              onClick={handleModalCloseButton}
               aria-label="Close"
             >
               &times;
@@ -189,7 +215,7 @@ const Hero = ({ lang = "en" }) => {
             </div>
             {/* Right Arrow in Modal */}
             <button
-              onClick={() => setCurrent((current + 1) % images.length)}
+              onClick={handleModalNext}
               className="absolute right-2 top-1/2 -translate-y-1/2 bg-white bg-opacity-70 hover:bg-primary hover:text-white text-3xl rounded-full w-10 h-10 flex items-center justify-center shadow z-10"
               aria-label="Next photo"
               style={{ outline: 'none', border: 'none' }}
