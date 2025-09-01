@@ -86,6 +86,13 @@ const Hero = ({ lang = "en" }) => {
   };
   const startTimer = (startIdx = current) => {
     if (modalOpen) return; // Don't start timer if modal is open
+    
+    // Clear any existing timer first
+    if (timerRef.current) {
+      clearInterval(timerRef.current);
+      timerRef.current = null;
+    }
+    
     timerRef.current = setInterval(() => {
       setFade(true);
       setTimeout(() => {
@@ -98,26 +105,40 @@ const Hero = ({ lang = "en" }) => {
   useEffect(() => {
     setFade(false); // Ensure first image is visible
     startTimer();
-    return () => clearInterval(timerRef.current);
+    return () => {
+      if (timerRef.current) {
+        clearInterval(timerRef.current);
+      }
+    };
     // eslint-disable-next-line
   }, []);
+
+  // Add effect to restart timer when modal closes
+  useEffect(() => {
+    if (!modalOpen) {
+      startTimer();
+    }
+  }, [modalOpen]);
 
   // Modal handlers
   const handleModalOpen = () => {
     setModalOpen(true);
-    clearInterval(timerRef.current); // Pause auto-rotation
+    if (timerRef.current) {
+      clearInterval(timerRef.current);
+      timerRef.current = null;
+    }
   };
 
   const handleModalClose = (e) => {
     if (e.target.classList.contains('modal-bg')) {
       setModalOpen(false);
-      startTimer(); // Resume auto-rotation
+      // Timer will restart automatically via useEffect
     }
   };
 
   const handleModalCloseButton = () => {
     setModalOpen(false);
-    startTimer(); // Resume auto-rotation
+    // Timer will restart automatically via useEffect
   };
 
   // Modal navigation handlers (don't restart timer)
