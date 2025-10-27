@@ -328,7 +328,10 @@ const Team = ({ lang = 'en', setLang }) => {
   const sortedAlumniMembers = sortMembersByLastName(alumniMembers);
 
   return (
-    <div className="min-h-screen bg-[url('/uploads/team-bg.jpg')] bg-cover bg-center">
+    <div
+      className="min-h-screen bg-cover bg-center"
+      style={{ backgroundImage: `url(${getImagePath('/uploads/team-bg.jpg')})` }}
+    >
       <Header lang={lang} setLang={setLang} />
       <main className="pt-16">
         <section className="py-20">
