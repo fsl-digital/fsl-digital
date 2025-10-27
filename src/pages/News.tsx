@@ -1,8 +1,8 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Calendar, Users, Award } from 'lucide-react';
 import Header from '@/components/Header';
 import Footer from '@/components/Footer';
-import { getUpcomingEvents, getPastEvents } from '@/data/events';
+// import { getUpcomingEvents, getPastEvents } from '@/data/events';
 
 interface NewsItemProps {
   title: string;
@@ -66,8 +66,54 @@ const News = ({ lang = 'en', setLang }: NewsProps) => {
     window.scrollTo(0, 0);
   }, []);
 
-  const upcomingEvents = getUpcomingEvents(lang);
-  const pastEvents = getPastEvents(lang);
+  const [upcomingEvents, setUpcoming] = useState<any[]>([]);
+  const [pastEvents, setPast] = useState<any[]>([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState('');
+
+  useEffect(() => {
+    setLoading(true);
+    fetch(`${import.meta.env.BASE_URL}uploads/news/news_${lang}.csv`)
+      .then(res => res.text())
+      .then(text => {
+        const parse = (t: string) => {
+          const lines = t.trim().split('\n');
+          const headers = lines[0].split(',').map(h => h.replace(/^"|"$/g, ''));
+          const rows = lines.slice(1).map(line => {
+            const cells: string[] = []; let cur = ''; let q = false;
+            for (let i = 0; i < line.length; i++) { const ch = line[i]; if (ch === '"') q = !q; else if (ch === ',' && !q) { cells.push(cur); cur = ''; } else { cur += ch; } }
+            cells.push(cur);
+            return Object.fromEntries(cells.map((c, i) => [headers[i], c.replace(/^"|"$/g, '')]));
+          });
+          return rows;
+        };
+        const rows = parse(text);
+        const sanitize = (s: string) => (s || '')
+          .replace(/\\"/g, '"')
+          .replace(/^"|"$/g, '')
+          .replace(/\\n/g, '\n')
+          .replace(/\\r/g, '\r');
+        const today = new Date().toISOString().slice(0,10);
+        const upcoming = rows.filter(r => (r.start_date || '') >= today)
+          .sort((a,b) => (a.start_date||'').localeCompare(b.start_date||''));
+        const past = rows.filter(r => (r.start_date || '') < today)
+          .sort((a,b) => (b.start_date||'').localeCompare(a.start_date||''));
+        setUpcoming(upcoming.map(r => ({
+          title: sanitize(r.title),
+          date: r.display_date || r.start_date,
+          type: r.type as any,
+          description: sanitize(r.desc || ''),
+        })));
+        setPast(past.map(r => ({
+          title: sanitize(r.title),
+          date: r.display_date || r.start_date,
+          type: r.type as any,
+          description: sanitize(r.desc || ''),
+        })));
+        setLoading(false);
+      })
+      .catch(() => { setError('Failed to load news.'); setLoading(false); });
+  }, [lang]);
 
   return (
     <div className="min-h-screen">
@@ -80,6 +126,12 @@ const News = ({ lang = 'en', setLang }: NewsProps) => {
             </h1>
             
             <div className="max-w-3xl mx-auto">
+              {loading ? (
+                <p className="text-gray-600 text-center">Loading...</p>
+              ) : error ? (
+                <p className="text-red-600 text-center">{error}</p>
+              ) : (
+                <>
               <h2 className="text-2xl font-bold mb-6">
                 {lang === 'en' ? 'Upcoming FSL Events' : 'Kommende FSL-Veranstaltungen'}
               </h2>
@@ -106,6 +158,8 @@ const News = ({ lang = 'en', setLang }: NewsProps) => {
                   isPast={true}
                 />
               ))}
+                </>
+              )}
             </div>
           </div>
         </section>

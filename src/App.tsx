@@ -12,6 +12,7 @@ import Corpus from "./pages/Corpus";
 import News from "./pages/News";
 import Publications from "./pages/Publications";
 import Bibliography from "./pages/Bibliography";
+import Contact from "./pages/Contact";
 
 const queryClient = new QueryClient();
 
@@ -32,6 +33,7 @@ const App = () => {
             <Route path="/news" element={<News lang={lang} setLang={setLang} />} />
             <Route path="/publications" element={<Publications lang={lang} setLang={setLang} />} />
             <Route path="/bibliography" element={<Bibliography lang={lang} setLang={setLang} />} />
+            <Route path="/contact" element={<Contact lang={lang} setLang={setLang} />} />
             {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
             <Route path="*" element={<NotFound />} />
           </Routes>

@@ -51,7 +51,7 @@ const imageFiles = [
   'TeamfotoBerlin2024.jpg',
   'TeamtreffenHamburg2025.jpg',
 ];
-const images = imageFiles.map((file) => getImagePath(`/lovable-uploads/photo/${file}`));
+const images = imageFiles.map((file) => getImagePath(`/uploads/photo/${file}`));
 
 const FADE_DURATION = 1000; // ms
 const SLIDE_INTERVAL = 5000; // ms
@@ -86,13 +86,6 @@ const Hero = ({ lang = "en" }) => {
   };
   const startTimer = (startIdx = current) => {
     if (modalOpen) return; // Don't start timer if modal is open
-    
-    // Clear any existing timer first
-    if (timerRef.current) {
-      clearInterval(timerRef.current);
-      timerRef.current = null;
-    }
-    
     timerRef.current = setInterval(() => {
       setFade(true);
       setTimeout(() => {
@@ -105,40 +98,26 @@ const Hero = ({ lang = "en" }) => {
   useEffect(() => {
     setFade(false); // Ensure first image is visible
     startTimer();
-    return () => {
-      if (timerRef.current) {
-        clearInterval(timerRef.current);
-      }
-    };
+    return () => clearInterval(timerRef.current);
     // eslint-disable-next-line
   }, []);
-
-  // Add effect to restart timer when modal closes
-  useEffect(() => {
-    if (!modalOpen) {
-      startTimer();
-    }
-  }, [modalOpen]);
 
   // Modal handlers
   const handleModalOpen = () => {
     setModalOpen(true);
-    if (timerRef.current) {
-      clearInterval(timerRef.current);
-      timerRef.current = null;
-    }
+    clearInterval(timerRef.current); // Pause auto-rotation
   };
 
   const handleModalClose = (e) => {
     if (e.target.classList.contains('modal-bg')) {
       setModalOpen(false);
-      // Timer will restart automatically via useEffect
+      startTimer(); // Resume auto-rotation
     }
   };
 
   const handleModalCloseButton = () => {
     setModalOpen(false);
-    // Timer will restart automatically via useEffect
+    startTimer(); // Resume auto-rotation
   };
 
   // Modal navigation handlers (don't restart timer)
@@ -170,7 +149,6 @@ const Hero = ({ lang = "en" }) => {
                 >
                   {'<'}
                 </button>
-                
                 {/* Image */}
                 <img
                   src={images[current]}
@@ -179,14 +157,12 @@ const Hero = ({ lang = "en" }) => {
                   style={{ borderRadius: 0 }}
                   onClick={handleModalOpen}
                 />
-                
                 {/* Caption and credits */}
-                <div className="text-center mt-4 text-xs text-gray-700">
+                <div className="text-center mt-2 text-xs text-gray-700">
                   <span>{imageCaptions[imageFiles[current]][lang]}</span>
                   <br />
                   <span className="italic text-gray-500">{imageCaptions[imageFiles[current]].credits}</span>
                 </div>
-                
                 {/* Right Arrow */}
                 <button
                   onClick={handleNext}

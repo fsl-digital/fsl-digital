@@ -12,6 +12,7 @@ const navLabels = {
     { href: '/news', label: 'News/Events' },
     { href: '/publications', label: 'FSL Publications' },
     { href: '/bibliography', label: 'Project Bibliography' },
+    { href: '/contact', label: 'Contact' },
   ],
   de: [
     { href: '/', label: 'Startseite' },
@@ -21,6 +22,7 @@ const navLabels = {
     { href: '/news', label: 'Neuigkeiten/Veranstaltungen' },
     { href: '/publications', label: 'FSL Publikation' },
     { href: '/bibliography', label: 'Projekt Bibliographie' },
+    { href: '/contact', label: 'Kontakt' },
   ],
 };
 
@@ -32,7 +34,7 @@ const Header = ({ lang, setLang }) => {
       <div className="container-custom flex justify-between items-center">
         <div className="flex items-center">
           <Link to="/" className="flex items-center">
-            <img src={getImagePath('/lovable-uploads/FSL-WBM_klein.svg')} alt="FSL Logo" className="max-h-20 w-auto" />
+            <img src={getImagePath('/uploads/FSL-WBM_klein.svg')} alt="FSL Logo" className="max-h-20 w-auto" />
           </Link>
         </div>
 

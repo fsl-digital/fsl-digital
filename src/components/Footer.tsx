@@ -22,10 +22,6 @@ const footerText = {
     en: "Terms of Use",
     de: "Nutzungsbedingungen"
   },
-  imprint: {
-    en: "Imprint",
-    de: "Impressum"
-  },
   follow: {
     en: "Follow Us",
     de: "Folgen Sie uns"
@@ -43,42 +39,42 @@ const Footer = ({ lang = "en" }) => {
             <div className="grid grid-cols-3 grid-rows-2 gap-4">
               <div className="bg-white p-3 rounded flex items-center justify-center">
                 <img 
-                  src={getImagePath('/lovable-uploads/b54eef16-85d4-4667-b0f1-9c94d089aeba.svg')} 
+                  src={getImagePath('/uploads/b54eef16-85d4-4667-b0f1-9c94d089aeba.svg')} 
                   alt="Union der Deutschen Akademien der Wissenschaften" 
                   className="max-h-16 w-auto"
                 />
               </div>
               <div className="bg-white p-3 rounded flex items-center justify-center">
                 <img 
-                  src={getImagePath('/lovable-uploads/f93f4ed5-e4fc-4601-a318-b04e96cb8496.png')} 
+                  src={getImagePath('/uploads/f93f4ed5-e4fc-4601-a318-b04e96cb8496.png')} 
                   alt="Akademie der Wissenschaften und der Literatur Mainz" 
                   className="max-h-16 w-auto"
                 />
               </div>
               <div className="bg-white p-3 rounded flex items-center justify-center">
                 <img 
-                  src={getImagePath('/lovable-uploads/e62e1d4c-eb23-4999-a343-7aa9eaef245d.png')} 
+                  src={getImagePath('/uploads/e62e1d4c-eb23-4999-a343-7aa9eaef245d.png')} 
                   alt="Berlin-Brandenburgische Akademie der Wissenschaften" 
                   className="max-h-16 w-auto"
                 />
               </div>
               <div className="bg-white p-3 rounded flex items-center justify-center">
                 <img 
-                  src={getImagePath('/lovable-uploads/647b4adf-ff44-4560-97f0-68b12a9ee388.png')} 
+                  src={getImagePath('/uploads/647b4adf-ff44-4560-97f0-68b12a9ee388.png')} 
                   alt="DHI London" 
                   className="max-h-16 w-auto"
                 />
               </div>
               <div className="bg-white p-3 rounded flex items-center justify-center">
                 <img 
-                  src={getImagePath('/lovable-uploads/faa7ed66-4f5f-46c5-b921-d0dcf0ff3ddd.png')} 
+                  src={getImagePath('/uploads/faa7ed66-4f5f-46c5-b921-d0dcf0ff3ddd.png')} 
                   alt="Freie Universität" 
                   className="max-h-16 w-auto"
                 />
               </div>
               <div className="bg-white p-3 rounded flex items-center justify-center">
                 <img 
-                  src={getImagePath('/lovable-uploads/TU_Darmstadt_Logo.svg')} 
+                  src={getImagePath('/uploads/TU_Darmstadt_Logo.svg')} 
                   alt="Technische Universität Darmstadt" 
                   className="max-h-16 w-auto"
                 />
@@ -121,9 +117,8 @@ const Footer = ({ lang = "en" }) => {
           <div className="flex flex-wrap justify-between items-center">
             <div>{footerText.copyright[lang]}</div>
             <div className="flex flex-wrap gap-4">
-              <a href="#" className="hover:text-secondary">{footerText.privacy[lang]}</a>
-              <a href="#" className="hover:text-secondary">{footerText.terms[lang]}</a>
-              <a href="#" className="hover:text-secondary">{footerText.imprint[lang]}</a>
+              <a href={`${import.meta.env.BASE_URL}condition/privacy_${lang}.html`} className="hover:text-secondary" target="_self">{footerText.privacy[lang]}</a>
+              <a href={`${import.meta.env.BASE_URL}condition/terms_${lang}.html`} className="hover:text-secondary" target="_self">{footerText.terms[lang]}</a>
             </div>
           </div>
         </div>
