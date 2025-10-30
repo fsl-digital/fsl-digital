@@ -24,7 +24,7 @@ const App = () => {
       <TooltipProvider>
         <Toaster />
         <Sonner />
-        <BrowserRouter basename="/fsl-digital">
+        <BrowserRouter basename={import.meta.env.BASE_URL}>
           <Routes>
             <Route path="/" element={<Index lang={lang} setLang={setLang} />} />
             <Route path="/team" element={<Team lang={lang} setLang={setLang} />} />
