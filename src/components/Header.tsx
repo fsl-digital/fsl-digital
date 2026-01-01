@@ -6,22 +6,22 @@ import { getImagePath } from '@/lib/image-utils';
 const navLabels = {
   en: [
     { href: '/', label: 'Home' },
-    { href: '/concept', label: 'Concept' },
+    { href: '/concept', label: 'Project' },
     { href: '/team', label: 'Team' },
     { href: '/corpus', label: 'Corpus' },
     { href: '/news', label: 'News/Events' },
-    { href: '/publications', label: 'FSL Publications' },
-    { href: '/bibliography', label: 'Project Bibliography' },
+    { href: '/publications', label: 'Publications' },
+    { href: '/bibliography', label: 'Bibliography' },
     { href: '/contact', label: 'Contact' },
   ],
   de: [
     { href: '/', label: 'Startseite' },
-    { href: '/concept', label: 'Konzept' },
+    { href: '/concept', label: 'Projekt' },
     { href: '/team', label: 'Team' },
     { href: '/corpus', label: 'Korpus' },
     { href: '/news', label: 'Neuigkeiten/Veranstaltungen' },
-    { href: '/publications', label: 'FSL Publikation' },
-    { href: '/bibliography', label: 'Projekt Bibliographie' },
+    { href: '/publications', label: 'Publikationen' },
+    { href: '/bibliography', label: 'Bibliographie' },
     { href: '/contact', label: 'Kontakt' },
   ],
 };
@@ -58,17 +58,17 @@ const Header = ({ lang, setLang }) => {
         {/* Language selector */}
         <div className="hidden lg:flex items-center">
           <button
-            className={`text-sm ${lang === "en" ? "text-primary font-bold" : "text-gray-600"} hover:text-gray-900`}
-            onClick={() => setLang("en")}
-          >
-            EN
-          </button>
-          <span className="mx-2 text-gray-300">|</span>
-          <button
             className={`text-sm ${lang === "de" ? "text-primary font-bold" : "text-gray-600"} hover:text-gray-900`}
             onClick={() => setLang("de")}
           >
             DE
+          </button>
+          <span className="mx-2 text-gray-300">|</span>
+          <button
+            className={`text-sm ${lang === "en" ? "text-primary font-bold" : "text-gray-600"} hover:text-gray-900`}
+            onClick={() => setLang("en")}
+          >
+            EN
           </button>
         </div>
       </div>
@@ -82,17 +82,17 @@ const Header = ({ lang, setLang }) => {
             ))}
             <div className="flex items-center pt-2">
               <button
-                className={`text-sm ${lang === "en" ? "text-primary font-bold" : "text-gray-600"} hover:text-gray-900`}
-                onClick={() => setLang("en")}
-              >
-                EN
-              </button>
-              <span className="mx-2 text-gray-300">|</span>
-              <button
                 className={`text-sm ${lang === "de" ? "text-primary font-bold" : "text-gray-600"} hover:text-gray-900`}
                 onClick={() => setLang("de")}
               >
                 DE
+              </button>
+              <span className="mx-2 text-gray-300">|</span>
+              <button
+                className={`text-sm ${lang === "en" ? "text-primary font-bold" : "text-gray-600"} hover:text-gray-900`}
+                onClick={() => setLang("en")}
+              >
+                EN
               </button>
             </div>
           </div>

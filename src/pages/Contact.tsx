@@ -10,8 +10,23 @@ interface Props {
 
 const Contact = ({ lang = 'en', setLang }: Props) => {
   const [zoomOpen, setZoomOpen] = useState(false);
+  const maskEmails = true;
   const openZoom = () => setZoomOpen(true);
   const closeZoom = () => setZoomOpen(false);
+
+  const emailUi = lang === 'de'
+    ? { toggleShow: 'E-Mail-Adressen anzeigen', toggleHide: 'E-Mail-Adressen verbergen', linkText: 'E-Mail senden' }
+    : { toggleShow: 'Show email addresses', toggleHide: 'Hide email addresses', linkText: 'Send email' };
+
+  const EmailLink = ({ addr, name }: { addr: string; name?: string }) => {
+    const maskedText = name ? `${emailUi.linkText} ${name}` : emailUi.linkText;
+    const aria = maskEmails ? (name ? maskedText : `${emailUi.linkText} ${addr}`) : addr;
+    return (
+      <a href={`mailto:${addr}`} className="text-primary underline" aria-label={aria}>
+        {maskEmails ? maskedText : addr}
+      </a>
+    );
+  };
 
   return (
     <div className="min-h-screen bg-gray-50 flex flex-col">
@@ -22,6 +37,7 @@ const Contact = ({ lang = 'en', setLang }: Props) => {
             <h1 className="text-4xl font-bold text-center mb-6">
               {lang === 'de' ? 'Kontakt und Standorte' : 'Contact and Locations'}
             </h1>
+            {/* Emails are masked by default; toggle removed per request */}
             {lang === 'de' ? (
               <div className="prose max-w-none">
                 <p>
@@ -48,7 +64,7 @@ const Contact = ({ lang = 'en', setLang }: Props) => {
                       Jägerstraße 22/23<br />
                       10117 Berlin<br />
                       Tel.: +49 (0)30-20 370 360<br />
-                      E-Mail: <a href="mailto:josephine.klingebeil-schieke@bbaw.de" className="text-primary underline">josephine.klingebeil-schieke@bbaw.de</a>
+                      E-Mail: <EmailLink addr="josephine.klingebeil-schieke@bbaw.de" />
                     </p>
                   </div>
 
@@ -56,13 +72,13 @@ const Contact = ({ lang = 'en', setLang }: Props) => {
                     <p className="mb-3 text-lg">📍 In Darmstadt werden die Daten modelliert und die digitale Infrastruktur für die Erfassung entwickelt und gepflegt. Auf analytischer und Annotationsebene liegt der Fokus auf den Glossaren und Wörterbuchteilen.</p>
                     <h2 className="text-xl font-semibold mb-3">Arbeitsstelle Darmstadt</h2>
                     <p>
-                      Dr. Luise Borek (aktuell vertreten von Elena Volkanovska)<br />
+                      Dr. Luise Borek<br />
                       Technische Universität Darmstadt<br />
                       Institut für Sprach- und Literaturwissenschaft<br />
                       Residenzschloss 1<br />
                       64283 Darmstadt<br />
                       Tel.: +49 (0)6151 16 - 57407 / - 57411<br />
-                      E-Mail: <a href="mailto:elena.volkanovska@tu-darmstadt.de" className="text-primary underline">elena.volkanovska@tu-darmstadt.de</a>
+                      E-Mail: <EmailLink addr="luise.borek@tu-darmstadt.de" />
                     </p>
                   </div>
 
@@ -75,7 +91,7 @@ const Contact = ({ lang = 'en', setLang }: Props) => {
                       Institut für Germanistik<br />
                       Von-Melle-Park 6, Postfach #15<br />
                       20146 Hamburg<br />
-                      E-Mail: <a href="mailto:kerstin.roth@uni-hamburg.de" className="text-primary underline">kerstin.roth@uni-hamburg.de</a> / <a href="mailto:miriam.hinterholzer@uni-hamburg.de" className="text-primary underline">miriam.hinterholzer@uni-hamburg.de</a>
+                      E-Mail: <EmailLink addr="kerstin.roth@uni-hamburg.de" name="Kerstin Roth" /> / <EmailLink addr="miriam.hinterholzer@uni-hamburg.de" name="Miriam Hinterholzer" />
                     </p>
                   </div>
                 </div>
@@ -105,20 +121,20 @@ const Contact = ({ lang = 'en', setLang }: Props) => {
                       Jägerstraße 22/23<br />
                       10117 Berlin<br />
                       Tel.: +49 (0)30-20 370 360<br />
-                      Email: <a href="mailto:josephine.klingebeil-schieke@bbaw.de" className="text-primary underline">josephine.klingebeil-schieke@bbaw.de</a>
+                      Email: <EmailLink addr="josephine.klingebeil-schieke@bbaw.de" />
                     </p>
                   </div>
                   <div className="bg-white rounded-xl shadow border border-gray-200 p-6 h-full">
                     <p className="mb-3 text-lg">📍 In Darmstadt, the data are modelled and the digital infrastructure for data capture is developed and maintained. On the analytical and annotation level, the focus is on the glossaries and dictionary sections.</p>
                     <h2 className="text-xl font-semibold mb-3">Darmstadt Office</h2>
                     <p className="text-gray-700">
-                      Dr. Luise Borek (currently represented by Elena Volkanovska)<br />
+                      Dr. Luise Borek<br />
                       Technische Universität Darmstadt<br />
                       Institute of Linguistics and Literary Studies<br />
                       Residenzschloss 1<br />
                       64283 Darmstadt<br />
                       Tel.: +49 (0)6151 16 - 57407 / - 57411<br />
-                      Email: <a href="mailto:elena.volkanovska@tu-darmstadt.de" className="text-primary underline">elena.volkanovska@tu-darmstadt.de</a>
+                      Email: <EmailLink addr="luise.borek@tu-darmstadt.de" />
                     </p>
                   </div>
                   <div className="bg-white rounded-xl shadow border border-gray-200 p-6 h-full">
@@ -130,7 +146,7 @@ const Contact = ({ lang = 'en', setLang }: Props) => {
                       Department of German Studies<br />
                       Von-Melle-Park 6, P.O. Box #15<br />
                       20146 Hamburg<br />
-                      Email: <a href="mailto:kerstin.roth@uni-hamburg.de" className="text-primary underline">kerstin.roth@uni-hamburg.de</a> / <a href="mailto:miriam.hinterholzer@uni-hamburg.de" className="text-primary underline">miriam.hinterholzer@uni-hamburg.de</a>
+                      Email: <EmailLink addr="kerstin.roth@uni-hamburg.de" name="Kerstin Roth" /> / <EmailLink addr="miriam.hinterholzer@uni-hamburg.de" name="Miriam Hinterholzer" />
                     </p>
                   </div>
                 </div>

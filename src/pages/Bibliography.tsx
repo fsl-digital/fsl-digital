@@ -31,10 +31,11 @@ function parseCSV(text: string) {
 
 const Bibliography = ({ lang = 'en', setLang }) => {
   const [entries, setEntries] = useState<any[]>([]);
-  const [sortKey, setSortKey] = useState<string>('Publication Year');
+  const [sortKey, setSortKey] = useState<string>('Author');
   const [sortDir, setSortDir] = useState<'asc' | 'desc'>('asc');
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState('');
+  const [maskLinks, setMaskLinks] = useState(true);
 
   useEffect(() => {
     setLoading(true);
@@ -57,8 +58,8 @@ const Bibliography = ({ lang = 'en', setLang }) => {
   }, [lang]);
 
   const labels = lang === 'de'
-    ? { author: 'Autor', year: 'Publikationsjahr', title: 'Titel', doi: 'DOI', url: 'URL' }
-    : { author: 'Author', year: 'Publication Year', title: 'Title', doi: 'DOI', url: 'URL' };
+    ? { author: 'Autor', year: 'Publikationsjahr', title: 'Titel', doi: 'DOI', url: 'URL', mask: 'DOI/URL verbergen', show: 'DOI/URL anzeigen', openDoi: 'DOI öffnen', openUrl: 'Link öffnen' }
+    : { author: 'Author', year: 'Publication Year', title: 'Title', doi: 'DOI', url: 'URL', mask: 'Hide DOI/URL', show: 'Show DOI/URL', openDoi: 'Open DOI', openUrl: 'Open Link' };
 
   const getDoiLink = (doi: string) => {
     if (!doi) return '';
@@ -139,77 +140,107 @@ const Bibliography = ({ lang = 'en', setLang }) => {
   return (
     <div className="min-h-screen bg-gray-50 flex flex-col">
       <Header lang={lang} setLang={setLang} />
-      <main className="flex-1 flex flex-col items-center justify-center py-16">
-        <h1 className="text-4xl font-bold text-center mb-12">{lang === 'de' ? 'Bibliographie' : 'Bibliography'}</h1>
-        {loading ? (
-          <p className="text-gray-600">Loading...</p>
-        ) : error ? (
-          <p className="text-red-600">{error}</p>
-        ) : entries.length === 0 ? (
-          <p className="text-gray-600">No bibliography entries found.</p>
-        ) : (
-          <div className="w-full max-w-6xl mx-auto">
-            <div className="overflow-x-auto rounded-xl shadow border border-gray-200">
-              <table className="min-w-full bg-white divide-y divide-gray-200">
-                <thead className="bg-gray-50">
-                  <tr>
-                    <th className="px-4 py-3 text-left text-sm font-semibold text-gray-700 cursor-pointer select-none" onClick={() => requestSort('Author')} aria-sort={sortKey==='Author' ? sortDir : 'none'}>
-                      {labels.author}<SortIcon col="Author" />
-                    </th>
-                    <th className="px-4 py-3 text-left text-sm font-semibold text-gray-700 cursor-pointer select-none" onClick={() => requestSort('Publication Year')} aria-sort={sortKey==='Publication Year' ? sortDir : 'none'}>
-                      {labels.year}<SortIcon col="Publication Year" />
-                    </th>
-                    <th className="px-4 py-3 text-left text-sm font-semibold text-gray-700 cursor-pointer select-none" onClick={() => requestSort('Title')} aria-sort={sortKey==='Title' ? sortDir : 'none'}>
-                      {labels.title}<SortIcon col="Title" />
-                    </th>
-                    <th className="px-4 py-3 text-left text-sm font-semibold text-gray-700 cursor-pointer select-none" onClick={() => requestSort('DOI')} aria-sort={sortKey==='DOI' ? sortDir : 'none'}>
-                      {labels.doi}<SortIcon col="DOI" />
-                    </th>
-                    <th className="px-4 py-3 text-left text-sm font-semibold text-gray-700 cursor-pointer select-none" onClick={() => requestSort('Url')} aria-sort={sortKey==='Url' ? sortDir : 'none'}>
-                      {labels.url}<SortIcon col="Url" />
-                    </th>
-                  </tr>
-                </thead>
-                <tbody className="divide-y divide-gray-100">
-                  {sortedEntries.map((entry, idx) => {
-                    const author = entry['Author'] || '';
-                    const year = entry['Publication Year'] || '';
-                    const title = entry['Title'] || '';
-                    const doi = entry['DOI'] || '';
-                    const url = entry['Url'] || '';
-                    const doiHref = getDoiLink(doi);
-                    const doiText = getDoiText(doi);
-                    return (
-                    <tr key={idx} className="align-top hover:bg-gray-50">
-                      <td className="px-4 py-3 text-gray-800">{renderAuthors(author)}</td>
-                      <td className="px-4 py-3 text-gray-700 whitespace-nowrap">{year}</td>
-                      <td className="px-4 py-3 text-gray-900 whitespace-pre-wrap">{title}</td>
-                      <td className="px-4 py-3">
-                        {doiHref ? (
-                          <a href={doiHref} target="_blank" rel="noopener noreferrer" className="inline-flex items-center px-2 py-1 text-sm rounded bg-blue-50 text-blue-700 hover:bg-blue-100">
-                            {doiText}
-                          </a>
-                        ) : (
-                          <span className="text-gray-400">—</span>
-                        )}
-                      </td>
-                      <td className="px-4 py-3">
-                        {url ? (
-                          <a href={url} target="_blank" rel="noopener noreferrer" className="inline-flex items-center px-2 py-1 text-sm rounded bg-green-50 text-green-700 hover:bg-green-100 break-all">
-                            {url}
-                          </a>
-                        ) : (
-                          <span className="text-gray-400">—</span>
-                        )}
-                      </td>
-                    </tr>
-                    );
-                  })}
-                </tbody>
-              </table>
-            </div>
+      <main className="pt-16">
+        <section className="py-20">
+          <div className="container-custom">
+            <h1 className="text-4xl font-bold text-center mb-12">
+              {lang === 'de' ? 'Projektbibliographie' : 'Project Bibliography'}
+            </h1>
+            {loading ? (
+              <p className="text-gray-600 text-center mb-6">Loading...</p>
+            ) : error ? (
+              <p className="text-red-600 text-center mb-6">{error}</p>
+            ) : entries.length === 0 ? (
+              <p className="text-gray-600 text-center mb-6">No bibliography entries found.</p>
+            ) : (
+              <div className="w-full max-w-6xl mx-auto">
+                <div className="flex items-center justify-end mb-3 px-1">
+                  <button
+                    type="button"
+                    onClick={() => setMaskLinks(v => !v)}
+                    className="inline-flex items-center gap-2 px-3 py-1.5 text-sm rounded border border-gray-300 bg-white hover:bg-gray-50 text-gray-700"
+                    aria-pressed={!maskLinks}
+                    aria-label={maskLinks ? labels.show : labels.mask}
+                  >
+                    <span className="inline-block w-2 h-2 rounded-full" style={{ backgroundColor: maskLinks ? '#6B7280' : '#10B981' }} />
+                    {maskLinks ? labels.show : labels.mask}
+                  </button>
+                </div>
+                <div className="overflow-x-auto rounded-xl shadow border border-gray-200">
+                  <table className="min-w-full table-fixed bg-white divide-y divide-gray-200">
+                    <thead className="bg-gray-50">
+                      <tr>
+                        <th className="px-4 py-3 text-left text-sm font-semibold text-gray-700 cursor-pointer select-none w-64 whitespace-nowrap" onClick={() => requestSort('Author')} aria-sort={sortKey === 'Author' ? sortDir : 'none'}>
+                          {labels.author}<SortIcon col="Author" />
+                        </th>
+                        <th className="px-4 py-3 text-left text-sm font-semibold text-gray-700 cursor-pointer select-none w-28 whitespace-nowrap" onClick={() => requestSort('Publication Year')} aria-sort={sortKey === 'Publication Year' ? sortDir : 'none'}>
+                          {labels.year}<SortIcon col="Publication Year" />
+                        </th>
+                        <th className="px-4 py-3 text-left text-sm font-semibold text-gray-700 cursor-pointer select-none w-1/2 whitespace-nowrap" onClick={() => requestSort('Title')} aria-sort={sortKey === 'Title' ? sortDir : 'none'}>
+                          {labels.title}<SortIcon col="Title" />
+                        </th>
+                        <th className="px-4 py-3 text-left text-sm font-semibold text-gray-700 cursor-pointer select-none w-36 whitespace-nowrap" onClick={() => requestSort('DOI')} aria-sort={sortKey === 'DOI' ? sortDir : 'none'}>
+                          {labels.doi}<SortIcon col="DOI" />
+                        </th>
+                        <th className="px-4 py-3 text-left text-sm font-semibold text-gray-700 cursor-pointer select-none w-36 whitespace-nowrap" onClick={() => requestSort('Url')} aria-sort={sortKey === 'Url' ? sortDir : 'none'}>
+                          {labels.url}<SortIcon col="Url" />
+                        </th>
+                      </tr>
+                    </thead>
+                    <tbody className="divide-y divide-gray-100">
+                      {sortedEntries.map((entry, idx) => {
+                        const author = entry['Author'] || '';
+                        const year = entry['Publication Year'] || '';
+                        const title = entry['Title'] || '';
+                        const doi = entry['DOI'] || '';
+                        const url = entry['Url'] || '';
+                        const doiHref = getDoiLink(doi);
+                        const doiText = getDoiText(doi);
+                        return (
+                        <tr key={idx} className="align-top hover:bg-gray-50">
+                          <td className="px-4 py-3 text-gray-800 w-64">{renderAuthors(author)}</td>
+                          <td className="px-4 py-3 text-gray-700 whitespace-nowrap w-28">{year}</td>
+                          <td className="px-4 py-3 text-gray-900 whitespace-pre-wrap break-words w-1/2">{title}</td>
+                          <td className="px-4 py-3 w-36">
+                            {doiHref ? (
+                              maskLinks ? (
+                                <a href={doiHref} target="_blank" rel="noopener noreferrer" className="inline-flex items-center px-2 py-1 text-sm rounded bg-blue-50 text-blue-700 hover:bg-blue-100">
+                                  {labels.openDoi}
+                                </a>
+                              ) : (
+                                <a href={doiHref} target="_blank" rel="noopener noreferrer" className="inline-flex items-center px-2 py-1 text-sm rounded bg-blue-50 text-blue-700 hover:bg-blue-100 break-all">
+                                  {doiText}
+                                </a>
+                              )
+                            ) : (
+                              <span className="text-gray-400">-</span>
+                            )}
+                          </td>
+                          <td className="px-4 py-3 w-36">
+                            {url ? (
+                              maskLinks ? (
+                                <a href={url} target="_blank" rel="noopener noreferrer" className="inline-flex items-center px-2 py-1 text-sm rounded bg-green-50 text-green-700 hover:bg-green-100">
+                                  {labels.openUrl}
+                                </a>
+                              ) : (
+                                <a href={url} target="_blank" rel="noopener noreferrer" className="inline-flex items-center px-2 py-1 text-sm rounded bg-green-50 text-green-700 hover:bg-green-100 break-all">
+                                  {url}
+                                </a>
+                              )
+                            ) : (
+                              <span className="text-gray-400">-</span>
+                            )}
+                          </td>
+                        </tr>
+                        );
+                      })}
+                    </tbody>
+                  </table>
+                </div>
+              </div>
+            )}
           </div>
-        )}
+        </section>
       </main>
       <Footer lang={lang} />
     </div>

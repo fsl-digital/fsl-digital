@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useMemo, useState } from 'react';
 import Header from '@/components/Header';
 import Footer from '@/components/Footer';
 import { getImagePath } from '@/lib/image-utils';
@@ -8,14 +8,25 @@ import ElenaBandtProfile from './profiles/ElenaBandtProfile';
 import LivBuechlerProfile from './profiles/LivBuechlerProfile';
 import FalcoRischProfile from './profiles/FalcoRischProfile';
 
-// Helper function to get last name
-const getLastName = (fullName) => {
+type TeamMember = {
+  section: string;
+  name: string;
+  email?: string;
+  image: string;
+  link?: string;
+  institution: { en: string; de: string };
+  timeline?: { en: string; de: string };
+  profileSlug?: string;
+};
+
+const defaultImage = '/uploads/team/no_photo.png';
+
+const getLastName = (fullName: string) => {
   const parts = fullName.split(' ');
   return parts[parts.length - 1];
 };
 
-// Helper function to sort members by last name
-const sortMembersByLastName = (members) => {
+const sortMembersByLastName = (members: TeamMember[]) => {
   return [...members].sort((a, b) => {
     const lastNameA = getLastName(a.name);
     const lastNameB = getLastName(b.name);
@@ -23,11 +34,77 @@ const sortMembersByLastName = (members) => {
   });
 };
 
+const parseCsvRow = (line: string) => {
+  const values: string[] = [];
+  let current = '';
+  let inQuotes = false;
+
+  for (let i = 0; i < line.length; i++) {
+    const char = line[i];
+    const next = line[i + 1];
+
+    if (char === '"' && inQuotes && next === '"') {
+      current += '"';
+      i++;
+    } else if (char === '"') {
+      inQuotes = !inQuotes;
+    } else if (char === ',' && !inQuotes) {
+      values.push(current);
+      current = '';
+    } else {
+      current += char;
+    }
+  }
+
+  values.push(current);
+  return values;
+};
+
+const parseTeamCsv = (text: string): TeamMember[] => {
+  const lines = text.trim().split(/\r?\n/);
+  if (!lines.length) return [];
+
+  const headers = parseCsvRow(lines[0]).map((h) => h.trim());
+  const rows: TeamMember[] = [];
+
+  for (let i = 1; i < lines.length; i++) {
+    const line = lines[i];
+    if (!line.trim()) continue;
+    const cols = parseCsvRow(line);
+    const row: Record<string, string> = {};
+    headers.forEach((h, idx) => {
+      row[h] = cols[idx] ?? '';
+    });
+
+    const normalize = (value: string) => (value || '').trim().replace(/\\n/g, '\n');
+    const section = row.section?.trim().toLowerCase() || '';
+
+    rows.push({
+      section,
+      name: row.name?.trim() || 'Unnamed',
+      email: row.email?.trim() || undefined,
+      image: row.image?.trim() || defaultImage,
+      link: row.link?.trim() || undefined,
+      institution: {
+        en: normalize(row.institution_en),
+        de: normalize(row.institution_de),
+      },
+      timeline:
+        row.timeline_en || row.timeline_de
+          ? { en: normalize(row.timeline_en), de: normalize(row.timeline_de) }
+          : undefined,
+      profileSlug: row.profile_slug?.trim() || undefined,
+    });
+  }
+
+  return rows;
+};
+
 const sections = [
   { key: 'leader', title: { en: 'Spokespersons or Project Leaders', de: 'Projektleitungen' } },
   { key: 'head', title: { en: 'Head of Office', de: 'Projektkoordination' } },
-  { key: 'postdoc', title: { en: 'Post Doctoral Researchers', de: 'Postdoktorand:innen' } },
-  { key: 'phd', title: { en: 'Ph. D. Researchers', de: 'Doktorandinnen:innen' } },
+  { key: 'postdoc', title: { en: 'Team Leader', de: 'Arbeitsstellenleiter:innen' } },
+  { key: 'phd', title: { en: 'Ph. D. Researchers', de: 'Doktorand:innen' } },
   { key: 'assistant', title: { en: 'Scientific Assistants', de: 'Studentische Hilfskräfte' } },
 ];
 
@@ -48,6 +125,9 @@ const ArrowIcon = ({ open }) => (
 );
 
 const Team = ({ lang = 'en', setLang }) => {
+  const [members, setMembers] = useState<TeamMember[]>([]);
+  const [loading, setLoading] = useState(false);
+  const [loadError, setLoadError] = useState<string | null>(null);
   const [open, setOpen] = useState({});
   const [showKlingebeilModal, setShowKlingebeilModal] = useState(false);
   const [showRothModal, setShowRothModal] = useState(false);
@@ -58,280 +138,79 @@ const Team = ({ lang = 'en', setLang }) => {
 
   const toggle = (key) => setOpen((prev) => ({ ...prev, [key]: !prev[key] }));
 
-  // Define team members for each section
-  const leaderMembers = [
-    {
-      name: "Prof. Dr. Andrea Rapp",
-      image: '/uploads/team_photo/RappAndrea.jpg',
-      link: "https://www.linglit.tu-darmstadt.de/institutlinglit/mitarbeitende/andrearapp/index.de.jsp",
-      email: "andrea.rapp@tu-darmstadt.de",
-      institution: {
-        en: "German Studies - Computational Philology and Medieval Studies\nTechnical University of Darmstadt",
-        de: "Germanistik - Computerphilologie und Mediävistik\nTechnische Universität Darmstadt"
-      }
-    },
-    {
-      name: "Prof. Dr. Horst Simon",
-      image: '/uploads/team_photo/Simon.png',
-      link: "https://www.geisteswissenschaften.fu-berlin.de/we04/linguistik/histling/mitarbeiter_innen/prof/simon/index.html",
-      email: "horst.simon@fu-berlin.de",
-      institution: {
-        en: "German Historical Linguistics - Freie Universität Berlin",
-        de: "Deutsche historische Linguistik - Freie Universität Berlin"
-      }
-    },
-    {
-      name: "Prof. Dr. Natalia Filatkina",
-      image: '/uploads/team_photo/natalia-filatkina.jpg',
-      link: "https://www.uni-hamburg.de/uhh/organisation/praesidium/vp2.html",
-      email: "natalia.filatkina@uni-hamburg.de",
-      institution: {
-        en: "Vice President for Studies and Teaching\nLinguistics of German with a focus on digital historical linguistics\nUniversity of Hamburg",
-        de: "Vizepräsidentin für Studium und Lehre\nLinguistik des Deutschen mit Schwerpunkt digitale historische Sprachwissenschaft\nUniversität Hamburg"
-      }
-    }
-  ];
+  useEffect(() => {
+    let canceled = false;
 
-  // Head of Office
-  const headMembers = [
-    {
-      name: "Dr. Josephine Klingebeil-Schieke",
-      image: '/uploads/team_photo/Klingebeil.jpg',
-      email: "klingebeil@bbaw.de",
-      institution: {
-        en: "Berlin-Brandenburg Academy of Sciences and Humanities",
-        de: "Berlin-Brandenburgische Akademie der Wissenschaften"
+    const loadCsv = async () => {
+      try {
+        setLoading(true);
+        setLoadError(null);
+        const response = await fetch(getImagePath('/uploads/team/team.csv'), { cache: 'no-store' });
+        if (!response.ok) {
+          throw new Error(`CSV fetch failed (${response.status})`);
+        }
+        const text = await response.text();
+        if (canceled) return;
+        setMembers(parseTeamCsv(text));
+      } catch (error) {
+        if (!canceled) {
+          setLoadError(error instanceof Error ? error.message : 'Failed to load team data');
+        }
+      } finally {
+        if (!canceled) {
+          setLoading(false);
+        }
       }
-    }
-  ];
+    };
 
-  const postdocMembers = [
-    {
-      name: "Dr. Luise Borek",
-      image: '/uploads/team_photo/no_photo.png',
-      email: "luise.borek@tu-darmstadt.de",
-      institution: {
-        en: "Technical University of Darmstadt\nUnion of German Academies of Sciences\nCurrently on leave until 2026",
-        de: "Technische Universität Darmstadt\nUnion der deutschen Akademien der Wissenschaften\nDerzeit beurlaubt bis 2026"
-      }
-    },
-    {
-      name: "Dr. Josephine Klingebeil-Schieke",
-      image: '/uploads/team_photo/Klingebeil.jpg',
-      email: "klingebeil@bbaw.de",
-      institution: {
-        en: "Berlin-Brandenburg Academy of Sciences and Humanities",
-        de: "Berlin-Brandenburgische Akademie der Wissenschaften"
-      }
-    },
-    {
-      name: "Dr. Kerstin Roth",
-      image: '/uploads/team_photo/KerstinRoth.jpg',
-      email: "kerstin.roth@uni-hamburg.de",
-      institution: {
-        en: "University of Hamburg",
-        de: "Universität Hamburg"
-      }
-    }
-  ];
+    loadCsv();
+    return () => {
+      canceled = true;
+    };
+  }, []);
 
-  const phdMembers = [
-    {
-      name: "Elena Bandt",
-      image: '/uploads/team_photo/BandtElena.jpg',
-      email: "elena.bandt@bbaw.de",
-      institution: {
-        en: "Berlin-Brandenburg Academy of Sciences and Humanities",
-        de: "Berlin-Brandenburgische Akademie der Wissenschaften"
-      }
-    },
-    {
-      name: "Liv Büchler",
-      image: '/uploads/team_photo/liv.jpg',
-      email: "liv.buechler@bbaw.de",
-      institution: {
-        en: "Berlin-Brandenburg Academy of Sciences and Humanities",
-        de: "Berlin-Brandenburgische Akademie der Wissenschaften"
-      }
-    },
-    {
-      name: "Debajyoti Paul Chowdhury",
-      image: '/uploads/team_photo/dp.jpg',
-      email: "debajyoti.chowdhury@tu-darmstadt.de",
-      institution: {
-        en: "Technical University of Darmstadt",
-        de: "Technische Universität Darmstadt"
-      }
-    },
-    {
-      name: "Miriam Hinterholzer",
-      image: '/uploads/team_photo/miriam.jpg',
-      email: "miriam.hinterholzer@uni-hamburg.de",
-      institution: {
-        en: "University of Hamburg",
-        de: "Universität Hamburg"
-      }
-    },
-    {
-      name: "Lisa Scharrer",
-      image: '/uploads/team_photo/lisa.jpg',
-      email: "lisa.scharrer@tu-darmstadt.de",
-      institution: {
-        en: "Technical University of Darmstadt",
-        de: "Technische Universität Darmstadt"
-      }
-    },
-    {
-      name: "Elena Volkanovska",
-      image: '/uploads/team_photo/no_photo.png',
-      email: "elena.volkanovska@tu-darmstadt.de",
-      institution: {
-        en: "Technical University of Darmstadt",
-        de: "Technische Universität Darmstadt"
-      }
-    }
-  ];
+  const grouped = useMemo(() => {
+    const groups: Record<string, TeamMember[]> = {
+      leader: [],
+      head: [],
+      postdoc: [],
+      phd: [],
+      assistant: [],
+      working: [],
+      partners: [],
+      alumni: [],
+    };
 
-  const assistantMembers = [
-    {
-      name: "Carlotta Schilke",
-      image: '/uploads/team_photo/Carlotta.jpg',
-      institution: {
-        en: "Berlin-Brandenburg Academy of Sciences and Humanities",
-        de: "Berlin-Brandenburgische Akademie der Wissenschaften"
+    members.forEach((member) => {
+      const key = member.section;
+      if (groups[key]) {
+        groups[key].push(member);
       }
-    },
-    {
-      name: "Zoe Kaufmann",
-      image: '/uploads/team_photo/no_photo.png',
-      institution: {
-        en: "Technical University of Darmstadt",
-        de: "Technische Universität Darmstadt"
-      }
-    },
-    {
-      name: "Emma Piel",
-      image: '/uploads/team_photo/no_photo.png',
-      institution: {
-        en: "University of Hamburg",
-        de: "Universität Hamburg"
-      }
-    },
-    {
-      name: "Anja Schramm",
-      image: '/uploads/team_photo/SchrammAnja.jpg',
-      institution: {
-        en: "Berlin-Brandenburg Academy of Sciences and Humanities",
-        de: "Berlin-Brandenburgische Akademie der Wissenschaften"
-      }
-    },
-    {
-      name: "Peer Scholl",
-      image: '/uploads/team_photo/Scholl.jpg',
-      institution: {
-        en: "Berlin-Brandenburg Academy of Sciences and Humanities",
-        de: "Berlin-Brandenburgische Akademie der Wissenschaften"
-      }
-    },
-    {
-      name: "Niclas Semmerow",
-      image: '/uploads/team_photo/no_photo.png',
-      institution: {
-        en: "University of Hamburg",
-        de: "Universität Hamburg"
-      }
-    },
-    {
-      name: "Francesca Romana Vertullo",
-      image: '/uploads/team_photo/Vertullo.jpg',
-      institution: {
-        en: "University of Hamburg",
-        de: "Universität Hamburg"
-      }
-    }
-  ];
+    });
 
-  const workingMembers = [
-    {
-      name: "Alexandra Franz",
-      image: '/uploads/team_photo/no_photo.png'
-    },
-    {
-      name: "Ekaterina Funk",
-      image: '/uploads/team_photo/no_photo.png'
-    },
-    {
-      name: "Stefanie Anna Voss",
-      image: '/uploads/team_photo/no_photo.png'
-    }
-  ];
+    return {
+      leader: sortMembersByLastName(groups.leader),
+      head: sortMembersByLastName(groups.head),
+      postdoc: sortMembersByLastName(groups.postdoc),
+      phd: sortMembersByLastName(groups.phd),
+      assistant: sortMembersByLastName(groups.assistant),
+      working: sortMembersByLastName(groups.working),
+      partners: sortMembersByLastName(groups.partners),
+      alumni: sortMembersByLastName(groups.alumni),
+    };
+  }, [members]);
 
-  const partnerMembers = [
-    {
-      name: "Linda Gennies",
-      image: '/uploads/team_photo/no_photo.png',
-      link: "https://www.geisteswissenschaften.fu-berlin.de/we04/linguistik/histling/mitarbeiter_innen/wimi/gennies/index.html",
-      institution: {
-        en: "Freie Universität Berlin",
-        de: "Freie Universität Berlin"
-      }
-    },
-    {
-      name: "Dr. Julia Hübner",
-      image: '/uploads/team_photo/no_photo.png',
-      link: "https://www.slm.uni-hamburg.de/germanistik/personen/huebner.html",
-      institution: {
-        en: "University of Hamburg",
-        de: "Universität Hamburg"
-      }
-    },
-    {
-      name: "Laura Panne",
-      image: '/uploads/team_photo/no_photo.png',
-      link: "https://www.slm.uni-hamburg.de/germanistik/personen/panne.html",
-      institution: {
-        en: "University of Hamburg",
-        de: "Universität Hamburg"
-      }
-    },
-    {
-      name: "Elizaveta Zimont",
-      image: '/uploads/team_photo/no_photo.png',
-      link: "https://www.univ-reims.fr/cirlep/l-equipe-des-chercheurs-du-cirlep/elizaveta-zimont,9931,43419.html",
-      institution: "Université de Reims Champagne-Ardenne"
-    }
-  ];
-
-  const alumniMembers = [
-    {
-      name: "Falco Risch",
-      image: '/uploads/team_photo/no_photo.png',
-      institution: {
-        en: "Technical University of Darmstadt",
-        de: "Technische Universität Darmstadt"
-      },
-      timeline: {
-        en: "May 2024 - August 2025",
-        de: "Mai 2024 - August 2025"
-      }
-    }
-  ];
-
-  // Sort all members by last name
-  const sortedLeaderMembers = sortMembersByLastName(leaderMembers);
-  const sortedHeadMembers = sortMembersByLastName(headMembers);
-  const sortedPostdocMembers = sortMembersByLastName(postdocMembers);
-  const sortedPhdMembers = sortMembersByLastName(phdMembers);
-  const sortedAssistantMembers = sortMembersByLastName(assistantMembers);
-  const sortedWorkingMembers = sortMembersByLastName(workingMembers);
-  const sortedPartnerMembers = sortMembersByLastName(partnerMembers);
-  const sortedAlumniMembers = sortMembersByLastName(alumniMembers);
+  const sortedLeaderMembers = grouped.leader;
+  const sortedHeadMembers = grouped.head;
+  const sortedPostdocMembers = grouped.postdoc;
+  const sortedPhdMembers = grouped.phd;
+  const sortedAssistantMembers = grouped.assistant;
+  const sortedWorkingMembers = grouped.working;
+  const sortedPartnerMembers = grouped.partners;
+  const sortedAlumniMembers = grouped.alumni;
 
   return (
-    <div
-      className="min-h-screen bg-cover bg-center"
-      style={{ backgroundImage: `url(${getImagePath('/uploads/team-bg.jpg')})` }}
-    >
+    <div className="min-h-screen bg-[url('/uploads/team-bg.jpg')] bg-cover bg-center">
       <Header lang={lang} setLang={setLang} />
       <main className="pt-16">
         <section className="py-20">
@@ -345,7 +224,7 @@ const Team = ({ lang = 'en', setLang }) => {
                   </p>
                   <div className="my-4 flex flex-col items-center">
                     <img
-                      src={getImagePath('/uploads/team_photo/team_head_1.png')}
+                      src={getImagePath('/uploads/team/team_head_1.png')}
                       alt="Zitat – Anon., Dictionarius Latinis... Lyon 1530"
                       className="mx-auto w-auto max-w-full max-h-[260px] object-contain"
                     />
@@ -357,14 +236,14 @@ const Team = ({ lang = 'en', setLang }) => {
                     Neben regelmäßigen virtuellen Jour Fixes und Sprints in kleineren Gruppen für den kontinuierlichen Austausch kommen die Projektteams mindestens jährlich zu einer Teamklausur zusammen, um Zwischenergebnisse wirkungsvoll zusammenzuführen.
                   </p>
                   <div className="grid grid-cols-1 md:grid-cols-3 gap-4 items-center">
-                    <button type="button" className="relative group" onClick={() => setZoomPhoto(getImagePath('/uploads/team_photo/team_head_Mainz.jpg'))}>
-                      <img src={getImagePath('/uploads/team_photo/team_head_Mainz.jpg')} alt="Teamfoto Mainz" className="w-full h-72 object-cover rounded-md shadow cursor-zoom-in" />
+                    <button type="button" className="relative group" onClick={() => setZoomPhoto(getImagePath('/uploads/team/team_head_Mainz.jpg'))}>
+                      <img src={getImagePath('/uploads/team/team_head_Mainz.jpg')} alt="Teamfoto Mainz" className="w-full h-72 object-cover rounded-md shadow cursor-zoom-in" />
                     </button>
-                    <button type="button" className="relative group" onClick={() => setZoomPhoto(getImagePath('/uploads/team_photo/team_head_Hamburg.jpg'))}>
-                      <img src={getImagePath('/uploads/team_photo/team_head_Hamburg.jpg')} alt="Teamfoto Hamburg" className="w-full h-72 object-cover rounded-md shadow cursor-zoom-in" />
+                    <button type="button" className="relative group" onClick={() => setZoomPhoto(getImagePath('/uploads/team/team_head_Hamburg.jpg'))}>
+                      <img src={getImagePath('/uploads/team/team_head_Hamburg.jpg')} alt="Teamfoto Hamburg" className="w-full h-72 object-cover rounded-md shadow cursor-zoom-in" />
                     </button>
-                    <button type="button" className="relative group" onClick={() => setZoomPhoto(getImagePath('/uploads/team_photo/team_head_Berlin.jpg'))}>
-                      <img src={getImagePath('/uploads/team_photo/team_head_Berlin.jpg')} alt="Teamfoto Berlin" className="w-full h-72 object-cover rounded-md shadow cursor-zoom-in" />
+                    <button type="button" className="relative group" onClick={() => setZoomPhoto(getImagePath('/uploads/team/team_head_Berlin.jpg'))}>
+                      <img src={getImagePath('/uploads/team/team_head_Berlin.jpg')} alt="Teamfoto Berlin" className="w-full h-72 object-cover rounded-md shadow cursor-zoom-in" />
                     </button>
                   </div>
                   <p className="text-xs text-gray-600 italic mt-2">Eigene Fotos CC BY-SA 4.0 | FSL digital</p>
@@ -376,7 +255,7 @@ const Team = ({ lang = 'en', setLang }) => {
                   </p>
                   <div className="my-4 flex flex-col items-center">
                     <img
-                      src={getImagePath('/uploads/team_photo/team_head_1.png')}
+                      src={getImagePath('/uploads/team/team_head_1.png')}
                       alt="Quotation – Anon., Dictionarius Latinis... Lyon 1530"
                       className="mx-auto w-auto max-w-full max-h-[260px] object-contain"
                     />
@@ -388,14 +267,14 @@ const Team = ({ lang = 'en', setLang }) => {
                     Alongside regular virtual jour fixes and sprints in smaller groups for ongoing exchange, the project teams meet at least once a year for a team retreat to effectively consolidate interim results.
                   </p>
                   <div className="grid grid-cols-1 md:grid-cols-3 gap-4 items-center">
-                    <button type="button" className="relative group" onClick={() => setZoomPhoto(getImagePath('/uploads/team_photo/team_head_Mainz.jpg'))}>
-                      <img src={getImagePath('/uploads/team_photo/team_head_Mainz.jpg')} alt="Team photo Mainz" className="w-full h-72 object-cover rounded-md shadow cursor-zoom-in" />
+                    <button type="button" className="relative group" onClick={() => setZoomPhoto(getImagePath('/uploads/team/team_head_Mainz.jpg'))}>
+                      <img src={getImagePath('/uploads/team/team_head_Mainz.jpg')} alt="Team photo Mainz" className="w-full h-72 object-cover rounded-md shadow cursor-zoom-in" />
                     </button>
-                    <button type="button" className="relative group" onClick={() => setZoomPhoto(getImagePath('/uploads/team_photo/team_head_Hamburg.jpg'))}>
-                      <img src={getImagePath('/uploads/team_photo/team_head_Hamburg.jpg')} alt="Team photo Hamburg" className="w-full h-72 object-cover rounded-md shadow cursor-zoom-in" />
+                    <button type="button" className="relative group" onClick={() => setZoomPhoto(getImagePath('/uploads/team/team_head_Hamburg.jpg'))}>
+                      <img src={getImagePath('/uploads/team/team_head_Hamburg.jpg')} alt="Team photo Hamburg" className="w-full h-72 object-cover rounded-md shadow cursor-zoom-in" />
                     </button>
-                    <button type="button" className="relative group" onClick={() => setZoomPhoto(getImagePath('/uploads/team_photo/team_head_Berlin.jpg'))}>
-                      <img src={getImagePath('/uploads/team_photo/team_head_Berlin.jpg')} alt="Team photo Berlin" className="w-full h-72 object-cover rounded-md shadow cursor-zoom-in" />
+                    <button type="button" className="relative group" onClick={() => setZoomPhoto(getImagePath('/uploads/team/team_head_Berlin.jpg'))}>
+                      <img src={getImagePath('/uploads/team/team_head_Berlin.jpg')} alt="Team photo Berlin" className="w-full h-72 object-cover rounded-md shadow cursor-zoom-in" />
                     </button>
                   </div>
                   <p className="text-xs text-gray-600 italic mt-2">Own photos CC BY-SA 4.0 | FSL digital</p>
@@ -520,6 +399,16 @@ const Team = ({ lang = 'en', setLang }) => {
                 </div>
               </div>
             )}
+            {loadError && (
+              <p className="text-center text-red-600 font-semibold mb-4">
+                {lang === 'de' ? 'Teamdaten konnten nicht geladen werden.' : 'Failed to load team data.'}
+              </p>
+            )}
+            {loading && !members.length && !loadError && (
+              <p className="text-center text-gray-700 mb-4">
+                {lang === 'de' ? 'Teamdaten werden geladen...' : 'Loading team data...'}
+              </p>
+            )}
             <div className="max-w-3xl mx-auto space-y-8">
               {sections.map((section) => (
                 <div key={section.key}>
@@ -562,9 +451,11 @@ const Team = ({ lang = 'en', setLang }) => {
                                   member.institution[lang]
                                 )}
                               </p>
-                              <div className="mt-auto w-full flex justify-center">
-                                <a href={`mailto:${member.email}`} className="px-3 py-1 bg-gray-100 text-gray-700 rounded font-medium border border-gray-300 hover:bg-gray-200 transition">Email</a>
-                              </div>
+                              {member.email && (
+                                <div className="mt-auto w-full flex justify-center">
+                                  <a href={`mailto:${member.email}`} className="px-3 py-1 bg-gray-100 text-gray-700 rounded font-medium border border-gray-300 hover:bg-gray-200 transition">Email</a>
+                                </div>
+                              )}
                             </div>
                           ))}
                         </div>
@@ -598,9 +489,11 @@ const Team = ({ lang = 'en', setLang }) => {
                               <p className="text-center text-gray-700 mb-2 text-sm whitespace-pre-line">
                                 {member.institution[lang]}
                               </p>
-                              <div className="mt-auto w-full flex justify-center">
-                                <a href={`mailto:${member.email}`} className="px-3 py-1 bg-gray-100 text-gray-700 rounded font-medium border border-gray-300 hover:bg-gray-200 transition">Email</a>
-                              </div>
+                              {member.email && (
+                                <div className="mt-auto w-full flex justify-center">
+                                  <a href={`mailto:${member.email}`} className="px-3 py-1 bg-gray-100 text-gray-700 rounded font-medium border border-gray-300 hover:bg-gray-200 transition">Email</a>
+                                </div>
+                              )}
                             </div>
                           ))}
                         </div>
@@ -626,9 +519,11 @@ const Team = ({ lang = 'en', setLang }) => {
                               <p className="text-center text-gray-700 mb-2 text-sm whitespace-pre-line">
                                 {member.institution[lang]}
                               </p>
-                              <div className="mt-auto w-full flex justify-center">
-                                <a href={`mailto:${member.email}`} className="px-3 py-1 bg-gray-100 text-gray-700 rounded font-medium border border-gray-300 hover:bg-gray-200 transition">Email</a>
-                              </div>
+                              {member.email && (
+                                <div className="mt-auto w-full flex justify-center">
+                                  <a href={`mailto:${member.email}`} className="px-3 py-1 bg-gray-100 text-gray-700 rounded font-medium border border-gray-300 hover:bg-gray-200 transition">Email</a>
+                                </div>
+                              )}
                             </div>
                           ))}
                         </div>
@@ -662,9 +557,11 @@ const Team = ({ lang = 'en', setLang }) => {
                               <p className="text-center text-gray-700 mb-2 text-sm">
                                 {member.institution[lang]}
                               </p>
-                              <div className="mt-auto w-full flex justify-center">
-                                <a href={`mailto:${member.email}`} className="px-3 py-1 bg-gray-100 text-gray-700 rounded font-medium border border-gray-300 hover:bg-gray-200 transition">Email</a>
-                              </div>
+                              {member.email && (
+                                <div className="mt-auto w-full flex justify-center">
+                                  <a href={`mailto:${member.email}`} className="px-3 py-1 bg-gray-100 text-gray-700 rounded font-medium border border-gray-300 hover:bg-gray-200 transition">Email</a>
+                                </div>
+                              )}
                             </div>
                           ))}
                         </div>
@@ -771,3 +668,5 @@ const Team = ({ lang = 'en', setLang }) => {
 };
 
 export default Team; 
+
+

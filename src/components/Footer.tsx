@@ -36,48 +36,72 @@ const Footer = ({ lang = "en" }) => {
           {/* Left Column - Partner Logos */}
           <div>
             <h3 className="text-xl font-bold mb-4">{footerText.partners[lang]}</h3>
-            <div className="grid grid-cols-3 grid-rows-2 gap-4">
-              <div className="bg-white p-3 rounded flex items-center justify-center">
-                <img 
-                  src={getImagePath('/uploads/b54eef16-85d4-4667-b0f1-9c94d089aeba.svg')} 
-                  alt="Union der Deutschen Akademien der Wissenschaften" 
-                  className="max-h-16 w-auto"
-                />
+            <div className="grid grid-cols-3 grid-rows-2 gap-4 partners-grid">
+              <div className="logo-card">
+                <a
+                  href="https://agate.academy/de/forschungsprojekte/details.html?tx_agate_projects%5Baction%5D=show&tx_agate_projects%5Bcontroller%5D=Projects&tx_agate_projects%5Bproject%5D=809&cHash=6ee5f1adb097c8344247a3707719711d"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  aria-label="Akademie der Wissenschaften und der Literatur Mainz - FSL digital"
+                  className="block w-full h-full flex items-center justify-center"
+                >
+                  <img
+                    src={getImagePath('/uploads/b54eef16-85d4-4667-b0f1-9c94d089aeba.svg')}
+                    alt="Union der Deutschen Akademien der Wissenschaften"
+                    className="max-h-16 w-auto drop-shadow"
+                  />
+                </a>
               </div>
-              <div className="bg-white p-3 rounded flex items-center justify-center">
-                <img 
-                  src={getImagePath('/uploads/f93f4ed5-e4fc-4601-a318-b04e96cb8496.png')} 
-                  alt="Akademie der Wissenschaften und der Literatur Mainz" 
-                  className="max-h-16 w-auto"
-                />
+              <div className="logo-card">
+                <a
+                  href="https://www.adwmainz.de/projekte/historische-fremdsprachenlehrwerke-digital/informationen.html"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  aria-label="Akademie der Wissenschaften und der Literatur Mainz - FSL digital"
+                  className="block w-full h-full flex items-center justify-center"
+                >
+                  <img 
+                    src={getImagePath('/uploads/f93f4ed5-e4fc-4601-a318-b04e96cb8496.png')} 
+                    alt="Akademie der Wissenschaften und der Literatur Mainz" 
+                    className="max-h-16 w-auto"
+                  />
+                </a>
               </div>
-              <div className="bg-white p-3 rounded flex items-center justify-center">
-                <img 
-                  src={getImagePath('/uploads/e62e1d4c-eb23-4999-a343-7aa9eaef245d.png')} 
-                  alt="Berlin-Brandenburgische Akademie der Wissenschaften" 
-                  className="max-h-16 w-auto"
-                />
+              <div className="logo-card">
+                <a href="https://www.bbaw.de/forschung/fsl-digital" target="_blank" rel="noopener noreferrer" aria-label="Berlin-Brandenburgische Akademie der Wissenschaften – FSL digital">
+                  <img 
+                    src={getImagePath('/uploads/e62e1d4c-eb23-4999-a343-7aa9eaef245d.png')} 
+                    alt="Berlin-Brandenburgische Akademie der Wissenschaften" 
+                    className="max-h-16 w-auto"
+                  />
+                </a>
               </div>
-              <div className="bg-white p-3 rounded flex items-center justify-center">
-                <img 
-                  src={getImagePath('/uploads/647b4adf-ff44-4560-97f0-68b12a9ee388.png')} 
-                  alt="DHI London" 
-                  className="max-h-16 w-auto"
-                />
+              <div className="logo-card">
+                <a href="https://www.gw.uni-hamburg.de/ueber-die-fakultaet/digital-humanities/digitale-forschung/fsl-digital.html" target="_blank" rel="noopener noreferrer" aria-label="Universität Hamburg – FSL digital">
+                  <img 
+                    src={getImagePath('/uploads/647b4adf-ff44-4560-97f0-68b12a9ee388.png')} 
+                    alt="DHI London" 
+                    className="max-h-16 w-auto"
+                  />
+                </a>
               </div>
-              <div className="bg-white p-3 rounded flex items-center justify-center">
-                <img 
-                  src={getImagePath('/uploads/faa7ed66-4f5f-46c5-b921-d0dcf0ff3ddd.png')} 
-                  alt="Freie Universität" 
-                  className="max-h-16 w-auto"
-                />
+              <div className="logo-card">
+                <a href="https://www.geisteswissenschaften.fu-berlin.de/dcl/projekte/index.html" target="_blank" rel="noopener noreferrer" aria-label="Freie Universität - FSL digital" className="block w-full h-full flex items-center justify-center">
+                  <img 
+                    src={getImagePath('/uploads/faa7ed66-4f5f-46c5-b921-d0dcf0ff3ddd.png')} 
+                    alt="Freie Universität" 
+                    className="max-h-16 w-auto"
+                  />
+                </a>
               </div>
-              <div className="bg-white p-3 rounded flex items-center justify-center">
-                <img 
-                  src={getImagePath('/uploads/TU_Darmstadt_Logo.svg')} 
-                  alt="Technische Universität Darmstadt" 
-                  className="max-h-16 w-auto"
-                />
+              <div className="logo-card">
+                <a href="https://www.adwmainz.de/forschung/projekte/historische-fremdsprachenlehrwerke-digital/informationen.html" target="_blank" rel="noopener noreferrer" aria-label="Technische Universität Darmstadt – FSL digital" className="block w-full h-full flex items-center justify-center">
+                  <img 
+                    src={getImagePath('/uploads/TU_Darmstadt_Logo.svg')} 
+                    alt="Technische Universität Darmstadt" 
+                    className="max-h-16 w-auto"
+                  />
+                </a>
               </div>
             </div>
           </div>
@@ -117,7 +141,14 @@ const Footer = ({ lang = "en" }) => {
           <div className="flex flex-wrap justify-between items-center">
             <div>{footerText.copyright[lang]}</div>
             <div className="flex flex-wrap gap-4">
-              <a href={`${import.meta.env.BASE_URL}condition/privacy_${lang}.html`} className="hover:text-secondary" target="_self">{footerText.privacy[lang]}</a>
+              <a
+                href="https://www.adwmainz.de/datenschutz.html"
+                className="hover:text-secondary"
+                target="_blank"
+                rel="noopener noreferrer"
+              >
+                {footerText.privacy[lang]}
+              </a>
               <a href={`${import.meta.env.BASE_URL}condition/terms_${lang}.html`} className="hover:text-secondary" target="_self">{footerText.terms[lang]}</a>
             </div>
           </div>

@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { Toaster } from "@/components/ui/toaster";
 import { Toaster as Sonner } from "@/components/ui/sonner";
 import { TooltipProvider } from "@/components/ui/tooltip";
@@ -17,14 +17,21 @@ import Contact from "./pages/Contact";
 const queryClient = new QueryClient();
 
 const App = () => {
-  const [lang, setLang] = useState("en");
+  const [lang, setLang] = useState("de");
+
+  // Keep the document language in sync for proper hyphenation rules
+  useEffect(() => {
+    if (typeof document !== "undefined") {
+      document.documentElement.lang = lang;
+    }
+  }, [lang]);
 
   return (
     <QueryClientProvider client={queryClient}>
       <TooltipProvider>
         <Toaster />
         <Sonner />
-        <BrowserRouter basename={import.meta.env.BASE_URL}>
+        <BrowserRouter basename="/fsl-digital">
           <Routes>
             <Route path="/" element={<Index lang={lang} setLang={setLang} />} />
             <Route path="/team" element={<Team lang={lang} setLang={setLang} />} />

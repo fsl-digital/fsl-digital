@@ -1,12 +1,11 @@
 import React from 'react';
-import { getImagePath } from '@/lib/image-utils';
 
 const LivBuechlerProfile: React.FC = () => {
   return (
     <div className="text-gray-900">
       <div className="flex flex-col md:flex-row items-center gap-8 mb-8 pb-8 border-b border-gray-200">
         <img
-          src={getImagePath('/uploads/team_photo/liv.jpg')}
+          src={"./uploads/team/liv.jpg"}
           alt="Liv Büchler"
           className="w-40 h-40 md:w-48 md:h-48 object-cover rounded-full border-4 border-gray-200 shadow-md mb-4 md:mb-0"
         />

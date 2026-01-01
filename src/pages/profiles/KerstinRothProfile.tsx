@@ -4,7 +4,7 @@ import { getImagePath } from '@/lib/image-utils';
 const KerstinRothProfile = () => (
   <div className="bg-white rounded-2xl shadow-2xl max-w-2xl w-full relative p-8 border border-gray-200">
     <div className="flex flex-col md:flex-row items-center gap-8 border-b pb-8 mb-8">
-      <img src={getImagePath('/uploads/team_photo/KerstinRoth.jpg')} alt="Dr. Kerstin Roth" className="w-40 h-40 rounded-full object-cover border-4 border-gray-200 shadow" />
+      <img src={getImagePath('/uploads/team/KerstinRoth.jpg')} alt="Dr. Kerstin Roth" className="w-40 h-40 rounded-full object-cover border-4 border-gray-200 shadow" />
       <div className="flex-1 text-center md:text-left">
         <h2 className="text-2xl font-bold mb-2">Dr. Kerstin Roth</h2>
         <div className="text-gray-700 mb-2 font-semibold">Wissenschaftliche Mitarbeiterin und Arbeitsstellenleitung (Hamburg)</div>
