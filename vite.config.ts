@@ -5,7 +5,7 @@ import { componentTagger } from "lovable-tagger";
 
 // https://vitejs.dev/config/
 export default defineConfig(({ mode }) => ({
-  base: '/fsl-digital/', // ✅ exact GitHub repo name
+  base: "/", // GitHub Pages custom domain root
   server: {
     host: "::",
     port: 8080,
