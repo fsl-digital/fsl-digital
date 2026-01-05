@@ -7,9 +7,11 @@ interface NewsItemProps {
   date: string;
   type: 'event' | 'publication' | 'award';
   description: string;
+  link?: string;
+  showMoreText?: string;
 }
 
-const NewsItem = ({ title, date, type, description }: NewsItemProps) => {
+const NewsItem = ({ title, date, type, description, link, showMoreText }: NewsItemProps) => {
   const getIcon = () => {
     switch (type) {
       case 'event':
@@ -31,6 +33,16 @@ const NewsItem = ({ title, date, type, description }: NewsItemProps) => {
       </div>
       <h3 className="text-xl font-bold mb-2">{title}</h3>
       <p className="text-gray-600">{description}</p>
+      {link && (
+        <a
+          href={link}
+          target="_blank"
+          rel="noopener noreferrer"
+          className="inline-flex items-center text-sm font-medium text-primary underline hover:text-secondary mt-2"
+        >
+          {showMoreText ?? 'Show more'}
+        </a>
+      )}
     </div>
   );
 };
@@ -61,6 +73,7 @@ const News = ({ lang = 'en' }: NewsProps) => {
   const [upcomingEvents, setUpcoming] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState('');
+  const showMoreText = lang === 'en' ? 'Show more' : 'Mehr erfahren';
 
   useEffect(() => {
     setLoading(true);
@@ -88,7 +101,8 @@ const News = ({ lang = 'en' }: NewsProps) => {
             title: sanitize(r.title),
             date: r.display_date || r.start_date,
             type: r.type as any,
-            description: sanitize(r.desc || '')
+            description: sanitize(r.desc || ''),
+            link: sanitize(r.link || '').trim()
           }));
         setUpcoming(upcoming);
         setLoading(false);
@@ -119,6 +133,8 @@ const News = ({ lang = 'en' }: NewsProps) => {
                 date={item.date}
                 type={item.type}
                 description={item.description}
+                link={item.link}
+                showMoreText={showMoreText}
               />
             ))
           )}
