@@ -96,16 +96,41 @@ const Publications = ({ lang = 'en', setLang }) => {
                   if (title) detailParts.push(`"${title}"`);
                   if (venue) detailParts.push(venue);
                   const detail = detailParts.join('. ');
-                  const line = [prefix, detail].filter(Boolean).join(' ').trim() + note;
+                  const htmlLine = [prefix, detail].filter(Boolean).join(' ').trim() + note;
+                  const detailEl = (
+                    <span dangerouslySetInnerHTML={{ __html: htmlLine }} />
+                  );
+                  const doiRaw = p.doi?.trim();
+                  const doiIsLink = doiRaw ? doiRaw.startsWith('https://doi.org/') : false;
                   return (
                     <li key={idx}>
                       {p.url ? (
-                        <a href={p.url} target="_blank" rel="noopener noreferrer" className="hover:text-blue-700">{line}</a>
+                        <a
+                          href={p.url}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          className="hover:text-blue-700"
+                          dangerouslySetInnerHTML={{ __html: htmlLine }}
+                        />
                       ) : (
-                        line
+                        detailEl
                       )}
-                      {p.doi && (
-                        <span className="ml-2 text-sm text-gray-500">DOI: {p.doi}</span>
+                      {doiRaw && (
+                        <span className="ml-2 text-sm text-gray-500">
+                          DOI:{' '}
+                          {doiIsLink ? (
+                            <a
+                              href={doiRaw}
+                              target="_blank"
+                              rel="noopener noreferrer"
+                              className="text-blue-600 hover:underline"
+                            >
+                              {doiRaw}
+                            </a>
+                          ) : (
+                            doiRaw
+                          )}
+                        </span>
                       )}
                     </li>
                   );

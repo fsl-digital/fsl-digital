@@ -9,10 +9,12 @@ interface NewsItemProps {
   date: string;
   type: 'event' | 'publication' | 'award';
   description: string;
+  link?: string;
+  showMoreText?: string;
   isPast?: boolean;
 }
 
-const NewsItem = ({ title, date, type, description, isPast = false }: NewsItemProps) => {
+const NewsItem = ({ title, date, type, description, link, showMoreText = 'Show more', isPast = false }: NewsItemProps) => {
   const getIcon = () => {
     switch (type) {
       case 'event':
@@ -32,8 +34,24 @@ const NewsItem = ({ title, date, type, description, isPast = false }: NewsItemPr
         {getIcon()}
         <span className={`text-sm ${isPast ? 'text-gray-400' : 'text-gray-500'}`}>{date}</span>
       </div>
-      <h3 className={`text-xl font-bold mb-2 ${isPast ? 'text-gray-600' : ''}`}>{title}</h3>
-      <p className={`${isPast ? 'text-gray-500' : 'text-gray-600'}`}>{description}</p>
+      <h3
+        className={`text-xl font-bold mb-2 ${isPast ? 'text-gray-600' : ''}`}
+        dangerouslySetInnerHTML={{ __html: title }}
+      />
+      <p
+        className={`${isPast ? 'text-gray-500' : 'text-gray-600'}`}
+        dangerouslySetInnerHTML={{ __html: description }}
+      />
+      {link && (
+        <a
+          href={link}
+          target="_blank"
+          rel="noopener noreferrer"
+          className="inline-flex items-center text-sm font-medium text-primary underline hover:text-secondary mt-2"
+        >
+          {showMoreText}
+        </a>
+      )}
     </div>
   );
 };
@@ -103,17 +121,21 @@ const News = ({ lang = 'en', setLang }: NewsProps) => {
           date: r.display_date || r.start_date,
           type: r.type as any,
           description: sanitize(r.desc || ''),
+          link: sanitize(r.link || '').trim(),
         })));
         setPast(past.map(r => ({
           title: sanitize(r.title),
           date: r.display_date || r.start_date,
           type: r.type as any,
           description: sanitize(r.desc || ''),
+          link: sanitize(r.link || '').trim(),
         })));
         setLoading(false);
       })
       .catch(() => { setError('Failed to load news.'); setLoading(false); });
   }, [lang]);
+
+  const showMoreText = lang === 'en' ? 'Show more' : 'Mehr erfahren';
 
   return (
     <div className="min-h-screen">
@@ -142,6 +164,8 @@ const News = ({ lang = 'en', setLang }: NewsProps) => {
                   date={item.date}
                   type={item.type}
                   description={item.description}
+                  link={item.link}
+                  showMoreText={showMoreText}
                 />
               ))}
 
@@ -156,6 +180,8 @@ const News = ({ lang = 'en', setLang }: NewsProps) => {
                   type={item.type}
                   description={item.description}
                   isPast={true}
+                  link={item.link}
+                  showMoreText={showMoreText}
                 />
               ))}
                 </>

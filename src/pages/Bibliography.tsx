@@ -77,16 +77,18 @@ const Bibliography = ({ lang = 'en', setLang }) => {
       .trim();
   };
 
+  const createMarkup = (value: string) => ({ __html: value || '' });
+
   const renderAuthors = (author: string) => {
     if (!author) return '';
     const parts = author.split(';');
     return (
       <span className="whitespace-pre-wrap">
         {parts.map((p, i) => (
-          <span key={i}>
-            {p.trim()}
-            {i < parts.length - 1 ? <><br /></> : null}
-          </span>
+          <React.Fragment key={i}>
+            <span dangerouslySetInnerHTML={createMarkup(p.trim())} />
+            {i < parts.length - 1 && <br />}
+          </React.Fragment>
         ))}
       </span>
     );
@@ -200,7 +202,10 @@ const Bibliography = ({ lang = 'en', setLang }) => {
                         <tr key={idx} className="align-top hover:bg-gray-50">
                           <td className="px-4 py-3 text-gray-800 w-64">{renderAuthors(author)}</td>
                           <td className="px-4 py-3 text-gray-700 whitespace-nowrap w-28">{year}</td>
-                          <td className="px-4 py-3 text-gray-900 whitespace-pre-wrap break-words w-1/2">{title}</td>
+                          <td
+                            className="px-4 py-3 text-gray-900 whitespace-pre-wrap break-words w-1/2"
+                            dangerouslySetInnerHTML={createMarkup(title)}
+                          />
                           <td className="px-4 py-3 w-36">
                             {doiHref ? (
                               maskLinks ? (
