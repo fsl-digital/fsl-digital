@@ -140,7 +140,7 @@ const Bibliography = ({ lang = 'en', setLang }) => {
   );
 
   return (
-    <div className="min-h-screen bg-gray-50 flex flex-col">
+    <div className="min-h-screen flex flex-col">
       <Header lang={lang} setLang={setLang} />
       <main className="pt-16">
         <section className="py-20">
@@ -148,6 +148,20 @@ const Bibliography = ({ lang = 'en', setLang }) => {
             <h1 className="text-4xl font-bold text-center mb-12">
               {lang === 'de' ? 'Projektbibliographie' : 'Project Bibliography'}
             </h1>
+            {lang === 'en' && (
+              <div className="mt-8 mb-12 bg-gray-50 border-l-4 border-primary p-8 rounded-r-lg text-left">
+                <p className="text-lg leading-relaxed text-gray-700">
+                  A curated overview of relevant literature on historical foreign language textbooks, their reception history, and their intellectual traditions. It serves as a starting point for further research and documents key sources and studies on the history of language, conceptions of language, and everyday communication in the context of multilingualism in early modern Europe.
+                </p>
+              </div>
+            )}
+            {lang === 'de' && (
+              <div className="mt-8 mb-12 bg-gray-50 border-l-4 border-primary p-8 rounded-r-lg text-left">
+                <p className="text-lg leading-relaxed text-gray-700">
+                  Eine kuratierte Übersicht relevanter Literatur zu historischen Fremdsprachenlehrwerken, deren Rezeptionsgeschichte und Traditionslinien. Sie dient als Einstiegspunkt für vertiefende Recherche und dokumentiert zentrale Quellen und Studien zu Sprachgeschichte, Sprachvorstellungen und Alltagskommunikation im Kontext der Mehrsprachigkeit im Europa der Frühen Neuzeit.
+                </p>
+              </div>
+            )}
             {loading ? (
               <p className="text-gray-600 text-center mb-6">Loading...</p>
             ) : error ? (

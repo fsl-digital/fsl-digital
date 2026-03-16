@@ -2,9 +2,27 @@ import React from 'react';
 import Header from '@/components/Header';
 import Footer from '@/components/Footer';
 
+const advisoryBoardMembers = [
+  'Prof. Dr. Vera Demberg',
+  'Prof. Dr. Mechthild Habermann',
+  'Prof. Dr. Henrike Lähnemann',
+  'Prof. Dr. Martin Mulsow',
+  'Senior-Prof. Dr. Manfred Pinkal',
+  'Prof. Dr. Jürgen Trabant',
+];
+
+const advisoryBoardMembersDe = [
+  'Prof. Dr. Vera Demberg',
+  'Prof. Dr. Mechthild Habermann',
+  'Prof. Dr. Henrike Lähnemann',
+  'Prof. Dr. Martin Mulsow',
+  'Senior-Prof. Dr. Manfred Pinkal',
+  'Prof. Dr. Jürgen Trabant',
+];
+
 const Concept = ({ lang = 'en', setLang }) => {
   return (
-    <div className="min-h-screen bg-gray-50 flex flex-col">
+    <div className="min-h-screen flex flex-col">
       <Header lang={lang} setLang={setLang} />
       <main className="pt-16">
         {lang === 'de' ? (
@@ -13,13 +31,15 @@ const Concept = ({ lang = 'en', setLang }) => {
               {/* Hero */}
               <div className="text-center mb-12">
                 <h1 className="section-title">Konzept</h1>
-                <p className="section-subtitle mx-auto">
-                  Ziele und Korpus des Projekts in der Übersicht.
-                </p>
+                <div className="mt-8 bg-gray-50 border-l-4 border-primary p-8 rounded-r-lg text-left">
+                  <p className="text-lg leading-relaxed text-gray-700">
+                    Das Vorhaben erschließt und untersucht historische Fremdsprachenlehrwerke der Frühen Neuzeit und macht ihre Inhalte wissenschaftlich zugänglich. Diese Seite stellt Konzept, Ziele und methodische Ansätze des Projekts sowie die beteiligten Partner und das Wissensnetzwerk vor.
+                  </p>
+                </div>
               </div>
 
               {/* Content cards */}
-              <div className="grid grid-cols-1 gap-8 max-w-4xl mx-auto">
+              <div className="grid grid-cols-1 gap-8">
                 <article className="bg-white rounded-xl shadow border border-gray-200 p-6">
                   <div className="flex items-center gap-3 mb-4">
                     <span className="w-1.5 h-6 bg-primary rounded" />
@@ -27,7 +47,7 @@ const Concept = ({ lang = 'en', setLang }) => {
                   </div>
                   <div className="text-lg leading-relaxed text-gray-800 space-y-4">
                     <p>
-                      Das Vorhaben will die praktischen Formen der Vermittlung des Wissens über die Volkssprachen vor allem der mündlichkeitsnahen Alltagskommunikation im mehrsprachigen Kontext des frühneuzeitlichen Europa anhand der Fremdsprachenlehrwerke (FSL) erschließen und untersuchen. Aus sprachhistorischer Perspektive lohnt die Untersuchung von Fremdsprachenlehrwerken deshalb, weil die vormodernen Vernakulare in ihrem schriftlichen Code gerade erst im Entstehen begriffen sind: Nicht nur zwischen Werken verschiedener Autoren, sondern auch innerhalb einzelner Sprachbücher lässt sich ein großer Variantenreichtum konstatieren, der die Notwendigkeit von Normierungsbemühungen unterstreicht, die im Vorhaben Gegenstand von Untersuchungen werden. Auch Neuauflagen liefern spannende Informationen über sprachhistorische Prozesse. Für einen breiten und ungehinderten Zugang sollen die Sprachbücher vollständig digitalisiert, nachhaltig aufbereitet, philologisch tief bearbeitet und für weitere wissenschaftliche Analysen bereitgestellt werden. Damit wird es möglich sein, die historischen Wurzeln der heutigen Mehrsprachigkeit in Europa aus der Perspektive alltagssprachlicher Praxis des Fremdsprachenerwerbs und der Fremdsprachen- und Wissensvermittlung in der Frühen Neuzeit zu ergründen.
+                      Im Vorhaben werden die praktischen Formen der Vermittlung des Wissens über die Volkssprachen vor allem der mündlichkeitsnahen Alltagskommunikation im mehrsprachigen Kontext des frühneuzeitlichen Europa anhand der Fremdsprachenlehrwerke (FSL) erschlossen und erforscht. Aus sprachhistorischer Perspektive lohnt die Untersuchung von Fremdsprachenlehrwerken deshalb, weil die vormodernen Vernakulare in ihrem schriftlichen Code gerade erst im Entstehen begriffen sind: Nicht nur zwischen Werken verschiedener Autoren, sondern auch innerhalb einzelner Sprachbücher lässt sich ein großer Variantenreichtum konstatieren, der die Notwendigkeit von Normierungsbemühungen unterstreicht, die im Vorhaben Gegenstand von Analysen werden. Auch Neuauflagen liefern spannende Informationen über sprachhistorische Prozesse. Für einen breiten und ungehinderten Zugang sollen die Sprachbücher vollständig digitalisiert, nachhaltig aufbereitet, philologisch tief bearbeitet und für weitere wissenschaftliche Analysen bereitgestellt werden. Damit wird es möglich sein, die historischen Wurzeln der heutigen Mehrsprachigkeit in Europa aus der Perspektive alltagssprachlicher Praxis des Fremdsprachenerwerbs und der Fremdsprachen- und Wissensvermittlung in der Frühen Neuzeit zu ergründen.
                     </p>
                   </div>
                 </article>
@@ -39,8 +59,36 @@ const Concept = ({ lang = 'en', setLang }) => {
                   </div>
                   <div className="text-lg leading-relaxed text-gray-800 space-y-4">
                     <p>
-                      Das gesamte überlieferte Material, in dem das Deutsche als Ausgangs- oder Zielsprache auftritt, umfasst rund 1.000 Lehrwerke, deren Volltexte digital erfasst werden. Alle Werkteile werden durch eine Basisannotation erschlossen. Rund 400 FSL des Kernkorpus werden strukturell und inhaltlich annotiert, wobei die Mehrsprachigkeit durch parallele Textalignierung berücksichtigt wird. Lehrwerke zählen um Projektkorpus, wenn sie neben dem Deutschen mindestens ein weiteres Vernakular enthalten und im zeitliche Rahmen bis Ende des 17. Jahrhunderts erstmals erschienen waren. Ein weiteres Kriterium besteht in der dezidiert auf die Praxis der Sprachvermittlung ausgerichteten Konzeption. Die Werke erheben keinen sprachtheoretischen, sprachphilosophischen und/oder sprachpflegerischen Anspruch. Schließlich zählen keine reinen Grammatiken oder Wörterbücher zu den FSL, sondern es werden mindestens zwei Werkteile kombiniert.
+                      Das gesamte überlieferte Material, in dem das Deutsche als Ausgangs- oder Zielsprache auftritt, umfasst rund 1.000 Lehrwerke, deren Volltexte digital erfasst werden. Alle Werkteile werden durch eine Basisannotation erschlossen. Rund 400 FSL des Kernkorpus werden strukturell und inhaltlich annotiert, wobei die Mehrsprachigkeit durch parallele Textalignierung berücksichtigt wird. Lehrwerke zählen zum Projektkorpus, wenn sie neben dem Deutschen mindestens ein weiteres Vernakular enthalten und im zeitliche Rahmen bis Ende des 17. Jahrhunderts erstmals erschienen waren. Ein weiteres Kriterium besteht in der dezidiert auf die Praxis der Sprachvermittlung ausgerichteten Konzeption. Die Werke erheben keinen sprachtheoretischen, sprachphilosophischen und/oder sprachpflegerischen Anspruch. Schließlich zählen keine reinen Grammatiken oder Wörterbücher zu den FSL, sondern es werden mindestens zwei Werkteile kombiniert.
                     </p>
+                  </div>
+                </article>
+
+                <article className="bg-gradient-to-br from-white via-white to-gray-100 rounded-xl shadow border border-gray-200 p-6">
+                  <div className="flex items-center gap-3 mb-4">
+                    <span className="w-1.5 h-6 bg-primary rounded" />
+                    <h2 className="text-2xl font-semibold">Projektkommission</h2>
+                  </div>
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-6">
+                    <div className="rounded-lg border border-gray-200 bg-gray-50 p-4">
+                      <div className="text-sm uppercase tracking-wide text-gray-500 mb-2">Vorsitz</div>
+                      <div className="text-lg font-semibold text-gray-900">Prof. Dr. Uta Störmer-Caysa</div>
+                    </div>
+                    <div className="rounded-lg border border-gray-200 bg-gray-50 p-4">
+                      <div className="text-sm uppercase tracking-wide text-gray-500 mb-2">Stellvertretung</div>
+                      <div className="text-lg font-semibold text-gray-900">Prof. Dr. Thomas Gloning</div>
+                    </div>
+                  </div>
+                  <div className="rounded-lg border border-gray-200 bg-white p-5">
+                    <div className="text-sm uppercase tracking-wide text-gray-500 mb-3">Weitere Mitglieder</div>
+                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-x-6 gap-y-3 text-gray-800">
+                      {advisoryBoardMembersDe.map((member) => (
+                        <div key={member} className="flex items-start gap-3">
+                          <span className="mt-2 h-2 w-2 rounded-full bg-primary shrink-0" />
+                          <span className="text-base leading-relaxed">{member}</span>
+                        </div>
+                      ))}
+                    </div>
                   </div>
                 </article>
               </div>
@@ -52,13 +100,15 @@ const Concept = ({ lang = 'en', setLang }) => {
               {/* Hero */}
               <div className="text-center mb-12">
                 <h1 className="section-title">Concept</h1>
-                <p className="section-subtitle mx-auto">
-                  Overview of the project’s goals and corpus.
-                </p>
+                <div className="mt-8 bg-gray-50 border-l-4 border-primary p-8 rounded-r-lg text-left">
+                  <p className="text-lg leading-relaxed text-gray-700">
+                    The project catalogs and analyzes historical foreign language textbooks from the early modern period and makes their content available for scholarly research. This page presents the project’s concept, objectives, and methodological approaches, as well as the participating partners and the knowledge network.
+                  </p>
+                </div>
               </div>
 
               {/* Content cards */}
-              <div className="grid grid-cols-1 gap-8 max-w-4xl mx-auto">
+              <div className="grid grid-cols-1 gap-8">
                 <article className="bg-white rounded-xl shadow border border-gray-200 p-6">
                   <div className="flex items-center gap-3 mb-4">
                     <span className="w-1.5 h-6 bg-primary rounded" />
@@ -80,6 +130,34 @@ const Concept = ({ lang = 'en', setLang }) => {
                     <p>
                       The corpus comprises all surviving material in which German appears as source or target language—around 1,000 textbooks whose full texts will be captured digitally. All parts of the works will receive basic annotation. Around 400 FSL in the core corpus will be structurally and semantically annotated; multilinguality is addressed through parallel text alignment. A work is included in the project corpus if, alongside German, it contains at least one additional vernacular and first appeared by the end of the seventeenth century. Another criterion is a design explicitly oriented toward the practice of language teaching; the works do not claim to be contributions to language theory, philosophy of language, and/or language cultivation. Pure grammars or dictionaries are therefore not counted as FSL; at least two types of components are combined.
                     </p>
+                  </div>
+                </article>
+
+                <article className="bg-gradient-to-br from-white via-white to-gray-100 rounded-xl shadow border border-gray-200 p-6">
+                  <div className="flex items-center gap-3 mb-4">
+                    <span className="w-1.5 h-6 bg-primary rounded" />
+                    <h2 className="text-2xl font-semibold">Advisory Board</h2>
+                  </div>
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-6">
+                    <div className="rounded-lg border border-gray-200 bg-gray-50 p-4">
+                      <div className="text-sm uppercase tracking-wide text-gray-500 mb-2">Chair</div>
+                      <div className="text-lg font-semibold text-gray-900">Prof. Dr. Uta Störmer-Caysa</div>
+                    </div>
+                    <div className="rounded-lg border border-gray-200 bg-gray-50 p-4">
+                      <div className="text-sm uppercase tracking-wide text-gray-500 mb-2">Vice Chair</div>
+                      <div className="text-lg font-semibold text-gray-900">Prof. Dr. Thomas Gloning</div>
+                    </div>
+                  </div>
+                  <div className="rounded-lg border border-gray-200 bg-white p-5">
+                    <div className="text-sm uppercase tracking-wide text-gray-500 mb-3">Further Commission Members</div>
+                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-x-6 gap-y-3 text-gray-800">
+                      {advisoryBoardMembers.map((member) => (
+                        <div key={member} className="flex items-start gap-3">
+                          <span className="mt-2 h-2 w-2 rounded-full bg-primary shrink-0" />
+                          <span className="text-base leading-relaxed">{member}</span>
+                        </div>
+                      ))}
+                    </div>
                   </div>
                 </article>
               </div>

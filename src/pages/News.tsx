@@ -136,6 +136,23 @@ const News = ({ lang = 'en', setLang }: NewsProps) => {
   }, [lang]);
 
   const showMoreText = lang === 'en' ? 'Show more' : 'Mehr erfahren';
+  const pageText = {
+    en: {
+      title: 'News & Events',
+      intro:
+        'Current announcements, talks, workshops, project presentations, and event reports from the FSL digital network. This page provides an overview of upcoming dates and documents recent activities from the project context.',
+      upcoming: 'Upcoming FSL Events',
+      past: 'Past Events',
+    },
+    de: {
+      title: 'Neuigkeiten & Veranstaltungen',
+      intro:
+        'Ankündigungen zum Vorhaben – von Veranstaltungen über neue Kooperationen bis zu technischen Entwicklungen. Hier informieren wir regelmäßig über Neuigkeiten, Termine und Fortschritte aus der Forschung und unserem Netzwerk.',
+      upcoming: 'Kommende FSL-Veranstaltungen',
+      past: 'Vergangene Veranstaltungen',
+    },
+  } as const;
+  const currentText = pageText[lang];
 
   return (
     <div className="min-h-screen">
@@ -144,49 +161,73 @@ const News = ({ lang = 'en', setLang }: NewsProps) => {
         <section className="py-20">
           <div className="container-custom">
             <h1 className="text-4xl font-bold text-center mb-12">
-              {lang === 'en' ? 'News & Events' : 'Nachrichten & Veranstaltungen'}
+              {currentText.title}
             </h1>
-            
-            <div className="max-w-3xl mx-auto">
-              {loading ? (
-                <p className="text-gray-600 text-center">Loading...</p>
-              ) : error ? (
-                <p className="text-red-600 text-center">{error}</p>
-              ) : (
-                <>
-              <h2 className="text-2xl font-bold mb-6">
-                {lang === 'en' ? 'Upcoming FSL Events' : 'Kommende FSL-Veranstaltungen'}
-              </h2>
-              {upcomingEvents.map((item, index) => (
-                <NewsItem
-                  key={`upcoming-${index}`}
-                  title={item.title}
-                  date={item.date}
-                  type={item.type}
-                  description={item.description}
-                  link={item.link}
-                  showMoreText={showMoreText}
-                />
-              ))}
 
-              <h2 className="text-2xl font-bold mb-6 mt-12">
-                {lang === 'en' ? 'Past Events' : 'Vergangene Veranstaltungen'}
-              </h2>
-              {pastEvents.map((item, index) => (
-                <NewsItem
-                  key={`past-${index}`}
-                  title={item.title}
-                  date={item.date}
-                  type={item.type}
-                  description={item.description}
-                  isPast={true}
-                  link={item.link}
-                  showMoreText={showMoreText}
-                />
-              ))}
-                </>
-              )}
+            <div className="bg-gray-50 border-l-4 border-primary p-8 mb-12 rounded-r-lg">
+              <p className="text-lg text-gray-700 leading-relaxed">
+                {currentText.intro}
+              </p>
             </div>
+
+            {loading ? (
+              <p className="text-gray-600 text-center">Loading...</p>
+            ) : error ? (
+              <p className="text-red-600 text-center">{error}</p>
+            ) : (
+              <>
+                <div className="mb-12">
+                  <h2 className="text-2xl font-bold text-gray-900 mb-8 text-center">
+                    {currentText.upcoming}
+                  </h2>
+                  <div className="bg-white border border-gray-200 p-8 rounded-lg shadow-md">
+                    {upcomingEvents.length ? (
+                      upcomingEvents.map((item, index) => (
+                        <NewsItem
+                          key={`upcoming-${index}`}
+                          title={item.title}
+                          date={item.date}
+                          type={item.type}
+                          description={item.description}
+                          link={item.link}
+                          showMoreText={showMoreText}
+                        />
+                      ))
+                    ) : (
+                      <p className="text-gray-600 text-center">
+                        {lang === 'en' ? 'No upcoming events.' : 'Keine kommenden Veranstaltungen.'}
+                      </p>
+                    )}
+                  </div>
+                </div>
+
+                <div className="mb-12">
+                  <h2 className="text-2xl font-bold text-gray-900 mb-8 text-center">
+                    {currentText.past}
+                  </h2>
+                  <div className="bg-white border border-gray-200 p-8 rounded-lg shadow-md">
+                    {pastEvents.length ? (
+                      pastEvents.map((item, index) => (
+                        <NewsItem
+                          key={`past-${index}`}
+                          title={item.title}
+                          date={item.date}
+                          type={item.type}
+                          description={item.description}
+                          isPast={true}
+                          link={item.link}
+                          showMoreText={showMoreText}
+                        />
+                      ))
+                    ) : (
+                      <p className="text-gray-600 text-center">
+                        {lang === 'en' ? 'No past events.' : 'Keine vergangenen Veranstaltungen.'}
+                      </p>
+                    )}
+                  </div>
+                </div>
+              </>
+            )}
           </div>
         </section>
       </main>

@@ -11,8 +11,8 @@ const footerText = {
     de: `Das Projekt wird gemeinsam von der Berlin-Brandenburgischen Akademie der Wissenschaften und der Akademie der Wissenschaften und der Literatur | Mainz getragen und besitzt Arbeitsstellen in Berlin, Hamburg und Darmstadt.\nDas Akademienvorhaben FSL digital ist Teil des von Bund und Ländern geförderten Akademienprogramms, das der Erhaltung, Sicherung und Vergegenwärtigung unseres kulturellen Erbes dient. Koordiniert wird das Programm von der Akademienunion.`
   },
   copyright: {
-    en: "© 2025 FSL digital. All rights reserved.",
-    de: "© 2025 FSL digital. Alle Rechte vorbehalten."
+    en: "© 2026 FSL digital. All rights reserved.",
+    de: "© 2026 FSL digital. Alle Rechte vorbehalten."
   },
   privacy: {
     en: "Privacy Policy",

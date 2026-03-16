@@ -10,6 +10,7 @@ import Team from "./pages/Team";
 import Concept from "./pages/Concept";
 import Corpus from "./pages/Corpus";
 import News from "./pages/News";
+import Interview from "./pages/Interview";
 import Publications from "./pages/Publications";
 import Bibliography from "./pages/Bibliography";
 import Contact from "./pages/Contact";
@@ -38,6 +39,7 @@ const App = () => {
             <Route path="/concept" element={<Concept lang={lang} setLang={setLang} />} />
             <Route path="/corpus" element={<Corpus lang={lang} setLang={setLang} />} />
             <Route path="/news" element={<News lang={lang} setLang={setLang} />} />
+            <Route path="/interview" element={<Interview lang={lang} setLang={setLang} />} />
             <Route path="/publications" element={<Publications lang={lang} setLang={setLang} />} />
             <Route path="/bibliography" element={<Bibliography lang={lang} setLang={setLang} />} />
             <Route path="/contact" element={<Contact lang={lang} setLang={setLang} />} />

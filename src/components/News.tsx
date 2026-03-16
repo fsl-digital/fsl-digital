@@ -113,11 +113,11 @@ const News = ({ lang = 'en' }: NewsProps) => {
   return (
     <section id="news" className="py-20">
       <div className="container-custom">
-        <h2 className="section-title text-center">{lang === 'en' ? 'News' : 'Ankündigung'}</h2>
+        <h2 className="section-title text-center">{lang === 'en' ? 'News' : 'Ankündigungen'}</h2>
         <p className="section-subtitle text-center mx-auto">
-          {lang === 'en' 
+          {lang === 'en'
             ? (<span>Follow us on <a href="https://www.instagram.com/fsl_digital/" target="_blank" rel="noopener noreferrer" className="text-primary underline hover:text-secondary">Instagram</a> for more news</span>)
-            : 'Bleiben Sie auf dem Laufenden über unsere kommenden Veranstaltungen'}
+            : (<span>Folgen Sie uns auf <a href="https://www.instagram.com/fsl_digital/" target="_blank" rel="noopener noreferrer" className="text-primary underline hover:text-secondary">Instagram</a> für weitere Neuigkeiten</span>)}
         </p>
         
         <div className="max-w-3xl mx-auto mt-12">
@@ -144,6 +144,22 @@ const News = ({ lang = 'en' }: NewsProps) => {
           <Link to="/news" className="btn-outline">
             {lang === 'en' ? 'View All Events' : 'Alle Veranstaltungen anzeigen'}
           </Link>
+        </div>
+
+        <div className="mt-12 bg-gray-50 border-l-4 border-primary p-8 rounded-r-lg">
+          <p className="text-lg text-gray-700 leading-relaxed text-center">
+            {lang === 'en'
+              ? 'For public interviews and podcasts about FSL, please visit the section below.'
+              : 'Für öffentliche Interviews und Podcasts zu FSL besuchen Sie bitte den folgenden Bereich.'}
+          </p>
+          <div className="text-center mt-6">
+            <Link
+              to="/interview"
+              className="btn-outline"
+            >
+              {lang === 'en' ? 'Public Interviews & Podcasts' : 'Öffentliche Interviews & Podcasts'}
+            </Link>
+          </div>
         </div>
       </div>
     </section>

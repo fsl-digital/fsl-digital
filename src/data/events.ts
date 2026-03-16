@@ -16,8 +16,8 @@ export function getUpcomingEvents(lang: 'en' | 'de' = 'en'): EventItem[] {
       type: 'event',
       description:
         lang === 'en'
-          ? 'Project presentation at the Mainz Science Market With (among others) Klingebeil, Josefine; Hinterholzer, Miriam; Scharrer, Lisa; Volkanovska, Elena; Risch, Falco.'
-          : 'Projektpräsentation auf dem Wissenschaftsmarkt Mainz Mit (u. a.) Klingebeil, Josefine; Hinterholzer, Miriam; Scharrer, Lisa; Volkanovska, Elena; Risch, Falco.'
+          ? 'Project presentation at the Mainz Science Market With (among others) Ulbricht, Josefine; Hinterholzer, Miriam; Scharrer, Lisa; Volkanovska, Elena; Risch, Falco.'
+          : 'Projektpräsentation auf dem Wissenschaftsmarkt Mainz Mit (u. a.) Ulbricht, Josefine; Hinterholzer, Miriam; Scharrer, Lisa; Volkanovska, Elena; Risch, Falco.'
     },
     {
       title:
@@ -40,8 +40,8 @@ export function getUpcomingEvents(lang: 'en' | 'de' = 'en'): EventItem[] {
       type: 'event',
       description:
         lang === 'en'
-          ? 'Lecture at the Martin Kramer Society in Vienna With Josephine Klingebeil-Schieke, Elena Bandt, and Lisa Scharrer.'
-          : 'Vortrag auf der Martin-Kramer-Gesellschaft in Wien Mit Josephine Klingebeil-Schieke, Elena Bandt, Lisa Scharrer.'
+          ? 'Lecture at the Martin Kramer Society in Vienna With Josephine Ulbricht, Elena Bandt, and Lisa Scharrer.'
+          : 'Vortrag auf der Martin-Kramer-Gesellschaft in Wien Mit Josephine Ulbricht, Elena Bandt, Lisa Scharrer.'
     },
     {
       title:

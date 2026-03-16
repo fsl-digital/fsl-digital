@@ -193,9 +193,11 @@ const Hero = ({ lang = "en" }) => {
             <h1 className="text-4xl font-bold leading-tight mb-6">
               {content[lang].heading}
             </h1>
-            <p className="text-xl text-gray-600 mb-8 text-justify">
-              {/* Image container with float for text wrapping */}
-              <div className="relative h-[28rem] flex flex-col items-center justify-center group float-right ml-8 mb-4">
+            <div className="grid grid-cols-1 lg:grid-cols-[minmax(0,1fr)_32rem] gap-10 items-center">
+              <div className="text-xl text-gray-600 text-center py-6 lg:py-12">
+                {content[lang].description}
+              </div>
+              <div className="relative h-[28rem] flex flex-col items-center justify-center group">
                 {/* Left Arrow */}
                 <button
                   onClick={handlePrev}
@@ -229,8 +231,7 @@ const Hero = ({ lang = "en" }) => {
                   {'>'}
                 </button>
               </div>
-              {content[lang].description}
-            </p>
+            </div>
           </div>
         </div>
       </div>

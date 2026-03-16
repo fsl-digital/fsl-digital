@@ -29,20 +29,22 @@ const Contact = ({ lang = 'en', setLang }: Props) => {
   };
 
   return (
-    <div className="min-h-screen bg-gray-50 flex flex-col">
+    <div className="min-h-screen flex flex-col">
       <Header lang={lang} setLang={setLang} />
       <main className="pt-16">
         <section className="py-16">
-          <div className="container-custom max-w-3xl">
+          <div className="container-custom">
             <h1 className="text-4xl font-bold text-center mb-6">
-              {lang === 'de' ? 'Kontakt und Standorte' : 'Contact and Locations'}
+              {lang === 'de' ? 'Kontakt & Standorte' : 'Contact and Locations'}
             </h1>
             {/* Emails are masked by default; toggle removed per request */}
             {lang === 'de' ? (
               <div className="prose max-w-none">
-                <p>
-                  Das Projekt wird gemeinsam von der Berlin-Brandenburgischen Akademie der Wissenschaften und der Akademie der Wissenschaften und der Literatur | Mainz getragen und besitzt Arbeitsstellen in Berlin, Hamburg und Darmstadt.
-                </p>
+                <div className="mt-8 mb-12 bg-gray-50 border-l-4 border-primary p-8 rounded-r-lg text-left">
+                  <p className="text-lg leading-relaxed text-gray-700 m-0">
+                    Das Projekt wird gemeinsam von der Berlin-Brandenburgischen Akademie der Wissenschaften und der Akademie der Wissenschaften und der Literatur | Mainz getragen und besitzt Arbeitsstellen in Berlin, Darmstadt und Hamburg.
+                  </p>
+                </div>
 
                 {/* Inline page image with caption under intro paragraph */}
                 <div className="my-6 flex flex-col items-center">
@@ -59,7 +61,7 @@ const Contact = ({ lang = 'en', setLang }: Props) => {
                     <p className="mb-3 text-lg">📍 In Berlin liegt der Fokus auf der Korpusalignierung der Musterdialoge. Diese werden untersucht auf dem Gebiet der historischen Pragmatik, Soziolinguistik, Höflichkeit und Kommunikationskultur. Von hier aus wird außerdem die Zusammenarbeit koordiniert.</p>
                     <h2 className="text-xl font-semibold mb-3">Projektkoordination | Arbeitsstelle Berlin</h2>
                     <p>
-                      Dr. Josephine Klingebeil-Schieke<br />
+                      Dr. Josephine Ulbricht<br />
                       Berlin-Brandenburgische Akademie der Wissenschaften<br />
                       Jägerstraße 22/23<br />
                       10117 Berlin<br />
@@ -72,13 +74,12 @@ const Contact = ({ lang = 'en', setLang }: Props) => {
                     <p className="mb-3 text-lg">📍 In Darmstadt werden die Daten modelliert und die digitale Infrastruktur für die Erfassung entwickelt und gepflegt. Auf analytischer und Annotationsebene liegt der Fokus auf den Glossaren und Wörterbuchteilen.</p>
                     <h2 className="text-xl font-semibold mb-3">Arbeitsstelle Darmstadt</h2>
                     <p>
-                      Dr. Luise Borek<br />
+                      Dr. Luise Borek (Im Sommerurlaub 2026) und Lisa Scharrer M.A.<br />
                       Technische Universität Darmstadt<br />
                       Institut für Sprach- und Literaturwissenschaft<br />
                       Residenzschloss 1<br />
                       64283 Darmstadt<br />
-                      Tel.: +49 (0)6151 16 - 57407 / - 57411<br />
-                      E-Mail: <EmailLink addr="luise.borek@tu-darmstadt.de" />
+                      E-Mail: <EmailLink addr="luise.borek@tu-darmstadt.de" name="Luise Borek" /> / <EmailLink addr="lisa.scharrer@tu-darmstadt.de" name="Lisa Scharrer" />
                     </p>
                   </div>
 
@@ -98,9 +99,11 @@ const Contact = ({ lang = 'en', setLang }: Props) => {
               </div>
             ) : (
               <>
-                <p className="text-lg text-gray-700 mb-6">
-                  The project is jointly run by the Berlin-Brandenburg Academy of Sciences and the Academy of Sciences and Literature Mainz and has jobs in Berlin, Hamburg and Darmstadt.
-                </p>
+                <div className="mt-8 mb-12 bg-gray-50 border-l-4 border-primary p-8 rounded-r-lg text-left">
+                  <p className="text-lg leading-relaxed text-gray-700 m-0">
+                    The project is jointly run by the Berlin-Brandenburg Academy of Sciences and the Academy of Sciences and Literature Mainz and has offices in Berlin, Darmstadt and Hamburg.
+                  </p>
+                </div>
                 {/* Mirror image placement for EN as well */}
                 <div className="my-6 flex flex-col items-center">
                   <img
@@ -116,7 +119,7 @@ const Contact = ({ lang = 'en', setLang }: Props) => {
                     <p className="mb-3 text-lg">📍 In Berlin, the focus is on corpus alignment of the model dialogues. These are examined in the fields of historical pragmatics, sociolinguistics, politeness and communication culture. Collaboration is also coordinated from here.</p>
                     <h2 className="text-xl font-semibold mb-3">Project Coordination | Berlin Office</h2>
                     <p className="text-gray-700">
-                      Dr. Josephine Klingebeil-Schieke<br />
+                      Dr. Josephine Ulbricht<br />
                       Berlin-Brandenburg Academy of Sciences and Humanities (BBAW)<br />
                       Jägerstraße 22/23<br />
                       10117 Berlin<br />
@@ -128,13 +131,12 @@ const Contact = ({ lang = 'en', setLang }: Props) => {
                     <p className="mb-3 text-lg">📍 In Darmstadt, the data are modelled and the digital infrastructure for data capture is developed and maintained. On the analytical and annotation level, the focus is on the glossaries and dictionary sections.</p>
                     <h2 className="text-xl font-semibold mb-3">Darmstadt Office</h2>
                     <p className="text-gray-700">
-                      Dr. Luise Borek<br />
+                      Dr. Luise Borek (On vacation Summer 2026) and Lisa Scharrer M.A.<br />
                       Technische Universität Darmstadt<br />
                       Institute of Linguistics and Literary Studies<br />
                       Residenzschloss 1<br />
                       64283 Darmstadt<br />
-                      Tel.: +49 (0)6151 16 - 57407 / - 57411<br />
-                      Email: <EmailLink addr="luise.borek@tu-darmstadt.de" />
+                      Email: <EmailLink addr="luise.borek@tu-darmstadt.de" name="Luise Borek" /> / <EmailLink addr="lisa.scharrer@tu-darmstadt.de" name="Lisa Scharrer" />
                     </p>
                   </div>
                   <div className="bg-white rounded-xl shadow border border-gray-200 p-6 h-full">

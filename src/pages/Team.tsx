@@ -218,10 +218,12 @@ const Team = ({ lang = 'en', setLang }) => {
             <h1 className="text-4xl font-bold text-center mb-12">{lang === 'de' ? 'Unser Team' : 'Our Team'}</h1>
             <div className="mb-12">
               {lang === 'de' ? (
-                <div className="max-w-3xl mx-auto">
-                  <p className="text-lg text-gray-800 mb-4">
-                    Das interakademische Vorhaben wird geleitet von Prof. Dr. Natalia Filatkina (Universität Hamburg), Prof. Dr. Andrea Rapp (Technische Universität Darmstadt) und Prof. Dr. Horst Simon (Freie Universität Berlin). An drei Arbeitsstellen arbeiten Linguist:innen mit einem interdisziplinären und internationalen Expert:innennetzwerk an der Erschließung des markanten Quellenmaterials.
-                  </p>
+                <div>
+                  <div className="mt-8 mb-12 bg-gray-50 border-l-4 border-primary p-8 rounded-r-lg text-left">
+                    <p className="text-lg leading-relaxed text-gray-700 m-0">
+                      Das interakademische Vorhaben wird geleitet von Prof. Dr. Natalia Filatkina (Universität Hamburg), Prof. Dr. Andrea Rapp (Technische Universität Darmstadt) und Prof. Dr. Horst Simon (Freie Universität Berlin). An drei Arbeitsstellen arbeiten Linguist:innen mit einem interdisziplinären und internationalen Expert:innennetzwerk an der Erschließung des markanten Quellenmaterials.
+                    </p>
+                  </div>
                   <div className="my-4 flex flex-col items-center">
                     <img
                       src={getImagePath('/uploads/team/team_head_1.png')}
@@ -249,10 +251,12 @@ const Team = ({ lang = 'en', setLang }) => {
                   <p className="text-xs text-gray-600 italic mt-2">Eigene Fotos CC BY-SA 4.0 | FSL digital</p>
                 </div>
               ) : (
-                <div className="max-w-3xl mx-auto">
-                  <p className="text-lg text-gray-800 mb-4">
-                    The inter-academy project is led by Prof. Dr. Natalia Filatkina (University of Hamburg), Prof. Dr. Andrea Rapp (Technical University of Darmstadt) and Prof. Dr. Horst Simon (Freie Universität Berlin). At three offices, linguists work together with an interdisciplinary and international network of experts to explore this distinctive source material.
-                  </p>
+                <div>
+                  <div className="mt-8 mb-12 bg-gray-50 border-l-4 border-primary p-8 rounded-r-lg text-left">
+                    <p className="text-lg leading-relaxed text-gray-700 m-0">
+                      The inter-academy project is led by Prof. Dr. Natalia Filatkina (University of Hamburg), Prof. Dr. Andrea Rapp (Technical University of Darmstadt) and Prof. Dr. Horst Simon (Freie Universität Berlin). At three offices, linguists work together with an interdisciplinary and international network of experts to explore this distinctive source material.
+                    </p>
+                  </div>
                   <div className="my-4 flex flex-col items-center">
                     <img
                       src={getImagePath('/uploads/team/team_head_1.png')}
@@ -466,7 +470,7 @@ const Team = ({ lang = 'en', setLang }) => {
                             <div key={index} className="flex flex-col items-center h-full justify-between bg-transparent">
                               <img src={getImagePath(member.image)} alt={member.name} className="w-48 h-48 object-cover rounded-lg shadow-md mb-4" />
                               <h3 className="text-lg font-bold font-sans">
-                                {member.name === 'Dr. Josephine Klingebeil-Schieke' ? (
+                                {member.name === 'Dr. Josephine Ulbricht' ? (
                                   <button
                                     className="focus:outline-none transition-colors hover:text-blue-700"
                                     style={{ background: 'none', border: 'none', padding: 0, margin: 0, cursor: 'pointer' }}
@@ -489,6 +493,11 @@ const Team = ({ lang = 'en', setLang }) => {
                               <p className="text-center text-gray-700 mb-2 text-sm whitespace-pre-line">
                                 {member.institution[lang]}
                               </p>
+                              {member.timeline && (
+                                <p className="text-center text-gray-500 mb-2 text-sm">
+                                  {member.timeline[lang]}
+                                </p>
+                              )}
                               {member.email && (
                                 <div className="mt-auto w-full flex justify-center">
                                   <a href={`mailto:${member.email}`} className="px-3 py-1 bg-gray-100 text-gray-700 rounded font-medium border border-gray-300 hover:bg-gray-200 transition">Email</a>
@@ -504,7 +513,7 @@ const Team = ({ lang = 'en', setLang }) => {
                             <div key={index} className="flex flex-col items-center h-full justify-between bg-transparent">
                               <img src={getImagePath(member.image)} alt={member.name} className="w-48 h-48 object-cover rounded-lg shadow-md mb-4" />
                               <h3 className="text-lg font-bold font-sans">
-                                {member.name === 'Dr. Josephine Klingebeil-Schieke' ? (
+                                {member.name === 'Dr. Josephine Ulbricht' ? (
                                   <button
                                     className="focus:outline-none transition-colors hover:text-blue-700"
                                     style={{ background: 'none', border: 'none', padding: 0, margin: 0, cursor: 'pointer' }}
