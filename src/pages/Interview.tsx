@@ -95,11 +95,11 @@ const Interview = ({ lang = 'en', setLang }: InterviewProps) => {
   const germanListeningItems = [
     {
       title: 'Podcast „Sozusagen“: Alte Sprachlehrbücher - und was sie uns erzählen',
-      url: 'https://www.br.de/mediathek/podcast/sozusagen/alte-sprachlehrbuecher-und-was-sie-uns-erzaehlen/2102040',
+    url: 'https://www.ardsounds.de/episode/urn:ard:episode:00aec404f222d868/',
     },
     {
       title: 'Podcast „Sozusagen“: Französisch für Renaissancemenschen: Fremdsprachenunterricht in der Frühen Neuzeit',
-      url: 'https://www.br.de/mediathek/podcast/sozusagen/franzoesisch-fuer-renaissancemenschen-fremdsprachenunterricht-in-der-fruehen-neuzeit/2090354',
+    url: 'https://www.ardsounds.de/episode/urn:ard:episode:63d8ba9d958aba98/',
     },
   ];
 
@@ -156,12 +156,12 @@ const Interview = ({ lang = 'en', setLang }: InterviewProps) => {
   const englishListeningItems = [
     {
       title: 'Podcast “Sozusagen”: Old Language Textbooks—and What They Tell Us',
-      url: 'https://www.br.de/mediathek/podcast/sozusagen/alte-sprachlehrbuecher-und-was-sie-uns-erzaehlen/2102040',
+    url: 'https://www.ardsounds.de/episode/urn:ard:episode:00aec404f222d868/',
     },
     {
       title:
         'Podcast “Sozusagen”: French for Renaissance People: Foreign Language Instruction in the Early Modern Period',
-      url: 'https://www.br.de/mediathek/podcast/sozusagen/franzoesisch-fuer-renaissancemenschen-fremdsprachenunterricht-in-der-fruehen-neuzeit/2090354',
+      url: 'https://www.ardsounds.de/episode/urn:ard:episode:63d8ba9d958aba98/',
     },
   ];
 
