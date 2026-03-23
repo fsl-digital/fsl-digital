@@ -74,7 +74,7 @@ const Contact = ({ lang = 'en', setLang }: Props) => {
                     <p className="mb-3 text-lg">📍 In Darmstadt werden die Daten modelliert und die digitale Infrastruktur für die Erfassung entwickelt und gepflegt. Auf analytischer und Annotationsebene liegt der Fokus auf den Glossaren und Wörterbuchteilen.</p>
                     <h2 className="text-xl font-semibold mb-3">Arbeitsstelle Darmstadt</h2>
                     <p>
-                      Dr. Luise Borek (Im Sommerurlaub 2026) und Lisa Scharrer M.A.<br />
+                      Dr. Luise Borek (Beurlaubt im SoSe 2026) und Lisa Scharrer M.A.<br />
                       Technische Universität Darmstadt<br />
                       Institut für Sprach- und Literaturwissenschaft<br />
                       Residenzschloss 1<br />
@@ -131,7 +131,7 @@ const Contact = ({ lang = 'en', setLang }: Props) => {
                     <p className="mb-3 text-lg">📍 In Darmstadt, the data are modelled and the digital infrastructure for data capture is developed and maintained. On the analytical and annotation level, the focus is on the glossaries and dictionary sections.</p>
                     <h2 className="text-xl font-semibold mb-3">Darmstadt Office</h2>
                     <p className="text-gray-700">
-                      Dr. Luise Borek (On vacation Summer 2026) and Lisa Scharrer M.A.<br />
+                      Dr. Luise Borek (On leave in Summer 2026) and Lisa Scharrer M.A.<br />
                       Technische Universität Darmstadt<br />
                       Institute of Linguistics and Literary Studies<br />
                       Residenzschloss 1<br />

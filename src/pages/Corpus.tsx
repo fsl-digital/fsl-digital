@@ -44,11 +44,8 @@ const Corpus = ({ lang = 'en', setLang }) => {
               {currentContent.title}
             </h1>
             
-            {/* Abstract/Introduction */}
+            {/* Introduction */}
             <div className="bg-gray-50 border-l-4 border-primary p-8 mb-12 rounded-r-lg">
-              <h2 className="text-2xl font-bold text-gray-900 mb-6">
-                {lang === 'en' ? 'Abstract' : 'Zusammenfassung'}
-              </h2>
               <p className="text-lg text-gray-700 leading-relaxed">
                 {currentContent.description}
               </p>

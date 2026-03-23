@@ -29,13 +29,11 @@ const Concept = ({ lang = 'en', setLang }) => {
           <section className="py-20 w-full">
             <div className="container-custom">
               {/* Hero */}
-              <div className="text-center mb-12">
-                <h1 className="section-title">Konzept</h1>
-                <div className="mt-8 bg-gray-50 border-l-4 border-primary p-8 rounded-r-lg text-left">
-                  <p className="text-lg leading-relaxed text-gray-700">
-                    Das Vorhaben erschließt und untersucht historische Fremdsprachenlehrwerke der Frühen Neuzeit und macht ihre Inhalte wissenschaftlich zugänglich. Diese Seite stellt Konzept, Ziele und methodische Ansätze des Projekts sowie die beteiligten Partner und das Wissensnetzwerk vor.
-                  </p>
-                </div>
+              <h1 className="text-4xl font-bold text-center mb-12">Konzept</h1>
+              <div className="bg-gray-50 border-l-4 border-primary p-8 mb-12 rounded-r-lg text-left">
+                <p className="text-lg leading-relaxed text-gray-700">
+                  Das Vorhaben erschließt und untersucht historische Fremdsprachenlehrwerke der Frühen Neuzeit und macht ihre Inhalte wissenschaftlich zugänglich. Diese Seite stellt Konzept, Ziele und methodische Ansätze des Projekts sowie die beteiligten Partner und das Wissensnetzwerk vor.
+                </p>
               </div>
 
               {/* Content cards */}
@@ -98,13 +96,11 @@ const Concept = ({ lang = 'en', setLang }) => {
           <section className="py-20 w-full">
             <div className="container-custom">
               {/* Hero */}
-              <div className="text-center mb-12">
-                <h1 className="section-title">Concept</h1>
-                <div className="mt-8 bg-gray-50 border-l-4 border-primary p-8 rounded-r-lg text-left">
-                  <p className="text-lg leading-relaxed text-gray-700">
-                    The project catalogs and analyzes historical foreign language textbooks from the early modern period and makes their content available for scholarly research. This page presents the project’s concept, objectives, and methodological approaches, as well as the participating partners and the knowledge network.
-                  </p>
-                </div>
+              <h1 className="text-4xl font-bold text-center mb-12">Concept</h1>
+              <div className="bg-gray-50 border-l-4 border-primary p-8 mb-12 rounded-r-lg text-left">
+                <p className="text-lg leading-relaxed text-gray-700">
+                  The project catalogs and analyzes historical foreign language textbooks from the early modern period and makes their content available for scholarly research. This page presents the project’s concept, objectives, and methodological approaches, as well as the participating partners and the knowledge network.
+                </p>
               </div>
 
               {/* Content cards */}

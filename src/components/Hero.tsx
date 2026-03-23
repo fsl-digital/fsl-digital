@@ -193,8 +193,8 @@ const Hero = ({ lang = "en" }) => {
             <h1 className="text-4xl font-bold leading-tight mb-6">
               {content[lang].heading}
             </h1>
-            <div className="grid grid-cols-1 lg:grid-cols-[minmax(0,1fr)_32rem] gap-10 items-center">
-              <div className="text-xl text-gray-600 text-center py-6 lg:py-12">
+            <div className="grid grid-cols-1 lg:grid-cols-[minmax(0,1fr)_32rem] gap-10 items-start">
+              <div className="text-xl text-gray-600 text-justify pt-3 pb-6 lg:pt-3 lg:pb-12">
                 {content[lang].description}
               </div>
               <div className="relative h-[28rem] flex flex-col items-center justify-center group">
