@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { Calendar, Users, Award } from 'lucide-react';
 import { Link } from 'react-router-dom';
+import { parseCsv, sanitizeText } from '@/lib/csv';
 
 interface NewsItemProps {
   title: string;
@@ -80,29 +81,17 @@ const News = ({ lang = 'en' }: NewsProps) => {
     fetch(`${import.meta.env.BASE_URL}uploads/news/news_${lang}.csv`)
       .then(res => res.text())
       .then(text => {
-        const sanitize = (s: string) => (s || '')
-          .replace(/\\"/g, '"')
-          .replace(/^"|"$/g, '')
-          .replace(/\\n/g, '\n')
-          .replace(/\\r/g, '\r');
-        const lines = text.trim().split('\n');
-        const headers = lines[0].split(',').map(h => h.replace(/^"|"$/g, ''));
-        const rows = lines.slice(1).map(line => {
-          const cells: string[] = []; let cur = ''; let q = false;
-          for (let i = 0; i < line.length; i++) { const ch = line[i]; if (ch === '"') q = !q; else if (ch === ',' && !q) { cells.push(cur); cur = ''; } else { cur += ch; } }
-          cells.push(cur);
-          return Object.fromEntries(cells.map((c, i) => [headers[i], sanitize(c)]));
-        });
+        const rows = parseCsv(text);
         const today = new Date().toISOString().slice(0,10);
         const upcoming = rows.filter(r => (r.start_date || '') >= today)
           .sort((a,b) => (a.start_date||'').localeCompare(b.start_date||''))
           .slice(0, 2)
           .map(r => ({
-            title: sanitize(r.title),
+            title: sanitizeText(r.title),
             date: r.display_date || r.start_date,
             type: r.type as any,
-            description: sanitize(r.desc || ''),
-            link: sanitize(r.link || '').trim()
+            description: sanitizeText(r.desc || ''),
+            link: sanitizeText(r.link || '').trim()
           }));
         setUpcoming(upcoming);
         setLoading(false);

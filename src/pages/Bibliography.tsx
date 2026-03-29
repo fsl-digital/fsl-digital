@@ -1,33 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import Header from '@/components/Header';
 import Footer from '@/components/Footer';
-
-// Improved CSV parser to handle quoted fields with commas
-function parseCSV(text: string) {
-  const lines = text.trim().split('\n');
-  const headers = lines[0].split(',').map(h => h.replace(/^"|"$/g, ''));
-  return lines.slice(1)
-    .map(line => {
-      const cells: string[] = [];
-      let current = '';
-      let inQuotes = false;
-      for (let i = 0; i < line.length; i++) {
-        const char = line[i];
-        if (char === '"') {
-          inQuotes = !inQuotes;
-        } else if (char === ',' && !inQuotes) {
-          cells.push(current);
-          current = '';
-        } else {
-          current += char;
-        }
-      }
-      cells.push(current);
-      return cells;
-    })
-    .filter(row => row.length === headers.length && !row.every(cell => cell === 'NONE'))
-    .map(row => Object.fromEntries(row.map((cell, i) => [headers[i], cell.replace(/^"|"$/g, '')])));
-}
+import { parseCsv, sanitizeText } from '@/lib/csv';
 
 const Bibliography = ({ lang = 'en', setLang }) => {
   const [entries, setEntries] = useState<any[]>([]);
@@ -47,7 +21,7 @@ const Bibliography = ({ lang = 'en', setLang }) => {
         return res.text();
       })
       .then(text => {
-        const parsed = parseCSV(text);
+        const parsed = parseCsv(text);
         setEntries(parsed);
         setLoading(false);
       })
@@ -77,8 +51,6 @@ const Bibliography = ({ lang = 'en', setLang }) => {
       .trim();
   };
 
-  const createMarkup = (value: string) => ({ __html: value || '' });
-
   const renderAuthors = (author: string) => {
     if (!author) return '';
     const parts = author.split(';');
@@ -86,7 +58,7 @@ const Bibliography = ({ lang = 'en', setLang }) => {
       <span className="whitespace-pre-wrap">
         {parts.map((p, i) => (
           <React.Fragment key={i}>
-            <span dangerouslySetInnerHTML={createMarkup(p.trim())} />
+            <span>{sanitizeText(p.trim())}</span>
             {i < parts.length - 1 && <br />}
           </React.Fragment>
         ))}
@@ -205,21 +177,18 @@ const Bibliography = ({ lang = 'en', setLang }) => {
                     </thead>
                     <tbody className="divide-y divide-gray-100">
                       {sortedEntries.map((entry, idx) => {
-                        const author = entry['Author'] || '';
-                        const year = entry['Publication Year'] || '';
-                        const title = entry['Title'] || '';
-                        const doi = entry['DOI'] || '';
-                        const url = entry['Url'] || '';
+                        const author = sanitizeText(entry['Author'] || '');
+                        const year = sanitizeText(entry['Publication Year'] || '');
+                        const title = sanitizeText(entry['Title'] || '');
+                        const doi = sanitizeText(entry['DOI'] || '');
+                        const url = sanitizeText(entry['Url'] || '');
                         const doiHref = getDoiLink(doi);
                         const doiText = getDoiText(doi);
                         return (
                         <tr key={idx} className="align-top hover:bg-gray-50">
                           <td className="px-4 py-3 text-gray-800 w-64">{renderAuthors(author)}</td>
                           <td className="px-4 py-3 text-gray-700 whitespace-nowrap w-28">{year}</td>
-                          <td
-                            className="px-4 py-3 text-gray-900 whitespace-pre-wrap break-words w-1/2"
-                            dangerouslySetInnerHTML={createMarkup(title)}
-                          />
+                          <td className="px-4 py-3 text-gray-900 whitespace-pre-wrap break-words w-1/2">{title}</td>
                           <td className="px-4 py-3 w-36">
                             {doiHref ? (
                               maskLinks ? (

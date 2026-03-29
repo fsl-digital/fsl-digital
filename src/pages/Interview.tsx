@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React from 'react';
 import Header from '@/components/Header';
 import Footer from '@/components/Footer';
 
@@ -39,10 +39,6 @@ const LinkIcon = () => (
 );
 
 const Interview = ({ lang = 'en', setLang }: InterviewProps) => {
-  useEffect(() => {
-    window.scrollTo(0, 0);
-  }, []);
-
   const germanReadingItems = [
     {
       title: 'Beitrag „Sprachen lernen im Europa der Frühen Neuzeit“',

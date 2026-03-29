@@ -1,32 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import Header from '@/components/Header';
 import Footer from '@/components/Footer';
-
-function parseCSV(text: string) {
-  const lines = text.trim().split('\n');
-  const headers = lines[0].split(',').map(h => h.replace(/^"|"$/g, ''));
-  return lines.slice(1)
-    .map(line => {
-      const cells: string[] = [];
-      let current = '';
-      let inQuotes = false;
-      for (let i = 0; i < line.length; i++) {
-        const ch = line[i];
-        if (ch === '"') {
-          inQuotes = !inQuotes;
-        } else if (ch === ',' && !inQuotes) {
-          cells.push(current);
-          current = '';
-        } else {
-          current += ch;
-        }
-      }
-      cells.push(current);
-      return cells;
-    })
-    .filter(row => row.length === headers.length && !row.every(cell => cell === 'NONE'))
-    .map(row => Object.fromEntries(row.map((cell, i) => [headers[i], cell.replace(/^"|"$/g, '')])));
-}
+import { parseCsv, sanitizeText } from '@/lib/csv';
 
 const Publications = ({ lang = 'en', setLang }) => {
   const [items, setItems] = useState<any[]>([]);
@@ -39,14 +14,14 @@ const Publications = ({ lang = 'en', setLang }) => {
     fetch(primaryUrl)
       .then(res => res.text())
       .then(async text => {
-        const primary = parseCSV(text);
+        const primary = parseCsv(text);
         // If any entries miss title or venue, try to fill from the other language CSV by matching authors+year
         const needsFallback = primary.some(p => !p.title || !p.venue);
         let merged = primary;
         if (needsFallback) {
           try {
             const altText = await fetch(secondaryUrl).then(r => r.text());
-            const secondary = parseCSV(altText);
+            const secondary = parseCsv(altText);
             const key = (r:any) => `${(r.authors||'').trim()}|${(r.year||'').trim()}`;
             const secMap = new Map(secondary.map(r => [key(r), r]));
             merged = primary.map(p => {
@@ -103,14 +78,16 @@ const Publications = ({ lang = 'en', setLang }) => {
             ) : (
               <div className="bg-white border border-gray-200 p-8 rounded-lg shadow-md">
                 {items.map((p, idx) => {
-                  const title = (p.title || '').trim();
-                  const venue = (p.venue || '').trim();
-                  const note = p.note ? ` ${p.note}` : '';
+                  const title = sanitizeText(p.title);
+                  const venue = sanitizeText(p.venue);
+                  const note = sanitizeText(p.note);
+                  const noteSuffix = note ? ` ${note}` : '';
                   const detailParts = [] as string[];
                   if (title) detailParts.push(`"${title}"`);
                   if (venue) detailParts.push(venue);
-                  const detail = `${detailParts.join('. ')}${note}`.trim();
-                  const doiRaw = p.doi?.trim();
+                  const detail = `${detailParts.join('. ')}${noteSuffix}`.trim();
+                  const doiRaw = sanitizeText(p.doi);
+                  const url = sanitizeText(p.url);
                   const doiIsLink = doiRaw ? doiRaw.startsWith('https://doi.org/') : false;
                   return (
                     <article
@@ -118,20 +95,21 @@ const Publications = ({ lang = 'en', setLang }) => {
                       className="border-b border-gray-200 pb-6 mb-6 last:border-0 last:pb-0 last:mb-0"
                     >
                       <div className="flex flex-wrap items-center gap-x-3 gap-y-1 mb-2 text-sm text-gray-500">
-                        {p.year && <span>{p.year}</span>}
-                        {p.authors && <span className="text-gray-700 font-medium">{p.authors}</span>}
+                        {p.year && <span>{sanitizeText(p.year)}</span>}
+                        {p.authors && <span className="text-gray-700 font-medium whitespace-pre-line">{sanitizeText(p.authors)}</span>}
                       </div>
                       <div className="text-lg text-gray-700 leading-relaxed">
-                        {p.url ? (
+                        {url ? (
                           <a
-                            href={p.url}
+                            href={url}
                             target="_blank"
                             rel="noopener noreferrer"
                             className="hover:text-blue-700"
-                            dangerouslySetInnerHTML={{ __html: detail }}
-                          />
+                          >
+                            {detail}
+                          </a>
                         ) : (
-                          <span dangerouslySetInnerHTML={{ __html: detail }} />
+                          <span>{detail}</span>
                         )}
                       </div>
                       {doiRaw && (

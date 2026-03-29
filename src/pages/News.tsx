@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { Calendar, Users, Award } from 'lucide-react';
 import Header from '@/components/Header';
 import Footer from '@/components/Footer';
+import { parseCsv, sanitizeText } from '@/lib/csv';
 // import { getUpcomingEvents, getPastEvents } from '@/data/events';
 
 interface NewsItemProps {
@@ -34,14 +35,8 @@ const NewsItem = ({ title, date, type, description, link, showMoreText = 'Show m
         {getIcon()}
         <span className={`text-sm ${isPast ? 'text-gray-400' : 'text-gray-500'}`}>{date}</span>
       </div>
-      <h3
-        className={`text-xl font-bold mb-2 ${isPast ? 'text-gray-600' : ''}`}
-        dangerouslySetInnerHTML={{ __html: title }}
-      />
-      <p
-        className={`${isPast ? 'text-gray-500' : 'text-gray-600'}`}
-        dangerouslySetInnerHTML={{ __html: description }}
-      />
+      <h3 className={`text-xl font-bold mb-2 whitespace-pre-line ${isPast ? 'text-gray-600' : ''}`}>{title}</h3>
+      <p className={`whitespace-pre-line ${isPast ? 'text-gray-500' : 'text-gray-600'}`}>{description}</p>
       {link && (
         <a
           href={link}
@@ -80,10 +75,6 @@ interface NewsProps {
 }
 
 const News = ({ lang = 'en', setLang }: NewsProps) => {
-  useEffect(() => {
-    window.scrollTo(0, 0);
-  }, []);
-
   const [upcomingEvents, setUpcoming] = useState<any[]>([]);
   const [pastEvents, setPast] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
@@ -94,41 +85,25 @@ const News = ({ lang = 'en', setLang }: NewsProps) => {
     fetch(`${import.meta.env.BASE_URL}uploads/news/news_${lang}.csv`)
       .then(res => res.text())
       .then(text => {
-        const parse = (t: string) => {
-          const lines = t.trim().split('\n');
-          const headers = lines[0].split(',').map(h => h.replace(/^"|"$/g, ''));
-          const rows = lines.slice(1).map(line => {
-            const cells: string[] = []; let cur = ''; let q = false;
-            for (let i = 0; i < line.length; i++) { const ch = line[i]; if (ch === '"') q = !q; else if (ch === ',' && !q) { cells.push(cur); cur = ''; } else { cur += ch; } }
-            cells.push(cur);
-            return Object.fromEntries(cells.map((c, i) => [headers[i], c.replace(/^"|"$/g, '')]));
-          });
-          return rows;
-        };
-        const rows = parse(text);
-        const sanitize = (s: string) => (s || '')
-          .replace(/\\"/g, '"')
-          .replace(/^"|"$/g, '')
-          .replace(/\\n/g, '\n')
-          .replace(/\\r/g, '\r');
+        const rows = parseCsv(text);
         const today = new Date().toISOString().slice(0,10);
         const upcoming = rows.filter(r => (r.start_date || '') >= today)
           .sort((a,b) => (a.start_date||'').localeCompare(b.start_date||''));
         const past = rows.filter(r => (r.start_date || '') < today)
           .sort((a,b) => (b.start_date||'').localeCompare(a.start_date||''));
         setUpcoming(upcoming.map(r => ({
-          title: sanitize(r.title),
+          title: sanitizeText(r.title),
           date: r.display_date || r.start_date,
           type: r.type as any,
-          description: sanitize(r.desc || ''),
-          link: sanitize(r.link || '').trim(),
+          description: sanitizeText(r.desc || ''),
+          link: sanitizeText(r.link || '').trim(),
         })));
         setPast(past.map(r => ({
-          title: sanitize(r.title),
+          title: sanitizeText(r.title),
           date: r.display_date || r.start_date,
           type: r.type as any,
-          description: sanitize(r.desc || ''),
-          link: sanitize(r.link || '').trim(),
+          description: sanitizeText(r.desc || ''),
+          link: sanitizeText(r.link || '').trim(),
         })));
         setLoading(false);
       })

@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { Menu, X } from 'lucide-react';
-import { Link } from 'react-router-dom';
+import { Link, NavLink } from 'react-router-dom';
 import { getImagePath } from '@/lib/image-utils';
 
 const navLabels = {
@@ -51,7 +51,7 @@ const Header = ({ lang, setLang }) => {
         {/* Desktop Navigation */}
         <nav className="hidden lg:flex space-x-8">
           {navLabels[lang].map((item) => (
-            <Link key={item.href} to={item.href} className="nav-link">{item.label}</Link>
+            <NavLink key={item.href} to={item.href} end={item.href === '/'} className={({ isActive }) => `nav-link ${isActive ? 'nav-link-active' : ''}`}>{item.label}</NavLink>
           ))}
         </nav>
 
@@ -78,7 +78,15 @@ const Header = ({ lang, setLang }) => {
         <div className="lg:hidden absolute top-16 left-0 right-0 bg-white z-50 shadow-lg">
           <div className="container-custom py-4 flex flex-col space-y-4">
             {navLabels[lang].map((item) => (
-              <Link key={item.href} to={item.href} className="nav-link" onClick={() => setIsMenuOpen(false)}>{item.label}</Link>
+              <NavLink
+                key={item.href}
+                to={item.href}
+                end={item.href === '/'}
+                className={({ isActive }) => `nav-link ${isActive ? 'nav-link-active' : ''}`}
+                onClick={() => setIsMenuOpen(false)}
+              >
+                {item.label}
+              </NavLink>
             ))}
             <div className="flex items-center pt-2">
               <button

@@ -2,6 +2,7 @@ import React, { useEffect, useMemo, useState } from 'react';
 import Header from '@/components/Header';
 import Footer from '@/components/Footer';
 import { getImagePath } from '@/lib/image-utils';
+import { parseCsv, sanitizeText } from '@/lib/csv';
 import JosephineProfile from './profiles/JosephineProfile';
 import KerstinRothProfile from './profiles/KerstinRothProfile';
 import ElenaBandtProfile from './profiles/ElenaBandtProfile';
@@ -34,57 +35,20 @@ const sortMembersByLastName = (members: TeamMember[]) => {
   });
 };
 
-const parseCsvRow = (line: string) => {
-  const values: string[] = [];
-  let current = '';
-  let inQuotes = false;
-
-  for (let i = 0; i < line.length; i++) {
-    const char = line[i];
-    const next = line[i + 1];
-
-    if (char === '"' && inQuotes && next === '"') {
-      current += '"';
-      i++;
-    } else if (char === '"') {
-      inQuotes = !inQuotes;
-    } else if (char === ',' && !inQuotes) {
-      values.push(current);
-      current = '';
-    } else {
-      current += char;
-    }
-  }
-
-  values.push(current);
-  return values;
-};
-
 const parseTeamCsv = (text: string): TeamMember[] => {
-  const lines = text.trim().split(/\r?\n/);
-  if (!lines.length) return [];
-
-  const headers = parseCsvRow(lines[0]).map((h) => h.trim());
+  const parsedRows = parseCsv(text);
   const rows: TeamMember[] = [];
 
-  for (let i = 1; i < lines.length; i++) {
-    const line = lines[i];
-    if (!line.trim()) continue;
-    const cols = parseCsvRow(line);
-    const row: Record<string, string> = {};
-    headers.forEach((h, idx) => {
-      row[h] = cols[idx] ?? '';
-    });
-
+  for (const row of parsedRows) {
     const normalize = (value: string) => (value || '').trim().replace(/\\n/g, '\n');
     const section = row.section?.trim().toLowerCase() || '';
 
     rows.push({
       section,
-      name: row.name?.trim() || 'Unnamed',
-      email: row.email?.trim() || undefined,
-      image: row.image?.trim() || defaultImage,
-      link: row.link?.trim() || undefined,
+      name: sanitizeText(row.name) || 'Unnamed',
+      email: sanitizeText(row.email) || undefined,
+      image: sanitizeText(row.image) || defaultImage,
+      link: sanitizeText(row.link) || undefined,
       institution: {
         en: normalize(row.institution_en),
         de: normalize(row.institution_de),
@@ -210,7 +174,7 @@ const Team = ({ lang = 'en', setLang }) => {
   const sortedAlumniMembers = grouped.alumni;
 
   return (
-    <div className="min-h-screen bg-[url('/uploads/team-bg.jpg')] bg-cover bg-center">
+    <div className="min-h-screen bg-gray-50">
       <Header lang={lang} setLang={setLang} />
       <main className="pt-16">
         <section className="py-20">
@@ -299,7 +263,7 @@ const Team = ({ lang = 'en', setLang }) => {
                     ×
                   </button>
                   <img src={zoomPhoto} alt="Zoomed team" className="max-w-[90vw] max-h-[80vh] object-contain bg-white rounded shadow" />
-                  <p className="text-center text-sm text-gray-300 mt-3">Eigene Fotos CC BY-SA 4.0 | FSL digital</p>
+                  <p className="text-center text-sm text-gray-300 mt-3">{lang === 'de' ? 'Eigene Fotos CC BY-SA 4.0 | FSL digital' : 'Own photos CC BY-SA 4.0 | FSL digital'}</p>
                 </div>
               </div>
             )}

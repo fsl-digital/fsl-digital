@@ -54,7 +54,7 @@ const Footer = ({ lang = "en" }) => {
               </div>
               <div className="logo-card">
                 <a
-                  href="https://www.adwmainz.de/projekte/historische-fremdsprachenlehrwerke-digital/informationen.html"
+                  href="https://www.bbaw.de/forschung/fsl-digital"
                   target="_blank"
                   rel="noopener noreferrer"
                   aria-label="Akademie der Wissenschaften und der Literatur Mainz - FSL digital"
@@ -95,7 +95,7 @@ const Footer = ({ lang = "en" }) => {
                 </a>
               </div>
               <div className="logo-card">
-                <a href="https://www.adwmainz.de/forschung/projekte/historische-fremdsprachenlehrwerke-digital/informationen.html" target="_blank" rel="noopener noreferrer" aria-label="Technische Universität Darmstadt – FSL digital" className="block w-full h-full flex items-center justify-center">
+                <a href="https://www.bbaw.de/forschung/fsl-digital" target="_blank" rel="noopener noreferrer" aria-label="Technische Universität Darmstadt – FSL digital" className="block w-full h-full flex items-center justify-center">
                   <img 
                     src={getImagePath('/uploads/TU_Darmstadt_Logo.svg')} 
                     alt="Technische Universität Darmstadt" 

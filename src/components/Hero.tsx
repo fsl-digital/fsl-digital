@@ -1,5 +1,6 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { getImagePath } from '@/lib/image-utils';
+import { parseCsv, sanitizeText } from '@/lib/csv';
 
 const content = {
   en: {
@@ -46,42 +47,11 @@ const DEFAULT_CAPTIONS: Record<string, { credits: string; en: string; de: string
   }
 };
 
-const imageFiles = [
+const defaultImageFiles = [
   'Anonym1614Heidelberg.png',
   'TeamfotoBerlin2024.jpg',
   'TeamtreffenHamburg2025.jpg',
 ];
-const images = imageFiles.map((file) => getImagePath(`/uploads/photo/${file}`));
-
-// Simple CSV parser that supports quoted commas and ignores blank lines
-function parseCSV(text: string) {
-  const lines = text.split(/\r?\n/).filter(l => l.trim().length > 0);
-  if (lines.length === 0) return [] as any[];
-  const headers = lines[0].split(',').map(h => h.replace(/^\"|\"$/g, '').trim());
-  const rows: any[] = [];
-  for (const line of lines.slice(1)) {
-    let cur = '';
-    let inQ = false;
-    const cells: string[] = [];
-    for (let i = 0; i < line.length; i++) {
-      const ch = line[i];
-      if (ch === '"') inQ = !inQ; else if (ch === ',' && !inQ) { cells.push(cur); cur = ''; } else cur += ch;
-    }
-    cells.push(cur);
-    if (cells.length >= 1 && cells.some(c => c.trim() !== '')) {
-      const obj: any = {};
-      for (let i = 0; i < headers.length && i < cells.length; i++) {
-        obj[headers[i]] = cells[i].replace(/^\"|\"$/g, '');
-      }
-      rows.push(obj);
-    }
-  }
-  return rows;
-}
-
-function sanitizeText(s: string | undefined) {
-  return (s || '').replace(/<[^>]*>/g, '').trim();
-}
 
 const FADE_DURATION = 1000; // ms
 const SLIDE_INTERVAL = 5000; // ms
@@ -92,12 +62,17 @@ const Hero = ({ lang = "en" }) => {
   const timerRef = useRef(null);
   const [modalOpen, setModalOpen] = useState(false);
   const [captions, setCaptions] = useState<Record<string, { credits: string; en: string; de: string }>>(DEFAULT_CAPTIONS);
+  const [imageFiles, setImageFiles] = useState(defaultImageFiles);
+
+  const images = imageFiles.map((file) => getImagePath(`/uploads/photo/${file}`));
+  const imageCount = imageFiles.length;
 
   // Arrow navigation handlers
   const goTo = (idx) => {
+    if (imageCount === 0) return;
     setFade(true);
     setTimeout(() => {
-      setCurrent((idx + images.length) % images.length);
+      setCurrent((idx + imageCount) % imageCount);
       setFade(false);
     }, FADE_DURATION);
   };
@@ -116,11 +91,11 @@ const Hero = ({ lang = "en" }) => {
     }
   };
   const startTimer = (startIdx = current) => {
-    if (modalOpen) return; // Don't start timer if modal is open
+    if (modalOpen || imageCount <= 1) return; // Don't start timer if modal is open
     timerRef.current = setInterval(() => {
       setFade(true);
       setTimeout(() => {
-        setCurrent((prev) => (prev + 1) % images.length);
+        setCurrent((prev) => (prev + 1) % imageCount);
         setFade(false);
       }, FADE_DURATION);
     }, SLIDE_INTERVAL);
@@ -139,21 +114,27 @@ const Hero = ({ lang = "en" }) => {
     fetch(url)
       .then(r => r.text())
       .then(text => {
-        const rows = parseCSV(text);
+        const rows = parseCsv(text);
         const map: Record<string, { credits: string; en: string; de: string }> = {};
+        const csvImageFiles: string[] = [];
         rows.forEach((r: any) => {
           const name = sanitizeText(r.name || r.filename || r.file);
           if (!name) return;
+          csvImageFiles.push(name);
           map[name] = {
             credits: sanitizeText(r.credits),
             en: sanitizeText(r.en || r.EN || r.english),
             de: sanitizeText(r.de || r.DE || r.german),
           };
         });
+        const nextImageFiles = csvImageFiles.length > 0 ? csvImageFiles : defaultImageFiles;
+        setImageFiles(nextImageFiles);
+        setCurrent((prev) => (nextImageFiles.length > 0 ? prev % nextImageFiles.length : 0));
         setCaptions({ ...DEFAULT_CAPTIONS, ...map });
       })
       .catch(() => {
         // keep defaults on failure
+        setImageFiles(defaultImageFiles);
         setCaptions(DEFAULT_CAPTIONS);
       });
   }, []);
@@ -178,11 +159,13 @@ const Hero = ({ lang = "en" }) => {
 
   // Modal navigation handlers (don't restart timer)
   const handleModalPrev = () => {
-    setCurrent((current - 1 + images.length) % images.length);
+    if (imageCount === 0) return;
+    setCurrent((current - 1 + imageCount) % imageCount);
   };
 
   const handleModalNext = () => {
-    setCurrent((current + 1) % images.length);
+    if (imageCount === 0) return;
+    setCurrent((current + 1) % imageCount);
   };
 
   return (
@@ -194,10 +177,10 @@ const Hero = ({ lang = "en" }) => {
               {content[lang].heading}
             </h1>
             <div className="grid grid-cols-1 lg:grid-cols-[minmax(0,1fr)_32rem] gap-10 items-start">
-              <div className="text-xl text-gray-600 text-justify pt-3 pb-6 lg:pt-3 lg:pb-12">
+              <div className="text-xl text-gray-600 text-justify pb-6 lg:pb-12">
                 {content[lang].description}
               </div>
-              <div className="relative h-[28rem] flex flex-col items-center justify-center group">
+              <div className="relative h-[28rem] flex flex-col items-center justify-start self-start group">
                 {/* Left Arrow */}
                 <button
                   onClick={handlePrev}
