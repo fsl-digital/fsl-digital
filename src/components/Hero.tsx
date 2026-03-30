@@ -56,16 +56,56 @@ const defaultImageFiles = [
 const FADE_DURATION = 1000; // ms
 const SLIDE_INTERVAL = 5000; // ms
 
+const DATE_IN_FILENAME_PATTERN = /(\d{4}-\d{2}-\d{2})/;
+
+const parseFilenameDate = (filename: string) => {
+  const match = filename.match(DATE_IN_FILENAME_PATTERN);
+  if (!match) return null;
+
+  const parsed = Date.parse(match[1]);
+  return Number.isNaN(parsed) ? null : parsed;
+};
+
+const sortImageFiles = (files: string[]) =>
+  [...files].sort((a, b) => {
+    const dateA = parseFilenameDate(a);
+    const dateB = parseFilenameDate(b);
+
+    if (dateA !== null && dateB !== null && dateA !== dateB) {
+      return dateB - dateA;
+    }
+
+    if (dateA !== null && dateB === null) return -1;
+    if (dateA === null && dateB !== null) return 1;
+
+    return a.localeCompare(b);
+  });
+
+const imageExists = (src: string) =>
+  new Promise<boolean>((resolve) => {
+    const img = new Image();
+    img.onload = () => resolve(true);
+    img.onerror = () => resolve(false);
+    img.src = src;
+  });
+
 const Hero = ({ lang = "en" }) => {
   const [current, setCurrent] = useState(0);
   const [fade, setFade] = useState(true);
-  const timerRef = useRef(null);
+  const timerRef = useRef<ReturnType<typeof window.setInterval> | null>(null);
   const [modalOpen, setModalOpen] = useState(false);
   const [captions, setCaptions] = useState<Record<string, { credits: string; en: string; de: string }>>(DEFAULT_CAPTIONS);
   const [imageFiles, setImageFiles] = useState(defaultImageFiles);
 
   const images = imageFiles.map((file) => getImagePath(`/uploads/photo/${file}`));
   const imageCount = imageFiles.length;
+
+  const clearTimer = () => {
+    if (timerRef.current !== null) {
+      clearInterval(timerRef.current);
+      timerRef.current = null;
+    }
+  };
 
   // Arrow navigation handlers
   const goTo = (idx) => {
@@ -77,24 +117,25 @@ const Hero = ({ lang = "en" }) => {
     }, FADE_DURATION);
   };
   const handlePrev = () => {
-    clearInterval(timerRef.current);
+    clearTimer();
     goTo(current - 1);
     if (!modalOpen) {
-      startTimer(current - 1);
+      startTimer();
     }
   };
   const handleNext = () => {
-    clearInterval(timerRef.current);
+    clearTimer();
     goTo(current + 1);
     if (!modalOpen) {
-      startTimer(current + 1);
+      startTimer();
     }
   };
-  const startTimer = (startIdx = current) => {
+  const startTimer = () => {
+    clearTimer();
     if (modalOpen || imageCount <= 1) return; // Don't start timer if modal is open
-    timerRef.current = setInterval(() => {
+    timerRef.current = window.setInterval(() => {
       setFade(true);
-      setTimeout(() => {
+      window.setTimeout(() => {
         setCurrent((prev) => (prev + 1) % imageCount);
         setFade(false);
       }, FADE_DURATION);
@@ -104,32 +145,57 @@ const Hero = ({ lang = "en" }) => {
   useEffect(() => {
     setFade(false); // Ensure first image is visible
     startTimer();
-    return () => clearInterval(timerRef.current);
-    // eslint-disable-next-line
-  }, []);
+    return clearTimer;
+  }, [imageCount, modalOpen]);
 
   // Load captions from CSV (admin-editable); merge over defaults
   useEffect(() => {
+    let cancelled = false;
     const url = getImagePath('/uploads/photo/caption.csv');
     fetch(url)
       .then(r => r.text())
-      .then(text => {
+      .then(async (text) => {
         const rows = parseCsv(text);
         const map: Record<string, { credits: string; en: string; de: string }> = {};
-        const csvImageFiles: string[] = [];
+        const csvImageFiles = new Set<string>();
+
         rows.forEach((r: any) => {
           const name = sanitizeText(r.name || r.filename || r.file);
           if (!name) return;
-          csvImageFiles.push(name);
+
+          const credits = sanitizeText(r.credits);
+          const en = sanitizeText(r.en || r.EN || r.english);
+          const de = sanitizeText(r.de || r.DE || r.german);
+
+          if (!credits && !en && !de) return;
+
+          csvImageFiles.add(name);
           map[name] = {
-            credits: sanitizeText(r.credits),
-            en: sanitizeText(r.en || r.EN || r.english),
-            de: sanitizeText(r.de || r.DE || r.german),
+            credits,
+            en,
+            de,
           };
         });
-        const nextImageFiles = csvImageFiles.length > 0 ? csvImageFiles : defaultImageFiles;
-        setImageFiles(nextImageFiles);
-        setCurrent((prev) => (nextImageFiles.length > 0 ? prev % nextImageFiles.length : 0));
+
+        const candidateFiles = csvImageFiles.size > 0 ? sortImageFiles(Array.from(csvImageFiles)) : defaultImageFiles;
+        const validatedFiles = await Promise.all(
+          candidateFiles.map(async (file) => ({
+            file,
+            exists: await imageExists(getImagePath(`/uploads/photo/${file}`)),
+          }))
+        );
+
+        if (cancelled) return;
+
+        const nextImageFiles = validatedFiles
+          .filter(({ exists }) => exists)
+          .map(({ file }) => file);
+
+        setImageFiles(nextImageFiles.length > 0 ? nextImageFiles : defaultImageFiles);
+        setCurrent((prev) => {
+          const safeLength = nextImageFiles.length > 0 ? nextImageFiles.length : defaultImageFiles.length;
+          return safeLength > 0 ? prev % safeLength : 0;
+        });
         setCaptions({ ...DEFAULT_CAPTIONS, ...map });
       })
       .catch(() => {
@@ -137,12 +203,16 @@ const Hero = ({ lang = "en" }) => {
         setImageFiles(defaultImageFiles);
         setCaptions(DEFAULT_CAPTIONS);
       });
+
+    return () => {
+      cancelled = true;
+    };
   }, []);
 
   // Modal handlers
   const handleModalOpen = () => {
     setModalOpen(true);
-    clearInterval(timerRef.current); // Pause auto-rotation
+    clearTimer(); // Pause auto-rotation
   };
 
   const handleModalClose = (e) => {
