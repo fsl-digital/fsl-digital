@@ -76,3 +76,18 @@ export function normalizeCsvValue(value: string) {
 export function sanitizeText(value: string | undefined) {
   return (value || "").replace(/<[^>]*>/g, "").trim();
 }
+
+function escapeHtml(value: string) {
+  return value
+    .replace(/&/g, "&amp;")
+    .replace(/</g, "&lt;")
+    .replace(/>/g, "&gt;")
+    .replace(/"/g, "&quot;")
+    .replace(/'/g, "&#39;");
+}
+
+export function sanitizeInlineFormatting(value: string | undefined) {
+  const escaped = escapeHtml((value || "").trim());
+
+  return escaped.replace(/&lt;(\/?)(b|i|u)&gt;/gi, "<$1$2>");
+}

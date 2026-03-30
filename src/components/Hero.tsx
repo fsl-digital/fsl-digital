@@ -1,6 +1,4 @@
-import React, { useState, useEffect, useRef } from 'react';
-import { getImagePath } from '@/lib/image-utils';
-import { parseCsv, sanitizeText } from '@/lib/csv';
+import PhotoSlideshow from '@/components/PhotoSlideshow';
 
 const content = {
   en: {
@@ -28,7 +26,6 @@ The project aims to explore and examine the practical forms of teaching knowledg
   }
 };
 
-// Default captions for each image (used as fallback)
 const DEFAULT_CAPTIONS: Record<string, { credits: string; en: string; de: string }> = {
   'TeamfotoBerlin2024.jpg': {
     credits: '(c) FSL digital',
@@ -53,191 +50,7 @@ const defaultImageFiles = [
   'TeamtreffenHamburg2025.jpg',
 ];
 
-const FADE_DURATION = 1000; // ms
-const SLIDE_INTERVAL = 5000; // ms
-
-const DATE_IN_FILENAME_PATTERN = /(\d{4}-\d{2}-\d{2})/;
-
-const parseFilenameDate = (filename: string) => {
-  const match = filename.match(DATE_IN_FILENAME_PATTERN);
-  if (!match) return null;
-
-  const parsed = Date.parse(match[1]);
-  return Number.isNaN(parsed) ? null : parsed;
-};
-
-const sortImageFiles = (files: string[]) =>
-  [...files].sort((a, b) => {
-    const dateA = parseFilenameDate(a);
-    const dateB = parseFilenameDate(b);
-
-    if (dateA !== null && dateB !== null && dateA !== dateB) {
-      return dateB - dateA;
-    }
-
-    if (dateA !== null && dateB === null) return -1;
-    if (dateA === null && dateB !== null) return 1;
-
-    return a.localeCompare(b);
-  });
-
-const imageExists = (src: string) =>
-  new Promise<boolean>((resolve) => {
-    const img = new Image();
-    img.onload = () => resolve(true);
-    img.onerror = () => resolve(false);
-    img.src = src;
-  });
-
 const Hero = ({ lang = "en" }) => {
-  const [current, setCurrent] = useState(0);
-  const [fade, setFade] = useState(true);
-  const timerRef = useRef<ReturnType<typeof window.setInterval> | null>(null);
-  const [modalOpen, setModalOpen] = useState(false);
-  const [captions, setCaptions] = useState<Record<string, { credits: string; en: string; de: string }>>(DEFAULT_CAPTIONS);
-  const [imageFiles, setImageFiles] = useState(defaultImageFiles);
-
-  const images = imageFiles.map((file) => getImagePath(`/uploads/photo/${file}`));
-  const imageCount = imageFiles.length;
-
-  const clearTimer = () => {
-    if (timerRef.current !== null) {
-      clearInterval(timerRef.current);
-      timerRef.current = null;
-    }
-  };
-
-  // Arrow navigation handlers
-  const goTo = (idx) => {
-    if (imageCount === 0) return;
-    setFade(true);
-    setTimeout(() => {
-      setCurrent((idx + imageCount) % imageCount);
-      setFade(false);
-    }, FADE_DURATION);
-  };
-  const handlePrev = () => {
-    clearTimer();
-    goTo(current - 1);
-    if (!modalOpen) {
-      startTimer();
-    }
-  };
-  const handleNext = () => {
-    clearTimer();
-    goTo(current + 1);
-    if (!modalOpen) {
-      startTimer();
-    }
-  };
-  const startTimer = () => {
-    clearTimer();
-    if (modalOpen || imageCount <= 1) return; // Don't start timer if modal is open
-    timerRef.current = window.setInterval(() => {
-      setFade(true);
-      window.setTimeout(() => {
-        setCurrent((prev) => (prev + 1) % imageCount);
-        setFade(false);
-      }, FADE_DURATION);
-    }, SLIDE_INTERVAL);
-  };
-
-  useEffect(() => {
-    setFade(false); // Ensure first image is visible
-    startTimer();
-    return clearTimer;
-  }, [imageCount, modalOpen]);
-
-  // Load captions from CSV (admin-editable); merge over defaults
-  useEffect(() => {
-    let cancelled = false;
-    const url = getImagePath('/uploads/photo/caption.csv');
-    fetch(url)
-      .then(r => r.text())
-      .then(async (text) => {
-        const rows = parseCsv(text);
-        const map: Record<string, { credits: string; en: string; de: string }> = {};
-        const csvImageFiles = new Set<string>();
-
-        rows.forEach((r: any) => {
-          const name = sanitizeText(r.name || r.filename || r.file);
-          if (!name) return;
-
-          const credits = sanitizeText(r.credits);
-          const en = sanitizeText(r.en || r.EN || r.english);
-          const de = sanitizeText(r.de || r.DE || r.german);
-
-          if (!credits && !en && !de) return;
-
-          csvImageFiles.add(name);
-          map[name] = {
-            credits,
-            en,
-            de,
-          };
-        });
-
-        const candidateFiles = csvImageFiles.size > 0 ? sortImageFiles(Array.from(csvImageFiles)) : defaultImageFiles;
-        const validatedFiles = await Promise.all(
-          candidateFiles.map(async (file) => ({
-            file,
-            exists: await imageExists(getImagePath(`/uploads/photo/${file}`)),
-          }))
-        );
-
-        if (cancelled) return;
-
-        const nextImageFiles = validatedFiles
-          .filter(({ exists }) => exists)
-          .map(({ file }) => file);
-
-        setImageFiles(nextImageFiles.length > 0 ? nextImageFiles : defaultImageFiles);
-        setCurrent((prev) => {
-          const safeLength = nextImageFiles.length > 0 ? nextImageFiles.length : defaultImageFiles.length;
-          return safeLength > 0 ? prev % safeLength : 0;
-        });
-        setCaptions({ ...DEFAULT_CAPTIONS, ...map });
-      })
-      .catch(() => {
-        // keep defaults on failure
-        setImageFiles(defaultImageFiles);
-        setCaptions(DEFAULT_CAPTIONS);
-      });
-
-    return () => {
-      cancelled = true;
-    };
-  }, []);
-
-  // Modal handlers
-  const handleModalOpen = () => {
-    setModalOpen(true);
-    clearTimer(); // Pause auto-rotation
-  };
-
-  const handleModalClose = (e) => {
-    if (e.target.classList.contains('modal-bg')) {
-      setModalOpen(false);
-      startTimer(); // Resume auto-rotation
-    }
-  };
-
-  const handleModalCloseButton = () => {
-    setModalOpen(false);
-    startTimer(); // Resume auto-rotation
-  };
-
-  // Modal navigation handlers (don't restart timer)
-  const handleModalPrev = () => {
-    if (imageCount === 0) return;
-    setCurrent((current - 1 + imageCount) % imageCount);
-  };
-
-  const handleModalNext = () => {
-    if (imageCount === 0) return;
-    setCurrent((current + 1) % imageCount);
-  };
-
   return (
     <section id="about" className="py-20 bg-gray-50">
       <div className="container-custom">
@@ -250,91 +63,16 @@ const Hero = ({ lang = "en" }) => {
               <div className="text-xl text-gray-600 text-justify pb-6 lg:pb-12">
                 {content[lang].description}
               </div>
-              <div className="relative h-[28rem] flex flex-col items-center justify-start self-start group">
-                {/* Left Arrow */}
-                <button
-                  onClick={handlePrev}
-                  className="absolute left-2 top-1/2 -translate-y-1/2 bg-white bg-opacity-70 hover:bg-primary hover:text-white text-3xl rounded-full w-12 h-12 flex items-center justify-center shadow transition-all opacity-0 group-hover:opacity-100 z-20"
-                  aria-label="Previous photo"
-                  style={{ outline: 'none', border: 'none' }}
-                >
-                  {'<'}
-                </button>
-                {/* Image */}
-                <img
-                  src={images[current]}
-                  alt="slide"
-                  className={`w-[32rem] h-[24rem] object-cover bg-white shadow-lg transition-opacity duration-1000 ${fade ? 'opacity-0' : 'opacity-100'} cursor-zoom-in`}
-                  style={{ borderRadius: 0 }}
-                  onClick={handleModalOpen}
-                />
-                {/* Caption and credits */}
-                <div className="text-center mt-2 text-xs text-gray-700">
-                  <span>{captions[imageFiles[current]]?.[lang]}</span>
-                  <br />
-                  <span className="italic text-gray-500">{captions[imageFiles[current]]?.credits}</span>
-                </div>
-                {/* Right Arrow */}
-                <button
-                  onClick={handleNext}
-                  className="absolute right-2 top-1/2 -translate-y-1/2 bg-white bg-opacity-70 hover:bg-primary hover:text-white text-3xl rounded-full w-12 h-12 flex items-center justify-center shadow transition-all opacity-0 group-hover:opacity-100 z-20"
-                  aria-label="Next photo"
-                  style={{ outline: 'none', border: 'none' }}
-                >
-                  {'>'}
-                </button>
-              </div>
+              <PhotoSlideshow
+                lang={lang}
+                csvPath="/uploads/photo/caption.csv"
+                defaultCaptions={DEFAULT_CAPTIONS}
+                defaultImageFiles={defaultImageFiles}
+              />
             </div>
           </div>
         </div>
       </div>
-      {/* Modal for zoomed image */}
-      {modalOpen && (
-        <div
-          className="modal-bg fixed inset-0 bg-black bg-opacity-80 flex items-center justify-center z-50"
-          onClick={handleModalClose}
-        >
-          <div className="relative">
-            {/* Left Arrow in Modal */}
-            <button
-              onClick={handleModalPrev}
-              className="absolute left-2 top-1/2 -translate-y-1/2 bg-white bg-opacity-70 hover:bg-primary hover:text-white text-3xl rounded-full w-10 h-10 flex items-center justify-center shadow z-10"
-              aria-label="Previous photo"
-              style={{ outline: 'none', border: 'none' }}
-            >
-              {'<'}
-            </button>
-            {/* Close Button */}
-            <button
-              className="absolute top-2 right-2 text-white text-3xl bg-black bg-opacity-50 rounded-full w-10 h-10 flex items-center justify-center z-10 hover:bg-opacity-80"
-              onClick={handleModalCloseButton}
-              aria-label="Close"
-            >
-              &times;
-            </button>
-            <img
-              src={images[current]}
-              alt="zoomed slide"
-              className="max-w-[90vw] max-h-[80vh] object-contain bg-white rounded shadow-lg"
-            />
-            {/* Caption and credits in modal */}
-            <div className="text-center mt-4 text-base text-white">
-              <span>{captions[imageFiles[current]]?.[lang]}</span>
-              <br />
-              <span className="italic text-gray-300">{captions[imageFiles[current]]?.credits}</span>
-            </div>
-            {/* Right Arrow in Modal */}
-            <button
-              onClick={handleModalNext}
-              className="absolute right-2 top-1/2 -translate-y-1/2 bg-white bg-opacity-70 hover:bg-primary hover:text-white text-3xl rounded-full w-10 h-10 flex items-center justify-center shadow z-10"
-              aria-label="Next photo"
-              style={{ outline: 'none', border: 'none' }}
-            >
-              {'>'}
-            </button>
-          </div>
-        </div>
-      )}
     </section>
   );
 };

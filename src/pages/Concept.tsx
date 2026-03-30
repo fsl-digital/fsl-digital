@@ -1,6 +1,7 @@
 import React from 'react';
 import Header from '@/components/Header';
 import Footer from '@/components/Footer';
+import PhotoSlideshow from '@/components/PhotoSlideshow';
 
 const advisoryBoardMembers = [
   'Prof. Dr. Vera Demberg',
@@ -48,6 +49,16 @@ const Concept = ({ lang = 'en', setLang }) => {
                       Im Vorhaben werden die praktischen Formen der Vermittlung des Wissens über die Volkssprachen vor allem der mündlichkeitsnahen Alltagskommunikation im mehrsprachigen Kontext des frühneuzeitlichen Europa anhand der Fremdsprachenlehrwerke (FSL) erschlossen und erforscht. Aus sprachhistorischer Perspektive lohnt die Untersuchung von Fremdsprachenlehrwerken deshalb, weil die vormodernen Vernakulare in ihrem schriftlichen Code gerade erst im Entstehen begriffen sind: Nicht nur zwischen Werken verschiedener Autoren, sondern auch innerhalb einzelner Sprachbücher lässt sich ein großer Variantenreichtum konstatieren, der die Notwendigkeit von Normierungsbemühungen unterstreicht, die im Vorhaben Gegenstand von Analysen werden. Auch Neuauflagen liefern spannende Informationen über sprachhistorische Prozesse. Für einen breiten und ungehinderten Zugang sollen die Sprachbücher vollständig digitalisiert, nachhaltig aufbereitet, philologisch tief bearbeitet und für weitere wissenschaftliche Analysen bereitgestellt werden. Damit wird es möglich sein, die historischen Wurzeln der heutigen Mehrsprachigkeit in Europa aus der Perspektive alltagssprachlicher Praxis des Fremdsprachenerwerbs und der Fremdsprachen- und Wissensvermittlung in der Frühen Neuzeit zu ergründen.
                     </p>
                   </div>
+                </article>
+
+                <article className="bg-white rounded-xl shadow border border-gray-200 p-6">
+                  <PhotoSlideshow
+                    lang={lang}
+                    csvPath="/uploads/photo/project.csv"
+                    wrapperClassName="relative flex flex-col items-center justify-start group"
+                    imageClassName="w-full max-w-4xl h-[20rem] sm:h-[24rem] object-contain bg-white shadow-lg"
+                    captionClassName="text-center mt-4 text-sm text-gray-700"
+                  />
                 </article>
 
                 <article className="bg-white rounded-xl shadow border border-gray-200 p-6">
@@ -115,6 +126,16 @@ const Concept = ({ lang = 'en', setLang }) => {
                       The project aims to identify and examine the practical forms in which knowledge about the vernacular languages—above all, everyday communication close to orality—was conveyed in the multilingual context of early modern Europe, using foreign-language textbooks (FSL) as its sources. From a historical‑linguistic perspective these textbooks are especially worthwhile objects of study because the pre‑modern vernaculars were only just emerging in written form: not only across the works of different authors, but also within individual textbooks, we find a high degree of variation that underscores the need for standardization efforts, which are themselves a subject of investigation in this project. New editions likewise provide valuable insights into language‑historical processes. To ensure broad and unhindered access, the textbooks will be fully digitized, sustainably processed, and subjected to in‑depth philological analysis, and then made available for further scholarly work. In this way it becomes possible to explore the historical roots of present‑day multilingualism in Europe from the perspective of everyday language practice in foreign‑language learning and in the transmission of language and knowledge in the early modern period.
                     </p>
                   </div>
+                </article>
+
+                <article className="bg-white rounded-xl shadow border border-gray-200 p-6">
+                  <PhotoSlideshow
+                    lang={lang}
+                    csvPath="/uploads/photo/project.csv"
+                    wrapperClassName="relative flex flex-col items-center justify-start group"
+                    imageClassName="w-full max-w-4xl h-[20rem] sm:h-[24rem] object-contain bg-white shadow-lg"
+                    captionClassName="text-center mt-4 text-sm text-gray-700"
+                  />
                 </article>
 
                 <article className="bg-white rounded-xl shadow border border-gray-200 p-6">

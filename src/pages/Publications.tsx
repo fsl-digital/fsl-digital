@@ -1,7 +1,17 @@
 import React, { useEffect, useState } from 'react';
 import Header from '@/components/Header';
 import Footer from '@/components/Footer';
-import { parseCsv, sanitizeText } from '@/lib/csv';
+import { parseCsv, sanitizeInlineFormatting, sanitizeText } from '@/lib/csv';
+
+function normalizeAuthorSortKey(authors: string | undefined) {
+  return (authors || '')
+    .normalize('NFD')
+    .replace(/[\u0300-\u036f]/g, '')
+    .replace(/\([^)]*\)/g, '')
+    .replace(/\s+/g, ' ')
+    .trim()
+    .toLocaleLowerCase();
+}
 
 const Publications = ({ lang = 'en', setLang }) => {
   const [items, setItems] = useState<any[]>([]);
@@ -36,10 +46,22 @@ const Publications = ({ lang = 'en', setLang }) => {
             });
           } catch {}
         }
+        const collator = new Intl.Collator(lang === 'de' ? 'de' : 'en', {
+          numeric: true,
+          sensitivity: 'base',
+        });
+
         const sorted = merged.sort((a, b) => {
-          const yearCompare = (b.year || '').localeCompare(a.year || '');
+          const yearCompare = collator.compare(b.year || '', a.year || '');
           if (yearCompare !== 0) return yearCompare;
-          return (a.authors || '').localeCompare(b.authors || '');
+
+          const authorCompare = collator.compare(
+            normalizeAuthorSortKey(a.authors),
+            normalizeAuthorSortKey(b.authors),
+          );
+          if (authorCompare !== 0) return authorCompare;
+
+          return collator.compare(a.title || '', b.title || '');
         });
         setItems(sorted);
         setLoading(false);
@@ -78,14 +100,14 @@ const Publications = ({ lang = 'en', setLang }) => {
             ) : (
               <div className="bg-white border border-gray-200 p-8 rounded-lg shadow-md">
                 {items.map((p, idx) => {
-                  const title = sanitizeText(p.title);
-                  const venue = sanitizeText(p.venue);
-                  const note = sanitizeText(p.note);
+                  const title = (p.title || '').trim();
+                  const venue = (p.venue || '').trim();
+                  const note = (p.note || '').trim();
                   const noteSuffix = note ? ` ${note}` : '';
                   const detailParts = [] as string[];
                   if (title) detailParts.push(`"${title}"`);
                   if (venue) detailParts.push(venue);
-                  const detail = `${detailParts.join('. ')}${noteSuffix}`.trim();
+                  const detail = sanitizeInlineFormatting(`${detailParts.join('. ')}${noteSuffix}`.trim());
                   const doiRaw = sanitizeText(p.doi);
                   const url = sanitizeText(p.url);
                   const doiIsLink = doiRaw ? doiRaw.startsWith('https://doi.org/') : false;
@@ -105,11 +127,11 @@ const Publications = ({ lang = 'en', setLang }) => {
                             target="_blank"
                             rel="noopener noreferrer"
                             className="hover:text-blue-700"
+                            dangerouslySetInnerHTML={{ __html: detail }}
                           >
-                            {detail}
                           </a>
                         ) : (
-                          <span>{detail}</span>
+                          <span dangerouslySetInnerHTML={{ __html: detail }} />
                         )}
                       </div>
                       {doiRaw && (
