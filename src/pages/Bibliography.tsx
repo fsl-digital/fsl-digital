@@ -1,230 +1,297 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useMemo } from 'react';
 import Header from '@/components/Header';
 import Footer from '@/components/Footer';
 import { parseCsv, sanitizeText } from '@/lib/csv';
 
+const CSV_FILES = [
+  'export-data_1.csv',
+  'export-data_2.csv',
+  'export-data_3.csv',
+  'export-data_4.csv',
+];
+
+const PREVIEW_ROWS = 10;
+
+const COLUMNS = [
+  { key: 'Author',            label: { en: 'Author',            de: 'Autor' } },
+  { key: 'Publication Year',  label: { en: 'Publication Year',  de: 'Jahr' } },
+  { key: 'Title',             label: { en: 'Title',             de: 'Titel' } },
+  { key: 'Publication Title', label: { en: 'Publication Title', de: 'Publikationstitel' } },
+  { key: 'Volume',            label: { en: 'Volume',            de: 'Band' } },
+  { key: 'Issue',             label: { en: 'Issue',             de: 'Heft' } },
+  { key: 'Pages',             label: { en: 'Pages',             de: 'Seiten' } },
+  { key: 'Place',             label: { en: 'Place',             de: 'Ort' } },
+  { key: 'DOI',               label: { en: 'DOI',               de: 'DOI' } },
+];
+
+/* ── Helpers ── */
+const getDoiHref = (doi: string) => {
+  if (!doi) return '';
+  const cleaned = doi.replace(/^DOI:\s*/i, '').trim();
+  if (!cleaned) return '';
+  return cleaned.startsWith('http') ? cleaned : `https://doi.org/${cleaned}`;
+};
+
+const getDoiText = (doi: string) =>
+  doi.replace(/^DOI:\s*/i, '').replace(/https?:\/\/(dx\.)?doi\.org\//i, '').trim();
+
+const renderAuthors = (author: string) => {
+  if (!author) return <span className="text-gray-400">—</span>;
+  return (
+    <>
+      {author.split(';').map((p, i) => (
+        <span key={i} className="block">{sanitizeText(p.trim())}</span>
+      ))}
+    </>
+  );
+};
+
+const SortIcon = ({ col, sortKey, sortDir }: { col: string; sortKey: string; sortDir: string }) => (
+  <span className={`ml-1 text-xs ${sortKey === col ? 'opacity-100' : 'opacity-30'}`}>
+    {sortKey === col ? (sortDir === 'asc' ? '▲' : '▼') : '↕'}
+  </span>
+);
+
+/* ── Page ── */
 const Bibliography = ({ lang = 'en', setLang }) => {
-  const [entries, setEntries] = useState<any[]>([]);
-  const [sortKey, setSortKey] = useState<string>('Author');
-  const [sortDir, setSortDir] = useState<'asc' | 'desc'>('asc');
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState('');
-  const [maskLinks, setMaskLinks] = useState(true);
+  const [entries,  setEntries]  = useState<any[]>([]);
+  const [sortKey,  setSortKey]  = useState('Publication Year');
+  const [sortDir,  setSortDir]  = useState<'asc' | 'desc'>('desc');
+  const [loading,  setLoading]  = useState(true);
+  const [error,    setError]    = useState('');
+  const [search,   setSearch]   = useState('');
+  const [showAll,  setShowAll]  = useState(false);
 
   useEffect(() => {
     setLoading(true);
     setError('');
-    const file = `bibliography_${lang}.csv`;
-    fetch(`${import.meta.env.BASE_URL}uploads/bibliography/zotero/${file}`)
-      .then(res => {
-        if (!res.ok) throw new Error('Network response was not ok');
-        return res.text();
-      })
-      .then(text => {
-        const parsed = parseCsv(text);
-        setEntries(parsed);
-        setLoading(false);
-      })
-      .catch(() => {
-        setError(lang === 'de' ? 'Bibliographie konnte nicht geladen werden.' : 'Failed to load bibliography.');
-        setLoading(false);
-      });
-  }, [lang]);
-
-  const labels = lang === 'de'
-    ? { author: 'Autor', year: 'Publikationsjahr', title: 'Titel', doi: 'DOI', url: 'URL', mask: 'DOI/URL verbergen', show: 'DOI/URL anzeigen', openDoi: 'DOI öffnen', openUrl: 'Link öffnen' }
-    : { author: 'Author', year: 'Publication Year', title: 'Title', doi: 'DOI', url: 'URL', mask: 'Hide DOI/URL', show: 'Show DOI/URL', openDoi: 'Open DOI', openUrl: 'Open Link' };
-
-  const getDoiLink = (doi: string) => {
-    if (!doi) return '';
-    const cleaned = doi.replace(/^DOI:\s*/i, '').trim();
-    if (!cleaned) return '';
-    // If it already looks like a URL, use it; otherwise prefix with doi.org
-    return cleaned.startsWith('http') ? cleaned : `https://doi.org/${cleaned}`;
-  };
-
-  const getDoiText = (doi: string) => {
-    if (!doi) return '';
-    return doi
-      .replace(/^DOI:\s*/i, '')
-      .replace(/https?:\/\/(dx\.)?doi\.org\//i, '')
-      .trim();
-  };
-
-  const renderAuthors = (author: string) => {
-    if (!author) return '';
-    const parts = author.split(';');
-    return (
-      <span className="whitespace-pre-wrap">
-        {parts.map((p, i) => (
-          <React.Fragment key={i}>
-            <span>{sanitizeText(p.trim())}</span>
-            {i < parts.length - 1 && <br />}
-          </React.Fragment>
-        ))}
-      </span>
-    );
-  };
+    const base = `${import.meta.env.BASE_URL}uploads/bibliography/zotero/`;
+    Promise.all(
+      CSV_FILES.map(f =>
+        fetch(base + f)
+          .then(r => (r.ok ? r.text() : Promise.reject(f)))
+          .then(text => parseCsv(text))
+          .catch(() => [] as any[])
+      )
+    ).then(results => {
+      const seen = new Set<string>();
+      const merged: any[] = [];
+      for (const rows of results) {
+        for (const row of rows) {
+          const key = row['Key'] || JSON.stringify(row);
+          if (!seen.has(key)) { seen.add(key); merged.push(row); }
+        }
+      }
+      setEntries(merged);
+      setLoading(false);
+    }).catch(() => {
+      setError(lang === 'de' ? 'Bibliographie konnte nicht geladen werden.' : 'Failed to load bibliography.');
+      setLoading(false);
+    });
+  }, []);
 
   const requestSort = (key: string) => {
-    setSortKey((prev) => {
-      if (prev === key) {
-        setSortDir((d) => (d === 'asc' ? 'desc' : 'asc'));
-        return prev;
-      }
-      setSortDir('asc');
-      return key;
-    });
+    if (sortKey === key) setSortDir(d => d === 'asc' ? 'desc' : 'asc');
+    else { setSortKey(key); setSortDir('asc'); }
   };
 
-  const getCellValue = (row: any, key: string) => {
-    if (key === 'Publication Year') {
-      const n = parseInt(row[key], 10);
-      return isNaN(n) ? null : n;
-    }
-    return (row[key] || '').toString().toLowerCase();
-  };
+  const filtered = useMemo(() => {
+    if (!search.trim()) return entries;
+    const q = search.toLowerCase();
+    return entries.filter(row => COLUMNS.some(c => (row[c.key] || '').toString().toLowerCase().includes(q)));
+  }, [entries, search]);
 
-  const sortedEntries = React.useMemo(() => {
-    const data = [...entries];
+  const sorted = useMemo(() => {
     const dir = sortDir === 'asc' ? 1 : -1;
-    return data.sort((a, b) => {
-      const av = getCellValue(a, sortKey);
-      const bv = getCellValue(b, sortKey);
-
-      const aEmpty = av === '' || av === null;
-      const bEmpty = bv === '' || bv === null;
-      if (aEmpty && !bEmpty) return 1;
-      if (!aEmpty && bEmpty) return -1;
-      if (aEmpty && bEmpty) return 0;
-
-      if (typeof av === 'number' && typeof bv === 'number') {
-        return (av - bv) * dir;
-      }
+    return [...filtered].sort((a, b) => {
+      const av = sortKey === 'Publication Year' ? parseInt(a[sortKey], 10) || 0 : (a[sortKey] || '').toString().toLowerCase();
+      const bv = sortKey === 'Publication Year' ? parseInt(b[sortKey], 10) || 0 : (b[sortKey] || '').toString().toLowerCase();
+      if (av === '' || av === 0) return 1;
+      if (bv === '' || bv === 0) return -1;
+      if (typeof av === 'number') return (av - (bv as number)) * dir;
       return (av as string).localeCompare(bv as string) * dir;
     });
-  }, [entries, sortKey, sortDir]);
+  }, [filtered, sortKey, sortDir]);
 
-  const SortIcon = ({ col }: { col: string }) => (
-    <span className={`ml-1 inline-block text-xs ${sortKey === col ? 'opacity-100' : 'opacity-40'}`}>
-      {sortKey === col ? (sortDir === 'asc' ? '▲' : '▼') : '↕'}
-    </span>
-  );
+  const visibleRows = showAll ? sorted : sorted.slice(0, PREVIEW_ROWS);
 
   return (
     <div className="min-h-screen flex flex-col">
       <Header lang={lang} setLang={setLang} />
       <main className="pt-16">
         <section className="py-20">
+
+          {/* ── Header ── */}
           <div className="container-custom">
             <h1 className="text-4xl font-bold text-center mb-12">
               {lang === 'de' ? 'Projektbibliographie' : 'Project Bibliography'}
             </h1>
-            {lang === 'en' && (
-              <div className="mt-8 mb-12 bg-gray-50 border-l-4 border-primary p-8 rounded-r-lg text-left">
-                <p className="text-lg leading-relaxed text-gray-700">
-                  A curated overview of relevant literature on historical foreign language textbooks, their reception history, and their intellectual traditions. It serves as a starting point for further research and documents key sources and studies on the history of language, conceptions of language, and everyday communication in the context of multilingualism in early modern Europe.
-                </p>
-              </div>
-            )}
-            {lang === 'de' && (
-              <div className="mt-8 mb-12 bg-gray-50 border-l-4 border-primary p-8 rounded-r-lg text-left">
-                <p className="text-lg leading-relaxed text-gray-700">
-                  Eine kuratierte Übersicht relevanter Literatur zu historischen Fremdsprachenlehrwerken, deren Rezeptionsgeschichte und Traditionslinien. Sie dient als Einstiegspunkt für vertiefende Recherche und dokumentiert zentrale Quellen und Studien zu Sprachgeschichte, Sprachvorstellungen und Alltagskommunikation im Kontext der Mehrsprachigkeit im Europa der Frühen Neuzeit.
-                </p>
-              </div>
-            )}
+
+            <div className="mt-8 mb-10 bg-gray-50 border-l-4 border-primary p-8 rounded-r-lg text-left">
+              <p className="text-lg leading-relaxed text-gray-700">
+                {lang === 'de' ? (
+                  <>
+                    Eine kuratierte Übersicht relevanter Literatur zu historischen Fremdsprachenlehrwerken, deren Rezeptionsgeschichte und Traditionslinien. Sie dient als Einstiegspunkt für vertiefende Recherche und dokumentiert zentrale Quellen und Studien zu Sprachgeschichte, Sprachvorstellungen und Alltagskommunikation im Kontext der Mehrsprachigkeit im Europa der Frühen Neuzeit. Eine Bibliographie der Titel aus der folgenden Tabelle steht{' '}
+                    <a href={`${import.meta.env.BASE_URL}uploads/bibliography/FSLdigital_Sekundärliteratur_202606.pdf`} download className="text-red-600 font-semibold underline underline-offset-2 hover:text-red-800">hier</a>
+                    {' '}zum Download zur Verfügung.
+                  </>
+                ) : (
+                  <>
+                    A curated overview of relevant literature on historical foreign language textbooks, their reception history, and their intellectual traditions. It serves as a starting point for further research and documents key sources and studies on the history of language, conceptions of language, and everyday communication in the context of multilingualism in early modern Europe. A bibliography of the titles listed in the table below is available for download{' '}
+                    <a href={`${import.meta.env.BASE_URL}uploads/bibliography/FSLdigital_Sekundärliteratur_202606.pdf`} download className="text-red-600 font-semibold underline underline-offset-2 hover:text-red-800">here</a>.
+                  </>
+                )}
+              </p>
+            </div>
+
+          </div>
+
+          {/* ── Table section (full width) ── */}
+          <div className="w-full px-4 sm:px-6 lg:px-8">
             {loading ? (
-              <p className="text-gray-600 text-center mb-6">Loading...</p>
+              <p className="text-gray-600 text-center py-12">{lang === 'de' ? 'Wird geladen…' : 'Loading…'}</p>
             ) : error ? (
-              <p className="text-red-600 text-center mb-6">{error}</p>
-            ) : entries.length === 0 ? (
-              <p className="text-gray-600 text-center mb-6">No bibliography entries found.</p>
+              <p className="text-red-600 text-center py-12">{error}</p>
             ) : (
-              <div className="w-full max-w-6xl mx-auto">
-                <div className="flex items-center justify-end mb-3 px-1">
-                  <button
-                    type="button"
-                    onClick={() => setMaskLinks(v => !v)}
-                    className="inline-flex items-center gap-2 px-3 py-1.5 text-sm rounded border border-gray-300 bg-white hover:bg-gray-50 text-gray-700"
-                    aria-pressed={!maskLinks}
-                    aria-label={maskLinks ? labels.show : labels.mask}
-                  >
-                    <span className="inline-block w-2 h-2 rounded-full" style={{ backgroundColor: maskLinks ? '#6B7280' : '#10B981' }} />
-                    {maskLinks ? labels.show : labels.mask}
-                  </button>
+              <div className="w-full">
+
+                {/* ── Centered search ── */}
+                <div className="flex flex-col items-center gap-2 mb-6">
+                  <div className="relative w-full max-w-lg">
+                    <svg className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400" xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+                    <input
+                      type="search"
+                      value={search}
+                      onChange={e => { setSearch(e.target.value); setShowAll(false); }}
+                      placeholder={lang === 'de' ? 'Suche in allen Feldern…' : 'Search all fields…'}
+                      className="w-full pl-10 pr-4 py-2.5 text-sm border border-gray-300 rounded-xl shadow-sm focus:outline-none focus:ring-2 focus:ring-primary"
+                    />
+                  </div>
+                  <span className="text-xs text-gray-400">
+                    {sorted.length} {lang === 'de' ? 'Einträge' : 'entries'}
+                    {search && ` ${lang === 'de' ? 'gefunden' : 'found'}`}
+                  </span>
                 </div>
-                <div className="overflow-x-auto rounded-xl shadow border border-gray-200">
-                  <table className="min-w-full table-fixed bg-white divide-y divide-gray-200">
-                    <thead className="bg-gray-50">
+
+                {/* ── Table ── */}
+                <div className="overflow-auto rounded-xl shadow border border-gray-200" style={{ maxHeight: '75vh' }}>
+                  <table className="w-full bg-white divide-y divide-gray-200 text-sm" style={{ minWidth: '1100px' }}>
+                    <colgroup>
+                      <col style={{ width: '160px' }} />
+                      <col style={{ width: '80px' }} />
+                      <col style={{ width: '260px' }} />
+                      <col style={{ width: '180px' }} />
+                      <col style={{ width: '70px' }} />
+                      <col style={{ width: '60px' }} />
+                      <col style={{ width: '90px' }} />
+                      <col style={{ width: '110px' }} />
+                      <col style={{ width: '90px' }} />
+                    </colgroup>
+                    <thead className="bg-gray-50 sticky top-0 z-10">
                       <tr>
-                        <th className="px-4 py-3 text-left text-sm font-semibold text-gray-700 cursor-pointer select-none w-64 whitespace-nowrap" onClick={() => requestSort('Author')} aria-sort={sortKey === 'Author' ? sortDir : 'none'}>
-                          {labels.author}<SortIcon col="Author" />
-                        </th>
-                        <th className="px-4 py-3 text-left text-sm font-semibold text-gray-700 cursor-pointer select-none w-28 whitespace-nowrap" onClick={() => requestSort('Publication Year')} aria-sort={sortKey === 'Publication Year' ? sortDir : 'none'}>
-                          {labels.year}<SortIcon col="Publication Year" />
-                        </th>
-                        <th className="px-4 py-3 text-left text-sm font-semibold text-gray-700 cursor-pointer select-none w-1/2 whitespace-nowrap" onClick={() => requestSort('Title')} aria-sort={sortKey === 'Title' ? sortDir : 'none'}>
-                          {labels.title}<SortIcon col="Title" />
-                        </th>
-                        <th className="px-4 py-3 text-left text-sm font-semibold text-gray-700 cursor-pointer select-none w-36 whitespace-nowrap" onClick={() => requestSort('DOI')} aria-sort={sortKey === 'DOI' ? sortDir : 'none'}>
-                          {labels.doi}<SortIcon col="DOI" />
-                        </th>
-                        <th className="px-4 py-3 text-left text-sm font-semibold text-gray-700 cursor-pointer select-none w-36 whitespace-nowrap" onClick={() => requestSort('Url')} aria-sort={sortKey === 'Url' ? sortDir : 'none'}>
-                          {labels.url}<SortIcon col="Url" />
-                        </th>
+                        {COLUMNS.map(col => (
+                          <th
+                            key={col.key}
+                            onClick={() => requestSort(col.key)}
+                            className="px-4 py-3 text-left font-semibold text-gray-700 cursor-pointer select-none whitespace-nowrap hover:bg-gray-100 border-b border-gray-200"
+                            aria-sort={sortKey === col.key ? sortDir : 'none'}
+                          >
+                            {col.label[lang as 'en' | 'de']}
+                            <SortIcon col={col.key} sortKey={sortKey} sortDir={sortDir} />
+                          </th>
+                        ))}
                       </tr>
                     </thead>
                     <tbody className="divide-y divide-gray-100">
-                      {sortedEntries.map((entry, idx) => {
-                        const author = sanitizeText(entry['Author'] || '');
-                        const year = sanitizeText(entry['Publication Year'] || '');
-                        const title = sanitizeText(entry['Title'] || '');
-                        const doi = sanitizeText(entry['DOI'] || '');
-                        const url = sanitizeText(entry['Url'] || '');
-                        const doiHref = getDoiLink(doi);
-                        const doiText = getDoiText(doi);
-                        return (
-                        <tr key={idx} className="align-top hover:bg-gray-50">
-                          <td className="px-4 py-3 text-gray-800 w-64">{renderAuthors(author)}</td>
-                          <td className="px-4 py-3 text-gray-700 whitespace-nowrap w-28">{year}</td>
-                          <td className="px-4 py-3 text-gray-900 whitespace-pre-wrap break-words w-1/2">{title}</td>
-                          <td className="px-4 py-3 w-36">
-                            {doiHref ? (
-                              maskLinks ? (
-                                <a href={doiHref} target="_blank" rel="noopener noreferrer" className="inline-flex items-center px-2 py-1 text-sm rounded bg-blue-50 text-blue-700 hover:bg-blue-100">
-                                  {labels.openDoi}
-                                </a>
-                              ) : (
-                                <a href={doiHref} target="_blank" rel="noopener noreferrer" className="inline-flex items-center px-2 py-1 text-sm rounded bg-blue-50 text-blue-700 hover:bg-blue-100 break-all">
-                                  {doiText}
-                                </a>
-                              )
-                            ) : (
-                              <span className="text-gray-400">-</span>
-                            )}
-                          </td>
-                          <td className="px-4 py-3 w-36">
-                            {url ? (
-                              maskLinks ? (
-                                <a href={url} target="_blank" rel="noopener noreferrer" className="inline-flex items-center px-2 py-1 text-sm rounded bg-green-50 text-green-700 hover:bg-green-100">
-                                  {labels.openUrl}
-                                </a>
-                              ) : (
-                                <a href={url} target="_blank" rel="noopener noreferrer" className="inline-flex items-center px-2 py-1 text-sm rounded bg-green-50 text-green-700 hover:bg-green-100 break-all">
-                                  {url}
-                                </a>
-                              )
-                            ) : (
-                              <span className="text-gray-400">-</span>
-                            )}
+                      {sorted.length === 0 ? (
+                        <tr>
+                          <td colSpan={COLUMNS.length} className="px-4 py-8 text-center text-gray-400">
+                            {lang === 'de' ? 'Keine Einträge gefunden.' : 'No entries found.'}
                           </td>
                         </tr>
+                      ) : visibleRows.map((entry, idx) => {
+                        const doi     = sanitizeText(entry['DOI'] || '');
+                        const doiHref = getDoiHref(doi);
+                        const doiText = getDoiText(doi);
+                        return (
+                          <tr key={idx} className={`align-top ${idx % 2 === 0 ? 'bg-white' : 'bg-gray-50'} hover:bg-blue-50 transition-colors`}>
+                            <td className="px-4 py-3 text-gray-800">{renderAuthors(sanitizeText(entry['Author'] || ''))}</td>
+                            <td className="px-4 py-3 text-gray-700 whitespace-nowrap">
+                              {sanitizeText(entry['Publication Year'] || '') || <span className="text-gray-300">—</span>}
+                            </td>
+                            <td className="px-4 py-3 text-gray-900 break-words">
+                              {sanitizeText(entry['Title'] || '') || <span className="text-gray-300">—</span>}
+                            </td>
+                            <td className="px-4 py-3 text-gray-700 break-words">
+                              {sanitizeText(entry['Publication Title'] || '') || <span className="text-gray-300">—</span>}
+                            </td>
+                            <td className="px-4 py-3 text-gray-700 whitespace-nowrap">
+                              {sanitizeText(entry['Volume'] || '') || <span className="text-gray-300">—</span>}
+                            </td>
+                            <td className="px-4 py-3 text-gray-700 whitespace-nowrap">
+                              {sanitizeText(entry['Issue'] || '') || <span className="text-gray-300">—</span>}
+                            </td>
+                            <td className="px-4 py-3 text-gray-700 whitespace-nowrap">
+                              {sanitizeText(entry['Pages'] || '') || <span className="text-gray-300">—</span>}
+                            </td>
+                            <td className="px-4 py-3 text-gray-700">
+                              {sanitizeText(entry['Place'] || '')
+                                ? sanitizeText(entry['Place']).split(',').map((p, i) => (
+                                    <span key={i} className="block">{p.trim()}</span>
+                                  ))
+                                : <span className="text-gray-300">—</span>}
+                            </td>
+                            <td className="px-4 py-3 whitespace-nowrap">
+                              {doiHref ? (
+                                <a
+                                  href={doiHref}
+                                  target="_blank"
+                                  rel="noopener noreferrer"
+                                  title={doiText}
+                                  className="inline-flex items-center gap-1 px-2 py-1 rounded bg-blue-50 text-blue-700 hover:bg-blue-100 text-xs font-medium transition-colors"
+                                >
+                                  <svg xmlns="http://www.w3.org/2000/svg" width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>
+                                  DOI
+                                </a>
+                              ) : (
+                                <span className="text-gray-300">—</span>
+                              )}
+                            </td>
+                          </tr>
                         );
                       })}
                     </tbody>
                   </table>
                 </div>
+
+                {/* ── Show full table button ── */}
+                {!showAll && sorted.length > PREVIEW_ROWS && (
+                  <div className="flex flex-col items-center mt-6 gap-2">
+                    <p className="text-sm text-gray-500">
+                      {lang === 'de'
+                        ? `Zeige ${PREVIEW_ROWS} von ${sorted.length} Einträgen`
+                        : `Showing ${PREVIEW_ROWS} of ${sorted.length} entries`}
+                    </p>
+                    <button
+                      onClick={() => setShowAll(true)}
+                      className="inline-flex items-center gap-2 px-6 py-2.5 rounded-xl bg-primary text-white text-sm font-semibold shadow hover:opacity-90 transition-opacity"
+                    >
+                      <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><line x1="8" y1="6" x2="21" y2="6"/><line x1="8" y1="12" x2="21" y2="12"/><line x1="8" y1="18" x2="21" y2="18"/><line x1="3" y1="6" x2="3.01" y2="6"/><line x1="3" y1="12" x2="3.01" y2="12"/><line x1="3" y1="18" x2="3.01" y2="18"/></svg>
+                      {lang === 'de' ? 'Gesamte Tabelle anzeigen' : 'Show Full Table'}
+                    </button>
+                  </div>
+                )}
+
+                {showAll && (
+                  <div className="flex justify-center mt-4">
+                    <button
+                      onClick={() => { setShowAll(false); window.scrollTo({ top: 0, behavior: 'smooth' }); }}
+                      className="text-sm text-gray-500 hover:text-primary underline underline-offset-2"
+                    >
+                      {lang === 'de' ? '↑ Weniger anzeigen' : '↑ Show less'}
+                    </button>
+                  </div>
+                )}
               </div>
             )}
           </div>

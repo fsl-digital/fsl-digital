@@ -61,23 +61,23 @@ const Interview = ({ lang = 'en', setLang }: InterviewProps) => {
       links: [
         {
           label: 'Video Salon 2026',
-          url: 'https://www.youtube.com/channel/UCmsRl-mJbgGyWUuszSvfiaA',
+          url: 'https://youtu.be/jMofYVzLjFg',
         },
       ],
     },
     {
       title:
-        'Aufzeichnungen der Paternoster Performance „Auf und ab durch die Sprachen Europas der Frühen Neuzeit“',
+        'Aufzeichnungen der Paternoster Performance „Auf und ab durch die Sprachen Europas der Frühen Neuzeit”',
       description:
-        'Im Rahmen des Salon Sophie Charlotte unter dem Thema „Metamorphosen“ am 18. Januar 2025 an der Berlin-Brandenburgischen Akademie der Wissenschaften.',
+        'Im Rahmen des Salon Sophie Charlotte unter dem Thema „Metamorphosen” am 18. Januar 2025 an der Berlin-Brandenburgischen Akademie der Wissenschaften.',
       links: [
         {
           label: 'Video SSC25-1',
-          url: 'https://www.youtube.com/channel/UCmsRl-mJbgGyWUuszSvfiaA',
+          url: 'https://youtu.be/_0_6iT9Ryvk',
         },
         {
           label: 'Video SSC25-2',
-          url: 'https://www.youtube.com/channel/UCmsRl-mJbgGyWUuszSvfiaA',
+          url: 'https://youtu.be/2L2EBjFvmcg',
         },
       ],
     },
@@ -123,7 +123,7 @@ const Interview = ({ lang = 'en', setLang }: InterviewProps) => {
       links: [
         {
           label: 'Video Salon 2026',
-          url: 'https://www.youtube.com/channel/UCmsRl-mJbgGyWUuszSvfiaA',
+          url: 'https://youtu.be/jMofYVzLjFg',
         },
       ],
     },
@@ -134,11 +134,11 @@ const Interview = ({ lang = 'en', setLang }: InterviewProps) => {
       links: [
         {
           label: 'Video SSC25-1',
-          url: 'https://www.youtube.com/channel/UCmsRl-mJbgGyWUuszSvfiaA',
+          url: 'https://youtu.be/_0_6iT9Ryvk',
         },
         {
           label: 'Video SSC25-2',
-          url: 'https://www.youtube.com/channel/UCmsRl-mJbgGyWUuszSvfiaA',
+          url: 'https://youtu.be/2L2EBjFvmcg',
         },
       ],
     },

@@ -17,6 +17,12 @@ import Contact from "./pages/Contact";
 
 const queryClient = new QueryClient();
 
+const LoadingOverlay = () => (
+  <div className="fixed inset-0 z-[9999] flex items-center justify-center bg-white">
+    <img src="/website_loading.gif" alt="Loading..." className="w-32 h-32 object-contain" />
+  </div>
+);
+
 const ScrollToTop = () => {
   const { pathname } = useLocation();
 
@@ -25,6 +31,27 @@ const ScrollToTop = () => {
   }, [pathname]);
 
   return null;
+};
+
+const AnimatedRoutes = ({ lang, setLang }: { lang: string; setLang: (l: string) => void }) => {
+  const { pathname } = useLocation();
+
+  return (
+    <div key={pathname} className="page-fade-in">
+      <Routes>
+        <Route path="/" element={<Index lang={lang} setLang={setLang} />} />
+        <Route path="/team" element={<Team lang={lang} setLang={setLang} />} />
+        <Route path="/concept" element={<Concept lang={lang} setLang={setLang} />} />
+        <Route path="/corpus" element={<Corpus lang={lang} setLang={setLang} />} />
+        <Route path="/news" element={<News lang={lang} setLang={setLang} />} />
+        <Route path="/interview" element={<Interview lang={lang} setLang={setLang} />} />
+        <Route path="/publications" element={<Publications lang={lang} setLang={setLang} />} />
+        <Route path="/bibliography" element={<Bibliography lang={lang} setLang={setLang} />} />
+        <Route path="/contact" element={<Contact lang={lang} setLang={setLang} />} />
+        <Route path="*" element={<NotFound />} />
+      </Routes>
+    </div>
+  );
 };
 
 const App = () => {
@@ -36,6 +63,13 @@ const App = () => {
     return savedLang === "en" ? "en" : "de";
   });
 
+  const [appReady, setAppReady] = useState(false);
+
+  useEffect(() => {
+    const timer = setTimeout(() => setAppReady(true), 600);
+    return () => clearTimeout(timer);
+  }, []);
+
   // Keep the document language in sync for proper hyphenation rules
   useEffect(() => {
     if (typeof document !== "undefined") {
@@ -46,6 +80,8 @@ const App = () => {
     }
   }, [lang]);
 
+  if (!appReady) return <LoadingOverlay />;
+
   return (
     <QueryClientProvider client={queryClient}>
       <TooltipProvider>
@@ -53,19 +89,7 @@ const App = () => {
         <Sonner />
         <BrowserRouter>
           <ScrollToTop />
-          <Routes>
-            <Route path="/" element={<Index lang={lang} setLang={setLang} />} />
-            <Route path="/team" element={<Team lang={lang} setLang={setLang} />} />
-            <Route path="/concept" element={<Concept lang={lang} setLang={setLang} />} />
-            <Route path="/corpus" element={<Corpus lang={lang} setLang={setLang} />} />
-            <Route path="/news" element={<News lang={lang} setLang={setLang} />} />
-            <Route path="/interview" element={<Interview lang={lang} setLang={setLang} />} />
-            <Route path="/publications" element={<Publications lang={lang} setLang={setLang} />} />
-            <Route path="/bibliography" element={<Bibliography lang={lang} setLang={setLang} />} />
-            <Route path="/contact" element={<Contact lang={lang} setLang={setLang} />} />
-            {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
-            <Route path="*" element={<NotFound />} />
-          </Routes>
+          <AnimatedRoutes lang={lang} setLang={setLang} />
         </BrowserRouter>
       </TooltipProvider>
     </QueryClientProvider>

@@ -35,7 +35,7 @@ const Contact = ({ lang = 'en', setLang }: Props) => {
         <section className="py-20">
           <div className="container-custom">
             <h1 className="text-4xl font-bold text-center mb-12">
-              {lang === 'de' ? 'Kontakt & Standorte' : 'Contact and Locations'}
+              {lang === 'de' ? 'Kontakt & Standorte' : 'Contact & Locations'}
             </h1>
             {/* Emails are masked by default; toggle removed per request */}
             {lang === 'de' ? (

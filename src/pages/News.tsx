@@ -2,7 +2,13 @@ import React, { useEffect, useState } from 'react';
 import { Calendar, Users, Award } from 'lucide-react';
 import Header from '@/components/Header';
 import Footer from '@/components/Footer';
-import { parseCsv, sanitizeText } from '@/lib/csv';
+import { parseCsv, sanitizeText, sanitizeInlineFormatting } from '@/lib/csv';
+
+function normalizeDashes(value: string) {
+  return value
+    .replace(/(\s)--(\s)/g, '$1–$2')
+    .replace(/(\s)-(\s)/g, '$1–$2');
+}
 // import { getUpcomingEvents, getPastEvents } from '@/data/events';
 
 interface NewsItemProps {
@@ -35,8 +41,10 @@ const NewsItem = ({ title, date, type, description, link, showMoreText = 'Show m
         {getIcon()}
         <span className={`text-sm ${isPast ? 'text-gray-400' : 'text-gray-500'}`}>{date}</span>
       </div>
-      <h3 className={`text-xl font-bold mb-2 whitespace-pre-line ${isPast ? 'text-gray-600' : ''}`}>{title}</h3>
-      <p className={`whitespace-pre-line ${isPast ? 'text-gray-500' : 'text-gray-600'}`}>{description}</p>
+      <h3 className={`text-xl font-bold mb-2 whitespace-pre-line ${isPast ? 'text-gray-600' : ''}`}
+          dangerouslySetInnerHTML={{ __html: title }} />
+      <p className={`whitespace-pre-line ${isPast ? 'text-gray-500' : 'text-gray-600'}`}
+         dangerouslySetInnerHTML={{ __html: description }} />
       {link && (
         <a
           href={link}
@@ -91,20 +99,15 @@ const News = ({ lang = 'en', setLang }: NewsProps) => {
           .sort((a,b) => (a.start_date||'').localeCompare(b.start_date||''));
         const past = rows.filter(r => (r.start_date || '') < today)
           .sort((a,b) => (b.start_date||'').localeCompare(a.start_date||''));
-        setUpcoming(upcoming.map(r => ({
-          title: sanitizeText(r.title),
-          date: r.display_date || r.start_date,
+        const mapRow = (r: any) => ({
+          title: sanitizeInlineFormatting(normalizeDashes(r.title || '')),
+          date: normalizeDashes(r.display_date || r.start_date || ''),
           type: r.type as any,
-          description: sanitizeText(r.desc || ''),
+          description: sanitizeInlineFormatting(normalizeDashes(r.desc || '')),
           link: sanitizeText(r.link || '').trim(),
-        })));
-        setPast(past.map(r => ({
-          title: sanitizeText(r.title),
-          date: r.display_date || r.start_date,
-          type: r.type as any,
-          description: sanitizeText(r.desc || ''),
-          link: sanitizeText(r.link || '').trim(),
-        })));
+        });
+        setUpcoming(upcoming.map(mapRow));
+        setPast(past.map(mapRow));
         setLoading(false);
       })
       .catch(() => { setError('Failed to load news.'); setLoading(false); });

@@ -13,6 +13,12 @@ function normalizeAuthorSortKey(authors: string | undefined) {
     .toLocaleLowerCase();
 }
 
+function normalizePublicationDashes(value: string) {
+  return value
+    .replace(/(\s)--(\s)/g, '$1–$2')
+    .replace(/(\s)-(\s)/g, '$1–$2');
+}
+
 const Publications = ({ lang = 'en', setLang }) => {
   const [items, setItems] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
@@ -100,12 +106,12 @@ const Publications = ({ lang = 'en', setLang }) => {
             ) : (
               <div className="bg-white border border-gray-200 p-8 rounded-lg shadow-md">
                 {items.map((p, idx) => {
-                  const title = (p.title || '').trim();
-                  const venue = (p.venue || '').trim();
-                  const note = (p.note || '').trim();
+                  const title = normalizePublicationDashes((p.title || '').trim());
+                  const venue = normalizePublicationDashes((p.venue || '').trim());
+                  const note = normalizePublicationDashes((p.note || '').trim());
                   const noteSuffix = note ? ` ${note}` : '';
                   const detailParts = [] as string[];
-                  if (title) detailParts.push(`"${title}"`);
+                  if (title) detailParts.push(title);
                   if (venue) detailParts.push(venue);
                   const detail = sanitizeInlineFormatting(`${detailParts.join('. ')}${noteSuffix}`.trim());
                   const doiRaw = sanitizeText(p.doi);

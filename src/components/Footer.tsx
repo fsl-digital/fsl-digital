@@ -54,7 +54,7 @@ const Footer = ({ lang = "en" }) => {
               </div>
               <div className="logo-card">
                 <a
-                  href="https://www.bbaw.de/forschung/fsl-digital"
+                  href="https://www.adwmainz.de/forschung/projekte/details/historische-fremdsprachenlehrwerke-digital"
                   target="_blank"
                   rel="noopener noreferrer"
                   aria-label="Akademie der Wissenschaften und der Literatur Mainz - FSL digital"
@@ -77,7 +77,7 @@ const Footer = ({ lang = "en" }) => {
                 </a>
               </div>
               <div className="logo-card">
-                <a href="https://www.gw.uni-hamburg.de/ueber-die-fakultaet/digital-humanities/digitale-forschung/fsl-digital.html" target="_blank" rel="noopener noreferrer" aria-label="Universität Hamburg – FSL digital">
+                <a href="https://www.gw.uni-hamburg.de/ueber-die-fakultaet/digital-humanities/forschung/fsl-digital.html" target="_blank" rel="noopener noreferrer" aria-label="Universität Hamburg – FSL digital">
                   <img 
                     src={getImagePath('/uploads/647b4adf-ff44-4560-97f0-68b12a9ee388.png')} 
                     alt="DHI London" 
@@ -86,7 +86,7 @@ const Footer = ({ lang = "en" }) => {
                 </a>
               </div>
               <div className="logo-card">
-                <a href="https://www.geisteswissenschaften.fu-berlin.de/dcl/projekte/index.html" target="_blank" rel="noopener noreferrer" aria-label="Freie Universität - FSL digital" className="block w-full h-full flex items-center justify-center">
+                <a href="https://www.dcl.fu-berlin.de/projekte/projektliste/simon-fsl-digital/index.html" target="_blank" rel="noopener noreferrer" aria-label="Freie Universität - FSL digital" className="block w-full h-full flex items-center justify-center">
                   <img 
                     src={getImagePath('/uploads/faa7ed66-4f5f-46c5-b921-d0dcf0ff3ddd.png')} 
                     alt="Freie Universität" 
@@ -95,7 +95,7 @@ const Footer = ({ lang = "en" }) => {
                 </a>
               </div>
               <div className="logo-card">
-                <a href="https://www.bbaw.de/forschung/fsl-digital" target="_blank" rel="noopener noreferrer" aria-label="Technische Universität Darmstadt – FSL digital" className="block w-full h-full flex items-center justify-center">
+                <a href="https://www.linglit.tu-darmstadt.de/forschungsuebersicht/index.en.jsp" target="_blank" rel="noopener noreferrer" aria-label="Technische Universität Darmstadt – FSL digital" className="block w-full h-full flex items-center justify-center">
                   <img 
                     src={getImagePath('/uploads/TU_Darmstadt_Logo.svg')} 
                     alt="Technische Universität Darmstadt" 
