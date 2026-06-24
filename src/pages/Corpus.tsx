@@ -512,7 +512,7 @@ const Corpus = ({ lang = 'en', setLang }) => {
                 <div className="grid grid-cols-3 gap-3 md:grid-cols-1">
                   {dashboardCards.slice(3).map((card) => (
                     <div key={card.label} className={`rounded-xl px-5 py-4 text-center ${card.color}`}>
-                      <div className="text-2xl font-bold tabular-nums"><AnimCounter target={card.value} /></div>
+                      <div className="text-2xl font-bold tabular-nums"><AnimCounter target={card.value} useGrouping={!card.isYear} /></div>
                       <div className="text-xs mt-1 opacity-80 leading-tight">{card.label}</div>
                     </div>
                   ))}
