@@ -257,7 +257,6 @@ const Corpus = ({ lang = 'en', setLang }) => {
   const [corpusRows, setCorpusRows] = useState<CsvRow[]>([]);
   const [corpusLoading, setCorpusLoading] = useState(true);
   const [corpusError, setCorpusError] = useState(false);
-  const [showAllEntries, setShowAllEntries] = useState(false);
   const [corpusSearch, setCorpusSearch] = useState('');
   const [sortColumn, setSortColumn] = useState<CorpusSortColumn>('Druckjahr');
   const [sortDirection, setSortDirection] = useState<SortDirection>('asc');
@@ -265,7 +264,7 @@ const Corpus = ({ lang = 'en', setLang }) => {
   useEffect(() => {
     let active = true;
 
-    fetch(`${import.meta.env.BASE_URL}uploads/corpus/corpus.csv`)
+    fetch(`${import.meta.env.BASE_URL}uploads/corpus/corpus.csv`, { cache: 'no-store' })
       .then((response) => {
         if (!response.ok) throw new Error(`Corpus CSV request failed: ${response.status}`);
         return response.text();
@@ -325,7 +324,7 @@ const Corpus = ({ lang = 'en', setLang }) => {
     ));
   }, [corpusSearch, lang, sortedCorpusRows]);
 
-  const visibleCorpusRows = showAllEntries ? searchedCorpusRows : newCorpusRows;
+  const visibleCorpusRows = searchedCorpusRows;
   const years = corpusRows
     .map((row) => Number.parseInt(row.Druckjahr, 10))
     .filter((year) => Number.isFinite(year));
@@ -496,7 +495,7 @@ const Corpus = ({ lang = 'en', setLang }) => {
             {/* ── Corpus data dashboard and table ── */}
             <div className="mb-8 bg-white p-6">
               <h2 className="text-center text-sm font-semibold uppercase tracking-widest text-gray-400 mb-6">
-                {lang === 'de' ? 'Korpusübersicht' : 'Korpus Overview'}
+                {lang === 'de' ? 'Korpusübersicht' : 'Corpus Overview'}
               </h2>
               <div className="mx-auto grid w-full max-w-3xl items-center gap-6 md:grid-cols-[180px_230px_180px] md:justify-center md:gap-5">
                 <div className="grid grid-cols-3 gap-3 md:grid-cols-1">
@@ -536,8 +535,7 @@ const Corpus = ({ lang = 'en', setLang }) => {
               )}
               {!corpusLoading && !corpusError && (
                 <>
-                  {showAllEntries && (
-                    <div className="mb-6 flex flex-col items-center gap-2">
+                  <div className="mb-6 flex flex-col items-center gap-2">
                       <div className="relative w-full max-w-lg">
                         <svg className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400" xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
                           <circle cx="11" cy="11" r="8" />
@@ -556,8 +554,7 @@ const Corpus = ({ lang = 'en', setLang }) => {
                         {searchedCorpusRows.length} {lang === 'de' ? 'Einträge' : 'entries'}
                         {corpusSearch && ` ${lang === 'de' ? 'gefunden' : 'found'}`}
                       </span>
-                    </div>
-                  )}
+                  </div>
                   <div className="overflow-x-auto rounded-xl border border-gray-200 shadow-sm">
                     <table className="w-full min-w-[850px] border-collapse bg-white text-left text-sm">
                       <thead className="bg-primary text-white">
@@ -609,23 +606,6 @@ const Corpus = ({ lang = 'en', setLang }) => {
                       </tbody>
                     </table>
                   </div>
-
-                  {sortedCorpusRows.length > newCorpusRows.length && (
-                    <div className="mt-6 text-center">
-                      <button
-                        type="button"
-                        onClick={() => {
-                          setShowAllEntries((showAll) => !showAll);
-                          if (showAllEntries) setCorpusSearch('');
-                        }}
-                        className="rounded-lg bg-primary px-6 py-3 font-semibold text-white transition-colors hover:bg-primary/90 focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2"
-                      >
-                        {showAllEntries
-                          ? (lang === 'de' ? 'Weniger anzeigen' : 'Show less')
-                          : (lang === 'de' ? 'Mehr anzeigen' : 'Show more')}
-                      </button>
-                    </div>
-                  )}
                 </>
               )}
             </div>
