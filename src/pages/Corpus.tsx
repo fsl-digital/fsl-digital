@@ -107,6 +107,7 @@ const NetworkVisualization = ({ lang }: { lang: string }) => {
 };
 
 const CORPUS_TOTAL  = 1000;
+const INITIAL_CORPUS_ROWS = 10;
 const NUM_TICKS     = 90;
 const PRIMARY       = 'hsl(215,71%,19%)';
 const SECONDARY     = '#166534';
@@ -115,7 +116,7 @@ type CorpusSortColumn = 'Autor einheitl.' | 'Vollständiger Titel' | 'Druckjahr'
 type SortDirection = 'asc' | 'desc';
 
 /* ── Animated gauge ── */
-const GaugeChart = ({ loaded, total, label, size = 140 }: { loaded: number; total: number; label: string; size?: number }) => {
+const GaugeChart = ({ loaded, total, size = 140 }: { loaded: number; total: number; size?: number }) => {
   const [animPct, setAnimPct] = useState(0);
   const raf = useRef<number>(0);
   const targetPct = total > 0 ? Math.round((loaded / total) * 100) : 0;
@@ -152,14 +153,14 @@ const GaugeChart = ({ loaded, total, label, size = 140 }: { loaded: number; tota
           <line key={i} x1={t.x1} y1={t.y1} x2={t.x2} y2={t.y2}
             strokeWidth="3" strokeLinecap="round" stroke={t.filled ? SECONDARY : '#e5e7eb'} />
         ))}
-        <text x="70" y="58" textAnchor="middle" fontSize="10" fill="#6b7280" fontFamily="inherit">{label}</text>
-        <text x="70" y="82" textAnchor="middle" fontSize="26" fontWeight="700" fill={PRIMARY} fontFamily="inherit">{animPct}</text>
-        <text x="70" y="96" textAnchor="middle" fontSize="11" fill="#6b7280" fontFamily="inherit">%</text>
+        <text x="70" y="70" textAnchor="middle" dominantBaseline="middle" fontSize="34" fontWeight="700" fill={PRIMARY} fontFamily="inherit">{animPct}%</text>
       </svg>
-      <p className="text-xs text-gray-500 mt-1 text-center">
-        {loaded.toLocaleString()} / {total.toLocaleString()}<br />
-        entries
-      </p>
+      <div className="mt-1 text-center text-gray-500">
+        <p className="text-base font-semibold tabular-nums">
+          {loaded.toLocaleString()} / {total.toLocaleString()}
+        </p>
+        <p className="text-xs">entries</p>
+      </div>
     </div>
   );
 };
@@ -258,6 +259,7 @@ const Corpus = ({ lang = 'en', setLang }) => {
   const [corpusLoading, setCorpusLoading] = useState(true);
   const [corpusError, setCorpusError] = useState(false);
   const [corpusSearch, setCorpusSearch] = useState('');
+  const [showAllCorpusRows, setShowAllCorpusRows] = useState(false);
   const [sortColumn, setSortColumn] = useState<CorpusSortColumn>('Druckjahr');
   const [sortDirection, setSortDirection] = useState<SortDirection>('asc');
 
@@ -324,7 +326,10 @@ const Corpus = ({ lang = 'en', setLang }) => {
     ));
   }, [corpusSearch, lang, sortedCorpusRows]);
 
-  const visibleCorpusRows = searchedCorpusRows;
+  const visibleCorpusRows = showAllCorpusRows
+    ? searchedCorpusRows
+    : searchedCorpusRows.slice(0, INITIAL_CORPUS_ROWS);
+  const canToggleCorpusRows = searchedCorpusRows.length > INITIAL_CORPUS_ROWS;
   const years = corpusRows
     .map((row) => Number.parseInt(row.Druckjahr, 10))
     .filter((year) => Number.isFinite(year));
@@ -507,7 +512,7 @@ const Corpus = ({ lang = 'en', setLang }) => {
                   ))}
                 </div>
                 <div className="flex justify-center md:order-none -order-1">
-                  <GaugeChart loaded={corpusRows.length} total={CORPUS_TOTAL} label={lang === 'de' ? 'Korpus' : 'Corpus'} size={210} />
+                  <GaugeChart loaded={corpusRows.length} total={CORPUS_TOTAL} size={210} />
                 </div>
                 <div className="grid grid-cols-3 gap-3 md:grid-cols-1">
                   {dashboardCards.slice(3).map((card) => (
@@ -544,7 +549,10 @@ const Corpus = ({ lang = 'en', setLang }) => {
                         <input
                           type="search"
                           value={corpusSearch}
-                          onChange={(event) => setCorpusSearch(event.target.value)}
+                          onChange={(event) => {
+                            setCorpusSearch(event.target.value);
+                            setShowAllCorpusRows(false);
+                          }}
                           placeholder={lang === 'de' ? 'Suche in allen Feldern…' : 'Search all fields…'}
                           aria-label={lang === 'de' ? 'Korpuseinträge durchsuchen' : 'Search corpus entries'}
                           className="w-full rounded-xl border border-gray-300 py-2.5 pl-10 pr-4 text-sm shadow-sm focus:outline-none focus:ring-2 focus:ring-primary"
@@ -606,6 +614,20 @@ const Corpus = ({ lang = 'en', setLang }) => {
                       </tbody>
                     </table>
                   </div>
+                  {canToggleCorpusRows && (
+                    <div className="mt-5 flex justify-center">
+                      <button
+                        type="button"
+                        onClick={() => setShowAllCorpusRows((showAll) => !showAll)}
+                        aria-expanded={showAllCorpusRows}
+                        className="rounded-lg bg-primary px-5 py-2.5 text-sm font-semibold text-white shadow-sm transition-colors hover:bg-primary/90 focus:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2"
+                      >
+                        {showAllCorpusRows
+                          ? (lang === 'de' ? 'Weniger anzeigen' : 'Show less')
+                          : (lang === 'de' ? 'Mehr anzeigen' : 'Show more')}
+                      </button>
+                    </div>
+                  )}
                 </>
               )}
             </div>
