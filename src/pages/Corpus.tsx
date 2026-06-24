@@ -165,7 +165,7 @@ const GaugeChart = ({ loaded, total, label, size = 140 }: { loaded: number; tota
 };
 
 /* ── Animated counter ── */
-const AnimCounter = ({ target }: { target: number }) => {
+const AnimCounter = ({ target, useGrouping = true }: { target: number; useGrouping?: boolean }) => {
   const [val, setVal] = useState(0);
   const raf = useRef<number>(0);
   useEffect(() => {
@@ -181,7 +181,7 @@ const AnimCounter = ({ target }: { target: number }) => {
     raf.current = requestAnimationFrame(step);
     return () => cancelAnimationFrame(raf.current);
   }, [target]);
-  return <>{val.toLocaleString()}</>;
+  return <>{val.toLocaleString(undefined, { useGrouping })}</>;
 };
 
 /* ── SVG Timeline ── */
@@ -333,12 +333,12 @@ const Corpus = ({ lang = 'en', setLang }) => {
   const latestYear = years.length ? Math.max(...years) : 0;
   const digitisedCount = corpusRows.filter((row) => row['Link zum Digitalisat']).length;
   const dashboardCards = [
-    { label: lang === 'de' ? 'Veröffentlicht' : 'Published', value: corpusRows.length, color: 'bg-blue-50 text-blue-700' },
-    { label: lang === 'de' ? 'Neue Einträge' : 'New entries', value: newCorpusRows.length, color: 'bg-green-50 text-green-700' },
-    { label: lang === 'de' ? 'Digitalisate' : 'Digital copies', value: digitisedCount, color: 'bg-purple-50 text-purple-700' },
-    { label: lang === 'de' ? 'Frühestes Jahr' : 'Earliest year', value: earliestYear, color: 'bg-orange-50 text-orange-700' },
-    { label: lang === 'de' ? 'Spätestes Jahr' : 'Latest year', value: latestYear, color: 'bg-amber-50 text-amber-700' },
-    { label: lang === 'de' ? 'Verbleibend' : 'Remaining', value: Math.max(CORPUS_TOTAL - corpusRows.length, 0), color: 'bg-red-50 text-red-700' },
+    { label: lang === 'de' ? 'Veröffentlicht' : 'Published', value: corpusRows.length, color: 'bg-blue-50 text-blue-700', isYear: false },
+    { label: lang === 'de' ? 'Neue Einträge' : 'New entries', value: newCorpusRows.length, color: 'bg-green-50 text-green-700', isYear: false },
+    { label: lang === 'de' ? 'Digitalisate' : 'Digital copies', value: digitisedCount, color: 'bg-purple-50 text-purple-700', isYear: false },
+    { label: lang === 'de' ? 'Frühestes Jahr' : 'Earliest year', value: earliestYear, color: 'bg-orange-50 text-orange-700', isYear: true },
+    { label: lang === 'de' ? 'Spätestes Jahr' : 'Latest year', value: latestYear, color: 'bg-amber-50 text-amber-700', isYear: true },
+    { label: lang === 'de' ? 'Verbleibend' : 'Remaining', value: Math.max(CORPUS_TOTAL - corpusRows.length, 0), color: 'bg-red-50 text-red-700', isYear: false },
   ];
 
   const changeSort = (column: CorpusSortColumn) => {
@@ -502,7 +502,7 @@ const Corpus = ({ lang = 'en', setLang }) => {
                 <div className="grid grid-cols-3 gap-3 md:grid-cols-1">
                   {dashboardCards.slice(0, 3).map((card) => (
                     <div key={card.label} className={`rounded-xl px-5 py-4 text-center ${card.color}`}>
-                      <div className="text-2xl font-bold tabular-nums"><AnimCounter target={card.value} /></div>
+                      <div className="text-2xl font-bold tabular-nums"><AnimCounter target={card.value} useGrouping={!card.isYear} /></div>
                       <div className="text-xs mt-1 opacity-80 leading-tight">{card.label}</div>
                     </div>
                   ))}
@@ -593,7 +593,7 @@ const Corpus = ({ lang = 'en', setLang }) => {
                           return (
                             <tr key={`${row['Vollständiger Titel']}-${row.Druckjahr}-${index}`} className="border-t border-gray-200 even:bg-gray-50 align-top">
                               <td className="px-4 py-3 text-gray-700">{row['Autor einheitl.'] || '—'}</td>
-                              <td className="px-4 py-3 text-gray-900">{row['Vollständiger Titel'] || '—'}</td>
+                              <td className="px-4 py-3 text-justify text-gray-900">{row['Vollständiger Titel'] || '—'}</td>
                               <td className="px-4 py-3 text-gray-700 tabular-nums">{row.Druckjahr || '—'}</td>
                               <td className="px-4 py-3 text-gray-700">{row.Verlagsort || '—'}</td>
                               <td className="px-4 py-3">
@@ -610,10 +610,19 @@ const Corpus = ({ lang = 'en', setLang }) => {
                     </table>
                   </div>
 
-                  {!showAllEntries && sortedCorpusRows.length > newCorpusRows.length && (
+                  {sortedCorpusRows.length > newCorpusRows.length && (
                     <div className="mt-6 text-center">
-                      <button type="button" onClick={() => setShowAllEntries(true)} className="rounded-lg bg-primary px-6 py-3 font-semibold text-white transition-colors hover:bg-primary/90 focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2">
-                        {lang === 'de' ? 'Mehr anzeigen' : 'Show more'}
+                      <button
+                        type="button"
+                        onClick={() => {
+                          setShowAllEntries((showAll) => !showAll);
+                          if (showAllEntries) setCorpusSearch('');
+                        }}
+                        className="rounded-lg bg-primary px-6 py-3 font-semibold text-white transition-colors hover:bg-primary/90 focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2"
+                      >
+                        {showAllEntries
+                          ? (lang === 'de' ? 'Weniger anzeigen' : 'Show less')
+                          : (lang === 'de' ? 'Mehr anzeigen' : 'Show more')}
                       </button>
                     </div>
                   )}

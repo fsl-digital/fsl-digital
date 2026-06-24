@@ -219,7 +219,7 @@ const Bibliography = ({ lang = 'en', setLang }) => {
                             <td className="px-4 py-3 text-gray-700 whitespace-nowrap">
                               {sanitizeText(entry['Publication Year'] || '') || <span className="text-gray-300">—</span>}
                             </td>
-                            <td className="px-4 py-3 text-gray-900 break-words">
+                            <td className="px-4 py-3 text-justify text-gray-900 break-words">
                               {sanitizeText(entry['Title'] || '') || <span className="text-gray-300">—</span>}
                             </td>
                             <td className="px-4 py-3 text-gray-700 break-words">
