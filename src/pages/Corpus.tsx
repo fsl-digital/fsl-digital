@@ -1,6 +1,8 @@
 import React, { useEffect, useMemo, useState, useRef } from 'react';
 import Header from '@/components/Header';
 import Footer from '@/components/Footer';
+import HumanGate from '@/components/HumanGate';
+import { useHumanVerified } from '@/hooks/useHumanVerified';
 import { parseCsv, type CsvRow } from '@/lib/csv';
 
 /* ── Network visualisation (3-layer SVG) ── */
@@ -107,7 +109,6 @@ const NetworkVisualization = ({ lang }: { lang: string }) => {
 };
 
 const CORPUS_TOTAL  = 1000;
-const INITIAL_CORPUS_ROWS = 10;
 const NUM_TICKS     = 90;
 const PRIMARY       = 'hsl(215,71%,19%)';
 const SECONDARY     = '#166534';
@@ -161,6 +162,56 @@ const GaugeChart = ({ loaded, total, size = 140 }: { loaded: number; total: numb
         </p>
         <p className="text-xs">entries</p>
       </div>
+    </div>
+  );
+};
+
+/* ── Expandable (clamped) title cell ── */
+const ExpandableTitle = ({ text, lang }: { text: string; lang: string }) => {
+  const [expanded, setExpanded] = useState(false);
+  const [overflowing, setOverflowing] = useState(false);
+  const textRef = useRef<HTMLParagraphElement>(null);
+  const expandedRef = useRef(expanded);
+  expandedRef.current = expanded;
+
+  useEffect(() => {
+    const el = textRef.current;
+    if (!el) return;
+
+    const measure = () => {
+      if (expandedRef.current) return;
+      setOverflowing(el.scrollHeight > el.clientHeight + 1);
+    };
+
+    measure();
+    const resizeObserver = new ResizeObserver(measure);
+    resizeObserver.observe(el);
+
+    let cancelled = false;
+    document.fonts?.ready.then(() => { if (!cancelled) measure(); });
+
+    return () => {
+      cancelled = true;
+      resizeObserver.disconnect();
+    };
+  }, [text]);
+
+  if (!text) return <span className="text-gray-400">—</span>;
+
+  return (
+    <div>
+      <p ref={textRef} className={expanded ? '' : 'line-clamp-2'}>{text}</p>
+      {overflowing && (
+        <button
+          type="button"
+          onClick={() => setExpanded((value) => !value)}
+          className="mt-1 text-xs font-medium text-blue-700 underline underline-offset-2 hover:text-blue-900"
+        >
+          {expanded
+            ? (lang === 'de' ? 'Weniger anzeigen' : 'Show less')
+            : (lang === 'de' ? 'Vollständigen Titel anzeigen' : 'Show full title')}
+        </button>
+      )}
     </div>
   );
 };
@@ -262,8 +313,10 @@ const Corpus = ({ lang = 'en', setLang }) => {
   const [showAllCorpusRows, setShowAllCorpusRows] = useState(false);
   const [sortColumn, setSortColumn] = useState<CorpusSortColumn>('Druckjahr');
   const [sortDirection, setSortDirection] = useState<SortDirection>('asc');
+  const { verified, verify } = useHumanVerified('fsl-table-verified');
 
   useEffect(() => {
+    if (!verified) return;
     let active = true;
 
     fetch(`${import.meta.env.BASE_URL}uploads/corpus/corpus.csv`, { cache: 'no-store' })
@@ -282,7 +335,7 @@ const Corpus = ({ lang = 'en', setLang }) => {
       });
 
     return () => { active = false; };
-  }, []);
+  }, [verified]);
 
   const sortedCorpusRows = useMemo(() => [...corpusRows].sort((a, b) => {
     let comparison: number;
@@ -309,9 +362,11 @@ const Corpus = ({ lang = 'en', setLang }) => {
     [sortedCorpusRows],
   );
 
+  const baseCorpusRows = showAllCorpusRows ? sortedCorpusRows : newCorpusRows;
+
   const searchedCorpusRows = useMemo(() => {
     const query = corpusSearch.trim().toLocaleLowerCase(lang);
-    if (!query) return sortedCorpusRows;
+    if (!query) return baseCorpusRows;
 
     const searchableColumns: CorpusSortColumn[] = [
       'Autor einheitl.',
@@ -321,15 +376,13 @@ const Corpus = ({ lang = 'en', setLang }) => {
       'Link zum Digitalisat',
     ];
 
-    return sortedCorpusRows.filter((row) => searchableColumns.some((column) =>
+    return baseCorpusRows.filter((row) => searchableColumns.some((column) =>
       (row[column] || '').toLocaleLowerCase(lang).includes(query),
     ));
-  }, [corpusSearch, lang, sortedCorpusRows]);
+  }, [baseCorpusRows, corpusSearch, lang]);
 
-  const visibleCorpusRows = showAllCorpusRows
-    ? searchedCorpusRows
-    : searchedCorpusRows.slice(0, INITIAL_CORPUS_ROWS);
-  const canToggleCorpusRows = searchedCorpusRows.length > INITIAL_CORPUS_ROWS;
+  const visibleCorpusRows = searchedCorpusRows;
+  const canToggleCorpusRows = corpusRows.length > newCorpusRows.length;
   const years = corpusRows
     .map((row) => Number.parseInt(row.Druckjahr, 10))
     .filter((year) => Number.isFinite(year));
@@ -498,6 +551,19 @@ const Corpus = ({ lang = 'en', setLang }) => {
             </div>
 
             {/* ── Corpus data dashboard and table ── */}
+            {!verified ? (
+              <div className="mb-12">
+                <HumanGate
+                  lang={lang}
+                  onVerify={verify}
+                  message={{
+                    en: 'Please confirm you are not an automated tool to view the table.',
+                    de: 'Bitte bestätigen Sie, dass Sie kein automatisiertes Programm sind, um die Tabelle anzuzeigen.',
+                  }}
+                />
+              </div>
+            ) : (
+              <>
             <div className="mb-8 bg-white p-6">
               <h2 className="text-center text-sm font-semibold uppercase tracking-widest text-gray-400 mb-6">
                 {lang === 'de' ? 'Korpusübersicht' : 'Corpus Overview'}
@@ -598,7 +664,9 @@ const Corpus = ({ lang = 'en', setLang }) => {
                           return (
                             <tr key={`${row['Vollständiger Titel']}-${row.Druckjahr}-${index}`} className="border-t border-gray-200 even:bg-gray-50 align-top">
                               <td className="px-4 py-3 text-gray-700">{row['Autor einheitl.'] || '—'}</td>
-                              <td className="px-4 py-3 text-justify text-gray-900">{row['Vollständiger Titel'] || '—'}</td>
+                              <td className="px-4 py-3 text-justify text-gray-900">
+                                <ExpandableTitle text={row['Vollständiger Titel'] || ''} lang={lang} />
+                              </td>
                               <td className="px-4 py-3 text-gray-700 tabular-nums">{row.Druckjahr || '—'}</td>
                               <td className="px-4 py-3 text-gray-700">{row.Verlagsort || '—'}</td>
                               <td className="px-4 py-3">
@@ -631,6 +699,8 @@ const Corpus = ({ lang = 'en', setLang }) => {
                 </>
               )}
             </div>
+              </>
+            )}
 
             {/* ── Shapenote / Status note ── */}
             <div className="mb-12 bg-amber-50 border border-amber-200 rounded-xl p-8">

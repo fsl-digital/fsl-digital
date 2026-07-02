@@ -4,6 +4,8 @@ import { Toaster as Sonner } from "@/components/ui/sonner";
 import { TooltipProvider } from "@/components/ui/tooltip";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { BrowserRouter, Routes, Route, useLocation } from "react-router-dom";
+import SiteGate from "@/components/SiteGate";
+import { useHumanVerified } from "@/hooks/useHumanVerified";
 import Index from "./pages/Index";
 import NotFound from "./pages/NotFound";
 import Team from "./pages/Team";
@@ -64,6 +66,7 @@ const App = () => {
   });
 
   const [appReady, setAppReady] = useState(false);
+  const { verified, verify } = useHumanVerified();
 
   useEffect(() => {
     const timer = setTimeout(() => setAppReady(true), 600);
@@ -81,6 +84,7 @@ const App = () => {
   }, [lang]);
 
   if (!appReady) return <LoadingOverlay />;
+  if (!verified) return <SiteGate lang={lang} setLang={setLang} onVerify={verify} />;
 
   return (
     <QueryClientProvider client={queryClient}>

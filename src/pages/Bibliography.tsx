@@ -1,6 +1,8 @@
 import React, { useEffect, useState, useMemo } from 'react';
 import Header from '@/components/Header';
 import Footer from '@/components/Footer';
+import HumanGate from '@/components/HumanGate';
+import { useHumanVerified } from '@/hooks/useHumanVerified';
 import { parseCsv, sanitizeText } from '@/lib/csv';
 
 const CSV_FILES = [
@@ -16,10 +18,11 @@ const COLUMNS = [
   { key: 'Author',            label: { en: 'Author',            de: 'Autor' } },
   { key: 'Publication Year',  label: { en: 'Publication Year',  de: 'Jahr' } },
   { key: 'Title',             label: { en: 'Title',             de: 'Titel' } },
+  { key: 'Editor',            label: { en: 'Editor',            de: 'Herausgeber' } },
   { key: 'Publication Title', label: { en: 'Publication Title', de: 'Publikationstitel' } },
-  { key: 'Volume',            label: { en: 'Volume',            de: 'Band' } },
-  { key: 'Issue',             label: { en: 'Issue',             de: 'Heft' } },
   { key: 'Pages',             label: { en: 'Pages',             de: 'Seiten' } },
+  { key: 'Issue',             label: { en: 'Issue',             de: 'Heft' } },
+  { key: 'Volume',            label: { en: 'Volume',            de: 'Band' } },
   { key: 'Place',             label: { en: 'Place',             de: 'Ort' } },
   { key: 'DOI',               label: { en: 'DOI',               de: 'DOI' } },
 ];
@@ -35,11 +38,11 @@ const getDoiHref = (doi: string) => {
 const getDoiText = (doi: string) =>
   doi.replace(/^DOI:\s*/i, '').replace(/https?:\/\/(dx\.)?doi\.org\//i, '').trim();
 
-const renderAuthors = (author: string) => {
-  if (!author) return <span className="text-gray-400">—</span>;
+const renderNameList = (names: string) => {
+  if (!names) return <span className="text-gray-400">—</span>;
   return (
     <>
-      {author.split(';').map((p, i) => (
+      {names.split(';').map((p, i) => (
         <span key={i} className="block">{sanitizeText(p.trim())}</span>
       ))}
     </>
@@ -61,8 +64,10 @@ const Bibliography = ({ lang = 'en', setLang }) => {
   const [error,    setError]    = useState('');
   const [search,   setSearch]   = useState('');
   const [showAll,  setShowAll]  = useState(false);
+  const { verified, verify } = useHumanVerified('fsl-table-verified');
 
   useEffect(() => {
+    if (!verified) return;
     setLoading(true);
     setError('');
     const base = `${import.meta.env.BASE_URL}uploads/bibliography/zotero/`;
@@ -88,7 +93,7 @@ const Bibliography = ({ lang = 'en', setLang }) => {
       setError(lang === 'de' ? 'Bibliographie konnte nicht geladen werden.' : 'Failed to load bibliography.');
       setLoading(false);
     });
-  }, []);
+  }, [verified]);
 
   const requestSort = (key: string) => {
     if (sortKey === key) setSortDir(d => d === 'asc' ? 'desc' : 'asc');
@@ -148,7 +153,16 @@ const Bibliography = ({ lang = 'en', setLang }) => {
 
           {/* ── Table section (full width) ── */}
           <div className="w-full px-4 sm:px-6 lg:px-8">
-            {loading ? (
+            {!verified ? (
+              <HumanGate
+                lang={lang}
+                onVerify={verify}
+                message={{
+                  en: 'Please confirm you are not an automated tool to view the table.',
+                  de: 'Bitte bestätigen Sie, dass Sie kein automatisiertes Programm sind, um die Tabelle anzuzeigen.',
+                }}
+              />
+            ) : loading ? (
               <p className="text-gray-600 text-center py-12">{lang === 'de' ? 'Wird geladen…' : 'Loading…'}</p>
             ) : error ? (
               <p className="text-red-600 text-center py-12">{error}</p>
@@ -175,15 +189,16 @@ const Bibliography = ({ lang = 'en', setLang }) => {
 
                 {/* ── Table ── */}
                 <div className="overflow-auto rounded-xl shadow border border-gray-200" style={{ maxHeight: '75vh' }}>
-                  <table className="w-full bg-white divide-y divide-gray-200 text-sm" style={{ minWidth: '1100px' }}>
+                  <table className="w-full bg-white divide-y divide-gray-200 text-sm" style={{ minWidth: '1250px' }}>
                     <colgroup>
                       <col style={{ width: '160px' }} />
                       <col style={{ width: '80px' }} />
                       <col style={{ width: '260px' }} />
+                      <col style={{ width: '160px' }} />
                       <col style={{ width: '180px' }} />
-                      <col style={{ width: '70px' }} />
-                      <col style={{ width: '60px' }} />
                       <col style={{ width: '90px' }} />
+                      <col style={{ width: '60px' }} />
+                      <col style={{ width: '70px' }} />
                       <col style={{ width: '110px' }} />
                       <col style={{ width: '90px' }} />
                     </colgroup>
@@ -215,24 +230,25 @@ const Bibliography = ({ lang = 'en', setLang }) => {
                         const doiText = getDoiText(doi);
                         return (
                           <tr key={idx} className={`align-top ${idx % 2 === 0 ? 'bg-white' : 'bg-gray-50'} hover:bg-blue-50 transition-colors`}>
-                            <td className="px-4 py-3 text-gray-800">{renderAuthors(sanitizeText(entry['Author'] || ''))}</td>
+                            <td className="px-4 py-3 text-gray-800">{renderNameList(sanitizeText(entry['Author'] || ''))}</td>
                             <td className="px-4 py-3 text-gray-700 whitespace-nowrap">
                               {sanitizeText(entry['Publication Year'] || '') || <span className="text-gray-300">—</span>}
                             </td>
                             <td className="px-4 py-3 text-justify text-gray-900 break-words">
                               {sanitizeText(entry['Title'] || '') || <span className="text-gray-300">—</span>}
                             </td>
+                            <td className="px-4 py-3 text-gray-800">{renderNameList(sanitizeText(entry['Editor'] || ''))}</td>
                             <td className="px-4 py-3 text-gray-700 break-words">
                               {sanitizeText(entry['Publication Title'] || '') || <span className="text-gray-300">—</span>}
                             </td>
                             <td className="px-4 py-3 text-gray-700 whitespace-nowrap">
-                              {sanitizeText(entry['Volume'] || '') || <span className="text-gray-300">—</span>}
+                              {sanitizeText(entry['Pages'] || '') || <span className="text-gray-300">—</span>}
                             </td>
                             <td className="px-4 py-3 text-gray-700 whitespace-nowrap">
                               {sanitizeText(entry['Issue'] || '') || <span className="text-gray-300">—</span>}
                             </td>
                             <td className="px-4 py-3 text-gray-700 whitespace-nowrap">
-                              {sanitizeText(entry['Pages'] || '') || <span className="text-gray-300">—</span>}
+                              {sanitizeText(entry['Volume'] || '') || <span className="text-gray-300">—</span>}
                             </td>
                             <td className="px-4 py-3 text-gray-700">
                               {sanitizeText(entry['Place'] || '')
