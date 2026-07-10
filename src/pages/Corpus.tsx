@@ -394,7 +394,7 @@ const Corpus = ({ lang = 'en', setLang }) => {
     { label: lang === 'de' ? 'Neue Einträge' : 'New entries', value: newCorpusRows.length, color: 'bg-green-50 text-green-700', isYear: false },
     { label: lang === 'de' ? 'Digitalisate' : 'Digital copies', value: digitisedCount, color: 'bg-purple-50 text-purple-700', isYear: false },
     { label: lang === 'de' ? 'Frühestes Jahr' : 'Earliest year', value: earliestYear, color: 'bg-orange-50 text-orange-700', isYear: true },
-    { label: lang === 'de' ? 'Spätestes Jahr' : 'Latest year', value: latestYear, color: 'bg-amber-50 text-amber-700', isYear: true },
+    { label: lang === 'de' ? 'Spätestes Jahr' : 'Latest year', value: latestYear, color: 'bg-teal-50 text-teal-700', isYear: true },
     { label: lang === 'de' ? 'Verbleibend' : 'Remaining', value: Math.max(CORPUS_TOTAL - corpusRows.length, 0), color: 'bg-red-50 text-red-700', isYear: false },
   ];
 
@@ -415,14 +415,12 @@ const Corpus = ({ lang = 'en', setLang }) => {
   const content = {
     en: {
       title: 'FSL Corpus',
-      description: 'The FSL corpus comprises a collection of multilingual textbooks from the period between the 15th and the end of the 17th century. These sources are characterised by the following criteria:',
       criteria: [
         'They contain German as one of the languages (object or meta language) and are located in the centre of Europe, which connects German language variants with borders to other European languages (Romance, Germanic, Slavic).',
         'They are not theory-based or language preservation-oriented works, but practical and orality-oriented teaching materials for language instruction.',
         'The works are not purely grammar or dictionary texts, but combine at least two elements such as prefaces, pronunciation or orthography lessons, grammar, glossaries and sample dialogues.',
       ],
       structureTitle: 'The project corpus is structured by an extensive database in which all sources are bibliographically recorded. It consists of two parts.',
-      projectCorpus: 'The FSL-digital corpus comprises a collection of multilingual foreign language textbooks from the period between the 15th and the end of the 17th century. The selected sources are organised into two corpus levels, each characterised by the following criteria:',
       coreCorpus: 'Contains all first editions of FSL with a complete representation of the work-part structure central to oral language use (preface, grammar, glossary, sample dialogues). These works are prototypical for the source group. The core corpus is annotated in depth and forms the gold standard for the automatic indexing of the expanded corpus.',
       expandedCorpus: 'Supplements the core corpus with works relevant to lines of tradition. These include further editions of core corpus works as well as works with an incomplete work-part structure in which the characteristics of everyday language practice remain clearly recognisable. In addition, only works from the 18th century that are revised versions of earlier textbooks or follow in their tradition are included in order to ensure comparability and contextual relevance.',
       networkCaption: 'Network visualisation of the lines of tradition across the various corpus levels (centre → outside: blue = core corpus, amber = expanded corpus, grey = bibliography)',
@@ -431,14 +429,12 @@ const Corpus = ({ lang = 'en', setLang }) => {
     },
     de: {
       title: 'FSL Korpus',
-      description: 'Das FSL Korpus umfasst eine Sammlung mehrsprachiger Lehrwerke aus dem Zeitraum vom 15. bis zum Ende des 17. Jahrhunderts. Diese Quellen zeichnen sich durch die folgenden Kriterien aus:',
       criteria: [
         'Sie enthalten Deutsch als eine der Sprachen (Objekt- oder Metasprache) und stehen im Zentrum Europas, was deutsche Sprachvarianten mit Grenzen zu anderen europäischen Sprachen (Romanisch, Germanisch, Slawisch) verbindet.',
         'Es handelt sich nicht um theoriebasierte oder sprachpflegerische Werke, sondern um praktische und mündlichkeitsnahe Lehrmaterialien für die Sprachvermittlung.',
         'Die Werke sind keine reinen Grammatik- oder Wörterbuchtexte, sondern kombinieren mindestens zwei Elemente wie Vorreden, Aussprache- oder Orthographielehren, Grammatik, Glossare und Musterdialoge.',
       ],
       structureTitle: 'Das Projektkorpus wird durch eine umfangreiche Datenbank strukturiert, in der alle Quellen bibliographisch erfasst sind. Es besteht aus zwei Teilen.',
-      projectCorpus: 'Das FSL-digital-Korpus umfasst eine Sammlung mehrsprachiger Fremdsprachenlehrwerke aus dem Zeitraum vom 15. bis zum Ende des 17. Jahrhunderts. Die ausgewählten Quellen sind in zwei Korpusebenen gegliedert und zeichnen sich jeweils durch folgende Kriterien aus:',
       coreCorpus: 'Enthält alle Erstauflagen der FSL mit vollständiger Darstellung der für den mündlichen Sprachgebrauch zentralen Werkteilstruktur (Vorrede, Grammatik, Glossar, Musterdialoge). Diese Werke repräsentieren prototypisch die Quellengruppe. Das Kernkorpus wird tiefenphilologisch annotiert und bildet den Goldstandard für die automatische Erschließung des erweiterten Korpus.',
       expandedCorpus: 'Ergänzt das Kernkorpus durch traditionslinienrelevante Werke. Dazu zählen sowohl weitere Auflagen der Kernkorpuswerke als auch Werke mit unvollständiger Werkteilstruktur, in denen die Merkmale der alltäglichen Gebrauchspraxis weiterhin deutlich erkennbar sind. Zudem werden aus dem 18. Jahrhundert nur die Werke aufgenommen, die überarbeitete Fassungen früherer Lehrwerke oder in deren Tradition stehen, um Vergleichbarkeit und Kontextbezug zu gewährleisten.',
       networkCaption: 'Netzwerkvisualisierung der Traditionslinien über die verschiedenen Korpusebenen (von innen nach außen: blau = Kernkorpus, bernstein = Erweitertes Korpus, grau = Bibliographie)',
@@ -460,7 +456,45 @@ const Corpus = ({ lang = 'en', setLang }) => {
 
             {/* Disclaimer / intro */}
             <div className="bg-gray-50 border-l-4 border-primary p-8 mb-12 rounded-r-lg">
-              <p className="text-lg text-gray-700 leading-relaxed">{c.description}</p>
+              {lang === 'de' ? (
+                <>
+                  <p className="text-lg text-gray-700 leading-relaxed">
+                    Das FSL Korpus umfasst eine Sammlung mehrsprachiger Fremdsprachenlehrwerke aus dem Zeitraum vom 15. bis zum Ende des 17. Jahrhunderts. Ausgangspunkt sind Vorarbeiten des{' '}
+                    <a href="https://www.episteme.fu-berlin.de/teilprojekte/handeln/C08/index.html" target="_blank" rel="noopener noreferrer" className="text-primary underline underline-offset-2 hover:text-primary/80">Teilprojekts C08</a>
+                    {' '}des SFB 980 „Episteme in Bewegung. Wissenstransfer von der alten Welt bis in die Frühe Neuzeit“ sowie die in diesem Rahmen entstandene{' '}
+                    <a href="https://refubium.fu-berlin.de/handle/fub188/28665.2" target="_blank" rel="noopener noreferrer" className="text-primary underline underline-offset-2 hover:text-primary/80">Berliner Datenbank frühneuzeitlicher Fremdsprachenlehrwerke (BDaFL)</a>
+                    . Ergänzend wurden sämtliche bereits vorhandenen Bibliographien (u. a. von Claes 1977, Schröder 1980, Gallagher 2019, Jones 2000, Glück et al. 2002/2007/2009) systematisch ausgewertet. Darüber hinaus wurden Befunde und Erkenntnisse aus bestehenden Einzelstudien (z. B. Rossebastiano Bart 1984, Gorini 1997, van der Sijs 2000, Franceschini 2002, Corvo Sánchez 2007, Gennies (i. Vorb.)) aufgenommen.
+                  </p>
+                  <p className="text-lg text-gray-700 leading-relaxed mt-4">
+                    Diese Datenbasis wurde anhand der definierten Projektkriterien erneut geprüft und durch eine systematische Recherche im Gesamtkatalog der Wiegendrucke, in den retrospektiven Nationalbibliographien VD16, VD 17, VD 18 und mit Hilfe des Karlsruher Virtuellem Katalog (KVK) in internationalen Katalogen von Bibliotheken und Archiven gezielt erweitert.
+                  </p>
+                  <p className="text-lg text-gray-700 leading-relaxed italic mt-4">
+                    Für Hinweise auf weitere Werke sind wir selbstverständlich dankbar.
+                  </p>
+                  <p className="text-lg text-gray-700 leading-relaxed mt-4">
+                    Die ausgewählten Quellen sind in zwei Korpusebenen gegliedert und zeichnen sich durch folgende Kriterien aus:
+                  </p>
+                </>
+              ) : (
+                <>
+                  <p className="text-lg text-gray-700 leading-relaxed">
+                    The FSL corpus comprises a collection of multilingual foreign language textbooks from the period between the 15th and the end of the 17th century. The project builds on preliminary work carried out as part of{' '}
+                    <a href="https://www.episteme.fu-berlin.de/teilprojekte/handeln/C08/index.html" target="_blank" rel="noopener noreferrer" className="text-primary underline underline-offset-2 hover:text-primary/80">sub-project C08</a>
+                    {' '}of the SFB 980 'Episteme in Motion. Transfer of Knowledge from the Ancient World to the Early Modern Period', as well as the{' '}
+                    <a href="https://refubium.fu-berlin.de/handle/fub188/28665.2" target="_blank" rel="noopener noreferrer" className="text-primary underline underline-offset-2 hover:text-primary/80">Berlin Database of Early Modern Foreign Language Textbooks (BDaFL)</a>
+                    , which was developed within this framework. In addition, all existing bibliographies (including those by Claes 1977, Schröder 1980, Gallagher 2019, Jones 2000, Glück et al. 2002/2007/2009) were systematically analysed. Furthermore, findings and insights from existing individual studies (e.g. Rossebastiano Bart 1984, Gorini 1997, van der Sijs 2000, Franceschini 2002, Corvo Sánchez 2007, Gennies (forthcoming)) were also incorporated.
+                  </p>
+                  <p className="text-lg text-gray-700 leading-relaxed mt-4">
+                    This database was re-examined against the defined project criteria and specifically expanded through a systematic search in the Union Catalogue of Incunabula, in the retrospective German national bibliographies VD16, VD 17 and VD 18, and with the aid of the Karlsruhe Virtual Catalogue (KVK) in international catalogues of libraries and archives.
+                  </p>
+                  <p className="text-lg text-gray-700 leading-relaxed italic mt-4">
+                    We would, of course, be grateful for any information regarding related books.
+                  </p>
+                  <p className="text-lg text-gray-700 leading-relaxed mt-4">
+                    These sources are characterised by the following criteria:
+                  </p>
+                </>
+              )}
             </div>
 
             {/* ── Methodological Framework ── */}
@@ -490,14 +524,6 @@ const Corpus = ({ lang = 'en', setLang }) => {
               <p className="text-lg text-gray-700 mb-8 leading-relaxed text-center italic">
                 {c.structureTitle}
               </p>
-
-              {/* Projektkorpus note */}
-              <div className="bg-gray-50 border-l-4 border-primary p-6 mb-8 rounded-r-lg">
-                <h3 className="text-lg font-bold text-gray-900 mb-2">
-                  {lang === 'en' ? 'Project Corpus' : 'Projektkorpus'}
-                </h3>
-                <p className="text-gray-700 leading-relaxed">{c.projectCorpus}</p>
-              </div>
 
               <div className="grid lg:grid-cols-2 gap-8">
                 {/* Core Corpus */}
@@ -629,9 +655,9 @@ const Corpus = ({ lang = 'en', setLang }) => {
                         {corpusSearch && ` ${lang === 'de' ? 'gefunden' : 'found'}`}
                       </span>
                   </div>
-                  <div className="overflow-x-auto rounded-xl border border-gray-200 shadow-sm">
+                  <div className="overflow-auto rounded-xl border border-gray-200 shadow-sm" style={{ maxHeight: '75vh' }}>
                     <table className="w-full min-w-[850px] border-collapse bg-white text-left text-sm">
-                      <thead className="bg-primary text-white">
+                      <thead className="bg-primary text-white sticky top-0 z-10">
                         <tr>
                           {([
                             ['Autor einheitl.', lang === 'de' ? 'Autor' : 'Author'],

@@ -136,13 +136,21 @@ const Bibliography = ({ lang = 'en', setLang }) => {
               <p className="text-lg leading-relaxed text-gray-700">
                 {lang === 'de' ? (
                   <>
-                    Eine kuratierte Übersicht relevanter Literatur zu historischen Fremdsprachenlehrwerken, deren Rezeptionsgeschichte und Traditionslinien. Sie dient als Einstiegspunkt für vertiefende Recherche und dokumentiert zentrale Quellen und Studien zu Sprachgeschichte, Sprachvorstellungen und Alltagskommunikation im Kontext der Mehrsprachigkeit im Europa der Frühen Neuzeit. Eine Bibliographie der Titel aus der folgenden Tabelle steht{' '}
+                    Die folgende kuratierte Übersicht relevanter Literatur zu historischen Fremdsprachenlehrwerken, deren Rezeptionsgeschichte und Traditionslinien basiert auf Vorarbeiten des{' '}
+                    <a href="https://www.episteme.fu-berlin.de/teilprojekte/handeln/C08/index.html" target="_blank" rel="noopener noreferrer" className="text-primary underline underline-offset-2 hover:text-primary/80">Teams</a>
+                    {' '}des{' '}
+                    <a href="https://www.zotero.org/groups/2166802/sfb980_c08_foreign_language_manuals/library" target="_blank" rel="noopener noreferrer" className="text-primary underline underline-offset-2 hover:text-primary/80">Teilprojekts C08</a>
+                    {' '}des SFB 980. Sie dient als Einstiegspunkt für vertiefende Recherche und dokumentiert zentrale Quellen und Studien zu Sprachgeschichte, Sprachvorstellungen und Alltagskommunikation im Kontext der Mehrsprachigkeit im Europa der Frühen Neuzeit. Eine Bibliographie der Titel aus der folgenden Tabelle steht{' '}
                     <a href={`${import.meta.env.BASE_URL}uploads/bibliography/FSLdigital_Sekundärliteratur_202606.pdf`} download className="text-red-600 font-semibold underline underline-offset-2 hover:text-red-800">hier</a>
                     {' '}zum Download zur Verfügung.
                   </>
                 ) : (
                   <>
-                    A curated overview of relevant literature on historical foreign language textbooks, their reception history, and their intellectual traditions. It serves as a starting point for further research and documents key sources and studies on the history of language, conceptions of language, and everyday communication in the context of multilingualism in early modern Europe. A bibliography of the titles listed in the table below is available for download{' '}
+                    The following curated overview of relevant literature on historical foreign language textbooks, their reception history, and their intellectual traditions is based on preliminary work carried out by the{' '}
+                    <a href="https://www.episteme.fu-berlin.de/teilprojekte/handeln/C08/index.html" target="_blank" rel="noopener noreferrer" className="text-primary underline underline-offset-2 hover:text-primary/80">team</a>
+                    {' '}of{' '}
+                    <a href="https://www.zotero.org/groups/2166802/sfb980_c08_foreign_language_manuals/library" target="_blank" rel="noopener noreferrer" className="text-primary underline underline-offset-2 hover:text-primary/80">sub-project C08</a>
+                    {' '}of the SFB 980. It serves as a starting point for further research and documents key sources and studies on the history of language, conceptions of language, and everyday communication in the context of multilingualism in early modern Europe. A bibliography of the titles listed in the table below is available for download{' '}
                     <a href={`${import.meta.env.BASE_URL}uploads/bibliography/FSLdigital_Sekundärliteratur_202606.pdf`} download className="text-red-600 font-semibold underline underline-offset-2 hover:text-red-800">here</a>.
                   </>
                 )}
