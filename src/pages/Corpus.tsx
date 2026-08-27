@@ -622,6 +622,8 @@ const Corpus = ({ lang = 'en', setLang }) => {
                 {lang === 'de' ? 'Korpus Einträge' : 'Corpus Entries'}
               </h2>
 
+              {/* ── CSV table section — temporarily disabled, replaced with placeholder image below.
+                     Re-enable once the new CSV is ready. ──
               {corpusLoading && (
                 <p className="text-center text-gray-500 py-8">{lang === 'de' ? 'Korpusdaten werden geladen …' : 'Loading corpus data…'}</p>
               )}
@@ -724,6 +726,15 @@ const Corpus = ({ lang = 'en', setLang }) => {
                   )}
                 </>
               )}
+              */}
+
+              <div className="flex justify-center">
+                <img
+                  src={`${import.meta.env.BASE_URL}uploads/um.png`}
+                  alt={lang === 'de' ? 'Korpus Einträge' : 'Corpus entries'}
+                  className="max-w-full h-auto rounded-xl border border-gray-200 shadow-sm"
+                />
+              </div>
             </div>
               </>
             )}
