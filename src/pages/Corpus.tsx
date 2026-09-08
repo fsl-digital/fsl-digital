@@ -622,8 +622,6 @@ const Corpus = ({ lang = 'en', setLang }) => {
                 {lang === 'de' ? 'Korpus Einträge' : 'Corpus Entries'}
               </h2>
 
-              {/* ── CSV table section — temporarily disabled, replaced with placeholder image below.
-                     Re-enable once the new CSV is ready. ──
               {corpusLoading && (
                 <p className="text-center text-gray-500 py-8">{lang === 'de' ? 'Korpusdaten werden geladen …' : 'Loading corpus data…'}</p>
               )}
@@ -726,20 +724,14 @@ const Corpus = ({ lang = 'en', setLang }) => {
                   )}
                 </>
               )}
-              */}
-
-              <div className="flex justify-center">
-                <img
-                  src={`${import.meta.env.BASE_URL}uploads/um.png`}
-                  alt={lang === 'de' ? 'Korpus Einträge' : 'Corpus entries'}
-                  className="max-w-full h-auto rounded-xl border border-gray-200 shadow-sm"
-                />
-              </div>
             </div>
               </>
             )}
 
-            {/* ── Shapenote / Status note ── */}
+            {/* ── Shapenote / Status note (under-maintenance notice) ──
+                 Hidden now that the corpus is published for users.
+                 Re-enable by uncommenting the block below. */}
+            {/*
             <div className="mb-12 bg-amber-50 border border-amber-200 rounded-xl p-8">
               <div className="flex items-start gap-4">
                 <svg className="w-6 h-6 text-amber-500 flex-shrink-0 mt-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -752,6 +744,7 @@ const Corpus = ({ lang = 'en', setLang }) => {
                 </div>
               </div>
             </div>
+            */}
 
             {/* ── Timeline ── */}
             <div className="mb-12">
