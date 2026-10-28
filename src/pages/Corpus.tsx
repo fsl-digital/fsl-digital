@@ -660,9 +660,9 @@ const Corpus = ({ lang = 'en', setLang }) => {
                       <thead className="bg-primary text-white sticky top-0 z-10">
                         <tr>
                           {([
-                            ['Autor einheitl.', lang === 'de' ? 'Autor' : 'Author'],
-                            ['Vollständiger Titel', lang === 'de' ? 'Vollständiger Titel' : 'Full title'],
                             ['Druckjahr', lang === 'de' ? 'Druckjahr' : 'Publication year'],
+                            ['Vollständiger Titel', lang === 'de' ? 'Vollständiger Titel' : 'Full title'],
+                            ['Autor einheitl.', lang === 'de' ? 'Autor' : 'Author'],
                             ['Verlagsort', lang === 'de' ? 'Verlagsort' : 'Publication place'],
                             ['Link zum Digitalisat', lang === 'de' ? 'Digitalisat' : 'Digital copy'],
                           ] as [CorpusSortColumn, string][]).map(([column, label]) => (
@@ -689,11 +689,11 @@ const Corpus = ({ lang = 'en', setLang }) => {
                           const safeLink = /^https?:\/\//i.test(link) ? link : '';
                           return (
                             <tr key={`${row['Vollständiger Titel']}-${row.Druckjahr}-${index}`} className="border-t border-gray-200 even:bg-gray-50 align-top">
-                              <td className="px-4 py-3 text-gray-700">{row['Autor einheitl.'] || '—'}</td>
+                              <td className="px-4 py-3 text-gray-700 tabular-nums">{row.Druckjahr || '—'}</td>
                               <td className="px-4 py-3 text-justify text-gray-900">
                                 <ExpandableTitle text={row['Vollständiger Titel'] || ''} lang={lang} />
                               </td>
-                              <td className="px-4 py-3 text-gray-700 tabular-nums">{row.Druckjahr || '—'}</td>
+                              <td className="px-4 py-3 text-gray-700">{row['Autor einheitl.'] || '—'}</td>
                               <td className="px-4 py-3 text-gray-700">{row.Verlagsort || '—'}</td>
                               <td className="px-4 py-3">
                                 {safeLink ? (

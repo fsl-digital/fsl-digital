@@ -15,6 +15,8 @@ function normalizeAuthorSortKey(authors: string | undefined) {
 
 function normalizePublicationDashes(value: string) {
   return value
+    // Non-breaking spaces from the CSV export prevent wrapping
+    .replace(/ /g, ' ')
     .replace(/(\s)--(\s)/g, '$1–$2')
     .replace(/(\s)-(\s)/g, '$1–$2');
 }
@@ -126,7 +128,7 @@ const Publications = ({ lang = 'en', setLang }) => {
                         {p.year && <span>{sanitizeText(p.year)}</span>}
                         {p.authors && <span className="text-gray-700 font-medium whitespace-pre-line">{sanitizeText(p.authors)}</span>}
                       </div>
-                      <div className="text-lg text-gray-700 leading-relaxed">
+                      <div className="text-lg text-gray-700 leading-relaxed break-words">
                         {url ? (
                           <a
                             href={url}

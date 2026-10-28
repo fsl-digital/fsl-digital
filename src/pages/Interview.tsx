@@ -97,6 +97,10 @@ const Interview = ({ lang = 'en', setLang }: InterviewProps) => {
       title: 'Podcast „Sozusagen“: Französisch für Renaissancemenschen: Fremdsprachenunterricht in der Frühen Neuzeit',
     url: 'https://www.ardsounds.de/episode/urn:ard:episode:63d8ba9d958aba98/',
     },
+    {
+      title: 'Podcast „Language on the Move“: Wie wurden im frühneuzeitlichen Europa Fremdsprachen gelernt?',
+      url: 'https://languageonthemove.com/how-were-foreign-languages-learned-in-early-modern-europe',
+    },
   ];
 
   const englishReadingItems = [
@@ -158,6 +162,10 @@ const Interview = ({ lang = 'en', setLang }: InterviewProps) => {
       title:
         'Podcast “Sozusagen”: French for Renaissance People: Foreign Language Instruction in the Early Modern Period',
       url: 'https://www.ardsounds.de/episode/urn:ard:episode:63d8ba9d958aba98/',
+    },
+    {
+      title: 'Podcast “Language on the Move”: How were foreign languages learned in early modern Europe?',
+      url: 'https://languageonthemove.com/how-were-foreign-languages-learned-in-early-modern-europe',
     },
   ];
 
