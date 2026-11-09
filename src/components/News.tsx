@@ -1,7 +1,8 @@
 import React, { useEffect, useState } from 'react';
 import { Calendar, Users, Award } from 'lucide-react';
 import { Link } from 'react-router-dom';
-import { parseCsv, sanitizeText } from '@/lib/csv';
+import { cleanCsvRows, parseCsv, sanitizeText } from '@/lib/csv';
+import { formatEventDate, isUpcomingEvent } from '@/lib/newsDates';
 
 interface NewsItemProps {
   title: string;
@@ -33,7 +34,7 @@ const NewsItem = ({ title, date, type, description, link, showMoreText }: NewsIt
         <span className="text-sm text-gray-500">{date}</span>
       </div>
       <h3 className="text-xl font-bold mb-2">{title}</h3>
-      <p className="text-gray-600">{description}</p>
+      {description && <p className="text-gray-600">{description}</p>}
       {link && (
         <a
           href={link}
@@ -81,14 +82,13 @@ const News = ({ lang = 'en' }: NewsProps) => {
     fetch(`${import.meta.env.BASE_URL}uploads/news/news_${lang}.csv`)
       .then(res => res.text())
       .then(text => {
-        const rows = parseCsv(text);
-        const today = new Date().toISOString().slice(0,10);
-        const upcoming = rows.filter(r => (r.start_date || '') >= today)
+        const rows = cleanCsvRows(parseCsv(text));
+        const upcoming = rows.filter(r => isUpcomingEvent(r))
           .sort((a,b) => (a.start_date||'').localeCompare(b.start_date||''))
           .slice(0, 2)
           .map(r => ({
             title: sanitizeText(r.title),
-            date: r.display_date || r.start_date,
+            date: formatEventDate(r, lang),
             type: r.type as any,
             description: sanitizeText(r.desc || ''),
             link: sanitizeText(r.link || '').trim()

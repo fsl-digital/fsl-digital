@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import Header from '@/components/Header';
 import Footer from '@/components/Footer';
-import { parseCsv, sanitizeInlineFormatting, sanitizeText } from '@/lib/csv';
+import { cleanCsvRows, parseCsv, sanitizeInlineFormatting, sanitizeText } from '@/lib/csv';
 
 function normalizeAuthorSortKey(authors: string | undefined) {
   return (authors || '')
@@ -16,9 +16,40 @@ function normalizeAuthorSortKey(authors: string | undefined) {
 function normalizePublicationDashes(value: string) {
   return value
     // Non-breaking spaces from the CSV export prevent wrapping
-    .replace(/ /g, ' ')
+    .replace(/\u00a0/g, ' ')
     .replace(/(\s)--(\s)/g, '$1–$2')
     .replace(/(\s)-(\s)/g, '$1–$2');
+}
+
+// Formats an author list as "Last, First; Last, First & Last, First", keeping a trailing "(eds.)"/"(Hg.)"
+function formatAuthors(authors: string) {
+  const match = authors.trim().match(/^(.*?)\s*(\([^)]*\))?$/);
+  const list = match?.[1] || '';
+  const suffix = match?.[2] || '';
+
+  const names: string[] = [];
+  list.split(/\s*[;&]\s*/).filter(Boolean).forEach((part) => {
+    const pieces = part.split(/\s*,\s*/).filter(Boolean);
+    if (pieces.length >= 2) {
+      // "Last, First" optionally followed by ", First Last" co-authors
+      names.push(`${pieces[0]}, ${pieces[1]}`);
+      pieces.slice(2).forEach((name) => names.push(name));
+    } else {
+      names.push(part);
+    }
+  });
+
+  const inverted = names.map((name) => {
+    if (name.includes(',')) return name;
+    const words = name.split(/\s+/);
+    if (words.length < 2) return name;
+    return `${words[words.length - 1]}, ${words.slice(0, -1).join(' ')}`;
+  });
+
+  const joined = inverted.length > 1
+    ? `${inverted.slice(0, -1).join('; ')} & ${inverted[inverted.length - 1]}`
+    : inverted[0] || '';
+  return suffix ? `${joined} ${suffix}` : joined;
 }
 
 const Publications = ({ lang = 'en', setLang }) => {
@@ -32,14 +63,14 @@ const Publications = ({ lang = 'en', setLang }) => {
     fetch(primaryUrl)
       .then(res => res.text())
       .then(async text => {
-        const primary = parseCsv(text);
+        const primary = cleanCsvRows(parseCsv(text));
         // If any entries miss title or venue, try to fill from the other language CSV by matching authors+year
         const needsFallback = primary.some(p => !p.title || !p.venue);
         let merged = primary;
         if (needsFallback) {
           try {
             const altText = await fetch(secondaryUrl).then(r => r.text());
-            const secondary = parseCsv(altText);
+            const secondary = cleanCsvRows(parseCsv(altText));
             const key = (r:any) => `${(r.authors||'').trim()}|${(r.year||'').trim()}`;
             const secMap = new Map(secondary.map(r => [key(r), r]));
             merged = primary.map(p => {
@@ -117,7 +148,9 @@ const Publications = ({ lang = 'en', setLang }) => {
                   if (venue) detailParts.push(venue);
                   const detail = sanitizeInlineFormatting(`${detailParts.join('. ')}${noteSuffix}`.trim());
                   const doiRaw = sanitizeText(p.doi);
-                  const url = sanitizeText(p.url);
+                  const urlRaw = sanitizeText(p.url);
+                  // Only link real web addresses; anything else would route to a broken page
+                  const url = /^https?:\/\//i.test(urlRaw) ? urlRaw : '';
                   const doiIsLink = doiRaw ? doiRaw.startsWith('https://doi.org/') : false;
                   return (
                     <article
@@ -126,7 +159,7 @@ const Publications = ({ lang = 'en', setLang }) => {
                     >
                       <div className="flex flex-wrap items-center gap-x-3 gap-y-1 mb-2 text-sm text-gray-500">
                         {p.year && <span>{sanitizeText(p.year)}</span>}
-                        {p.authors && <span className="text-gray-700 font-medium whitespace-pre-line">{sanitizeText(p.authors)}</span>}
+                        {p.authors && <span className="text-gray-700 font-medium whitespace-pre-line">{formatAuthors(sanitizeText(p.authors))}</span>}
                       </div>
                       <div className="text-lg text-gray-700 leading-relaxed break-words">
                         {url ? (

@@ -64,6 +64,15 @@ export function parseCsv(text: string): CsvRow[] {
   });
 }
 
+/** Turns "NULL" placeholders into empty cells and drops rows marked visible = "no". */
+export function cleanCsvRows(rows: CsvRow[]): CsvRow[] {
+  return rows
+    .map((row) => Object.fromEntries(
+      Object.entries(row).map(([key, value]) => [key, value.toUpperCase() === "NULL" ? "" : value]),
+    ))
+    .filter((row) => (row.visible || "yes").toLowerCase() !== "no");
+}
+
 export function normalizeCsvValue(value: string) {
   return (value || "")
     .replace(/\uFEFF/g, "")

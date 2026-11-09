@@ -39,7 +39,11 @@ const parseTeamCsv = (text: string): TeamMember[] => {
   const parsedRows = parseCsv(text);
   const rows: TeamMember[] = [];
 
-  for (const row of parsedRows) {
+  for (const rawRow of parsedRows) {
+    // Treat "NULL" placeholders from the CSV export as empty cells
+    const row = Object.fromEntries(
+      Object.entries(rawRow).map(([key, value]) => [key, value.trim().toUpperCase() === 'NULL' ? '' : value]),
+    );
     const normalize = (value: string) => (value || '').trim().replace(/\\n/g, '\n');
     const section = row.section?.trim().toLowerCase() || '';
 
@@ -457,11 +461,6 @@ const Team = ({ lang = 'en', setLang }) => {
                               <p className="text-center text-gray-700 mb-2 text-sm whitespace-pre-line">
                                 {member.institution[lang]}
                               </p>
-                              {member.timeline && (
-                                <p className="text-center text-gray-500 mb-2 text-sm">
-                                  {member.timeline[lang]}
-                                </p>
-                              )}
                               {member.email && (
                                 <div className="mt-auto w-full flex justify-center">
                                   <a href={`mailto:${member.email}`} className="px-3 py-1 bg-gray-100 text-gray-700 rounded font-medium border border-gray-300 hover:bg-gray-200 transition">Email</a>

@@ -2,7 +2,8 @@ import React, { useEffect, useState } from 'react';
 import { Calendar, Users, Award } from 'lucide-react';
 import Header from '@/components/Header';
 import Footer from '@/components/Footer';
-import { parseCsv, sanitizeText, sanitizeInlineFormatting } from '@/lib/csv';
+import { cleanCsvRows, parseCsv, sanitizeText, sanitizeInlineFormatting } from '@/lib/csv';
+import { formatEventDate, isUpcomingEvent } from '@/lib/newsDates';
 
 function normalizeDashes(value: string) {
   return value
@@ -43,8 +44,10 @@ const NewsItem = ({ title, date, type, description, link, showMoreText = 'Show m
       </div>
       <h3 className={`text-xl font-bold mb-2 whitespace-pre-line ${isPast ? 'text-gray-600' : ''}`}
           dangerouslySetInnerHTML={{ __html: title }} />
-      <p className={`whitespace-pre-line ${isPast ? 'text-gray-500' : 'text-gray-600'}`}
-         dangerouslySetInnerHTML={{ __html: description }} />
+      {description && (
+        <p className={`whitespace-pre-line ${isPast ? 'text-gray-500' : 'text-gray-600'}`}
+           dangerouslySetInnerHTML={{ __html: description }} />
+      )}
       {link && (
         <a
           href={link}
@@ -93,15 +96,14 @@ const News = ({ lang = 'en', setLang }: NewsProps) => {
     fetch(`${import.meta.env.BASE_URL}uploads/news/news_${lang}.csv`)
       .then(res => res.text())
       .then(text => {
-        const rows = parseCsv(text);
-        const today = new Date().toISOString().slice(0,10);
-        const upcoming = rows.filter(r => (r.start_date || '') >= today)
+        const rows = cleanCsvRows(parseCsv(text));
+        const upcoming = rows.filter(r => isUpcomingEvent(r))
           .sort((a,b) => (a.start_date||'').localeCompare(b.start_date||''));
-        const past = rows.filter(r => (r.start_date || '') < today)
+        const past = rows.filter(r => !isUpcomingEvent(r))
           .sort((a,b) => (b.start_date||'').localeCompare(a.start_date||''));
         const mapRow = (r: any) => ({
           title: sanitizeInlineFormatting(normalizeDashes(r.title || '')),
-          date: normalizeDashes(r.display_date || r.start_date || ''),
+          date: formatEventDate(r, lang),
           type: r.type as any,
           description: sanitizeInlineFormatting(normalizeDashes(r.desc || '')),
           link: sanitizeText(r.link || '').trim(),

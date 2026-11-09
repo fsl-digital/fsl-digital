@@ -109,6 +109,7 @@ const NetworkVisualization = ({ lang }: { lang: string }) => {
 };
 
 const CORPUS_TOTAL  = 1000;
+const PREVIEW_COUNT = 5;
 const NUM_TICKS     = 90;
 const PRIMARY       = 'hsl(215,71%,19%)';
 const SECONDARY     = '#166534';
@@ -325,7 +326,14 @@ const Corpus = ({ lang = 'en', setLang }) => {
         return response.text();
       })
       .then((text) => {
-        if (active) setCorpusRows(parseCsv(text));
+        if (!active) return;
+        // Treat "NULL" placeholders as empty and skip rows explicitly hidden via the "visible" column
+        const rows = parseCsv(text)
+          .map((row) => Object.fromEntries(
+            Object.entries(row).map(([key, value]) => [key, value.toUpperCase() === 'NULL' ? '' : value]),
+          ))
+          .filter((row) => (row.visible || 'yes').toLowerCase() !== 'no');
+        setCorpusRows(rows);
       })
       .catch(() => {
         if (active) setCorpusError(true);
@@ -357,16 +365,9 @@ const Corpus = ({ lang = 'en', setLang }) => {
     return sortDirection === 'asc' ? comparison : -comparison;
   }), [corpusRows, lang, sortColumn, sortDirection]);
 
-  const newCorpusRows = useMemo(
-    () => sortedCorpusRows.filter((row) => row['Entry type'].trim().toLowerCase() === 'new'),
-    [sortedCorpusRows],
-  );
-
-  const baseCorpusRows = showAllCorpusRows ? sortedCorpusRows : newCorpusRows;
-
   const searchedCorpusRows = useMemo(() => {
     const query = corpusSearch.trim().toLocaleLowerCase(lang);
-    if (!query) return baseCorpusRows;
+    if (!query) return sortedCorpusRows;
 
     const searchableColumns: CorpusSortColumn[] = [
       'Autor einheitl.',
@@ -376,22 +377,28 @@ const Corpus = ({ lang = 'en', setLang }) => {
       'Link zum Digitalisat',
     ];
 
-    return baseCorpusRows.filter((row) => searchableColumns.some((column) =>
+    return sortedCorpusRows.filter((row) => searchableColumns.some((column) =>
       (row[column] || '').toLocaleLowerCase(lang).includes(query),
     ));
-  }, [baseCorpusRows, corpusSearch, lang]);
+  }, [sortedCorpusRows, corpusSearch, lang]);
 
-  const visibleCorpusRows = searchedCorpusRows;
-  const canToggleCorpusRows = corpusRows.length > newCorpusRows.length;
+  // Collapsed view: first and last PREVIEW_COUNT entries of the current (sorted, searched) list
+  const canToggleCorpusRows = searchedCorpusRows.length > PREVIEW_COUNT * 2;
+  const isCollapsed = canToggleCorpusRows && !showAllCorpusRows;
+  const hiddenCorpusRowCount = isCollapsed ? searchedCorpusRows.length - PREVIEW_COUNT * 2 : 0;
+  const visibleCorpusRows = isCollapsed
+    ? [...searchedCorpusRows.slice(0, PREVIEW_COUNT), ...searchedCorpusRows.slice(-PREVIEW_COUNT)]
+    : searchedCorpusRows;
+  const placeCount = new Set(corpusRows.map((row) => row.Verlagsort).filter(Boolean)).size;
   const years = corpusRows
     .map((row) => Number.parseInt(row.Druckjahr, 10))
     .filter((year) => Number.isFinite(year));
   const earliestYear = years.length ? Math.min(...years) : 0;
   const latestYear = years.length ? Math.max(...years) : 0;
-  const digitisedCount = corpusRows.filter((row) => row['Link zum Digitalisat']).length;
+  const digitisedCount = corpusRows.filter((row) => /^https?:\/\//i.test(row['Link zum Digitalisat'] || '')).length;
   const dashboardCards = [
     { label: lang === 'de' ? 'Veröffentlicht' : 'Published', value: corpusRows.length, color: 'bg-blue-50 text-blue-700', isYear: false },
-    { label: lang === 'de' ? 'Neue Einträge' : 'New entries', value: newCorpusRows.length, color: 'bg-green-50 text-green-700', isYear: false },
+    { label: lang === 'de' ? 'Verlagsorte' : 'Publication places', value: placeCount, color: 'bg-green-50 text-green-700', isYear: false },
     { label: lang === 'de' ? 'Digitalisate' : 'Digital copies', value: digitisedCount, color: 'bg-purple-50 text-purple-700', isYear: false },
     { label: lang === 'de' ? 'Frühestes Jahr' : 'Earliest year', value: earliestYear, color: 'bg-orange-50 text-orange-700', isYear: true },
     { label: lang === 'de' ? 'Spätestes Jahr' : 'Latest year', value: latestYear, color: 'bg-teal-50 text-teal-700', isYear: true },
@@ -688,7 +695,15 @@ const Corpus = ({ lang = 'en', setLang }) => {
                           const link = row['Link zum Digitalisat'];
                           const safeLink = /^https?:\/\//i.test(link) ? link : '';
                           return (
-                            <tr key={`${row['Vollständiger Titel']}-${row.Druckjahr}-${index}`} className="border-t border-gray-200 even:bg-gray-50 align-top">
+                            <React.Fragment key={`${row['Vollständiger Titel']}-${row.Druckjahr}-${index}`}>
+                            {isCollapsed && index === PREVIEW_COUNT && (
+                              <tr className="border-t border-gray-200 bg-gray-100">
+                                <td colSpan={5} className="px-4 py-2 text-center text-xs italic text-gray-500">
+                                  … {hiddenCorpusRowCount} {lang === 'de' ? 'weitere Einträge' : 'more entries'} …
+                                </td>
+                              </tr>
+                            )}
+                            <tr className="border-t border-gray-200 even:bg-gray-50 align-top">
                               <td className="px-4 py-3 text-gray-700 tabular-nums">{row.Druckjahr || '—'}</td>
                               <td className="px-4 py-3 text-justify text-gray-900">
                                 <ExpandableTitle text={row['Vollständiger Titel'] || ''} lang={lang} />
@@ -703,6 +718,7 @@ const Corpus = ({ lang = 'en', setLang }) => {
                                 ) : '—'}
                               </td>
                             </tr>
+                            </React.Fragment>
                           );
                         })}
                       </tbody>
@@ -718,7 +734,7 @@ const Corpus = ({ lang = 'en', setLang }) => {
                       >
                         {showAllCorpusRows
                           ? (lang === 'de' ? 'Weniger anzeigen' : 'Show less')
-                          : (lang === 'de' ? 'Mehr anzeigen' : 'Show more')}
+                          : (lang === 'de' ? `Alle ${searchedCorpusRows.length} Einträge anzeigen` : `Show all ${searchedCorpusRows.length} entries`)}
                       </button>
                     </div>
                   )}
